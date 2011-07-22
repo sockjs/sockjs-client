@@ -1,9 +1,11 @@
 Parts of the code are derived from various open source projects.
 
 For code derived from Socket.IO by Guillermo Rauch see
-LICENSE-MIT-Socket.io, most notably:
-  o lib/trans-jsonp.js
+LICENSE-MIT-Socket.io, most notably.
 
 Snippets derived from JSON-js by Douglas Crockford are public domain.
+
+Snippets derived from jQuery-JSONP by Julian Aubourg, generic MIT
+license.
 
 All other code is released on MIT license, see LICENSE-MIT-SockJS.
