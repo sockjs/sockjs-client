@@ -30,7 +30,7 @@
   </code>
 
 <script>
-    var test_server_url = 'http://172.16.173.128:9999';
+    var test_server_url = document.location.protocol + '//' + document.location.hostname + ':9999';
     function log(a, e) {
             if ('console' in window && 'log' in window.console) {
                 console.log(a, e);
