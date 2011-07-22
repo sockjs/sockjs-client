@@ -11,6 +11,12 @@ test_protocol = (protocol) ->
         asyncTest("large_message", factor_echo_large_message(protocol))
         asyncTest("batch_large", factor_batch_large(protocol))
 
+        asyncTest("user close", factor_user_close(protocol))
+        asyncTest("server close", factor_server_close(protocol))
+        asyncTest("invalid url 404", test_invalid_url_404(protocol))
+        asyncTest("invalid url 500", test_invalid_url_500(protocol))
+        asyncTest("invalid url port", test_invalid_url_port(protocol))
+
 
 for protocol in ['ws', 'jsonp']
     test_protocol(protocol)

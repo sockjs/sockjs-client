@@ -1,19 +1,13 @@
-debug = false
-
-echo_factory_factory = (protocol, messages, name) ->
+echo_factory_factory = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
         a = messages.slice(0)
         r = new SockJS(test_server_url + '/echo', [protocol])
         ok(r)
         r.onopen = (e) ->
-            if debug
-                log(name+'_'+protocol+'_open', e)
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
-            if debug
-                log(name+'_'+protocol+'_msg', e.data + ' ' + a[0])
             equals(e.data, a[0])
             a.shift()
             if typeof a[0] is 'undefined'
@@ -21,14 +15,12 @@ echo_factory_factory = (protocol, messages, name) ->
             else
                 r.send(a[0])
         r.onclose = (e) ->
-            if debug
-                log(name+'_'+protocol+'_close', e)
             ok(true)
             start()
 
 factor_echo_basic = (protocol) ->
     messages = ['data']
-    return echo_factory_factory(protocol, messages, 'echo_basic')
+    return echo_factory_factory(protocol, messages)
 
 factor_echo_unicode = (protocol) ->
     messages = [
@@ -43,7 +35,7 @@ factor_echo_unicode = (protocol) ->
         "Mogę jeść szkło, i mi nie szkodzi.",
         "\ufffd\u10102\u2f877",
     ]
-    return echo_factory_factory(protocol, messages, 'echo_unicode')
+    return echo_factory_factory(protocol, messages)
 
 factor_echo_special_chars = (protocol) ->
     messages = [
@@ -72,7 +64,7 @@ factor_echo_special_chars = (protocol) ->
         "message\ufffd",
         "\ufffdmessage",
     ]
-    return echo_factory_factory(protocol, messages, 'echo_unicode')
+    return echo_factory_factory(protocol, messages)
 
 
 factor_echo_large_message = (protocol) ->
@@ -82,31 +74,25 @@ factor_echo_large_message = (protocol) ->
         Array(4096*4).join('x'),
         Array(4096*8).join('x'),
     ]
-    return echo_factory_factory(protocol, messages, 'large_message')
+    return echo_factory_factory(protocol, messages)
 
 
-batch_factory_factory = (protocol, messages, name) ->
+batch_factory_factory = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
         r = new SockJS(test_server_url + '/echo', [protocol])
         ok(r)
         counter = 0
         r.onopen = (e) ->
-            if debug
-                log(name+'_'+protocol+'_open', e)
             ok(true)
             for msg in messages
                 r.send(msg)
         r.onmessage = (e) ->
-            if debug
-                log(name+'_'+protocol+'_msg', e.data + ' ' + messages[counter])
             equals(e.data, messages[counter])
             counter += 1
             if counter is messages.length
                 r.close()
         r.onclose = (e) ->
-            if debug
-                log(name+'_'+protocol+'_close', e)
             ok(true)
             start()
 
@@ -120,4 +106,63 @@ factor_batch_large = (protocol) ->
         Array(Math.pow(2,17)).join('x'),
         Array(Math.pow(2,18)).join('x'),
     ]
-    return batch_factory_factory(protocol, messages, 'batch_large')
+    return batch_factory_factory(protocol, messages)
+
+
+
+factor_user_close = (protocol) ->
+    return ->
+        expect(4)
+        r = new SockJS(test_server_url + '/echo', [protocol])
+        ok(r)
+        r.onopen = (e) ->
+            ok(true)
+            r.close(3000, "User message")
+        r.onclose = (e) ->
+            equals(e.status, 3000)
+            equals(e.reason, "User message")
+            start()
+
+factor_server_close = (protocol) ->
+    return ->
+        expect(3)
+        r = new SockJS(test_server_url + '/close', [protocol])
+        ok(r)
+        r.onopen = (e) ->
+            ok(true)
+        r.onclose = (e) ->
+            equals(e.status, 1001)
+            start()
+
+test_invalid_url_404 = (protocol) ->
+    return ->
+        expect(2)
+        r = new SockJS(test_server_url + '/invalid_url', [protocol])
+        ok(r)
+        r.onopen = (e) ->
+            fail(true)
+        r.onclose = (e) ->
+            equals(e.status, 2000)
+            start()
+
+test_invalid_url_500 = (protocol) ->
+    return ->
+        expect(2)
+        r = new SockJS(test_server_url + '/500_error', [protocol])
+        ok(r)
+        r.onopen = (e) ->
+            fail(true)
+        r.onclose = (e) ->
+            equals(e.status, 2000)
+            start()
+
+test_invalid_url_port = (protocol) ->
+    return ->
+        expect(2)
+        r = new SockJS("http://127.0.0.1:1079", [protocol])
+        ok(r)
+        r.onopen = (e) ->
+            fail(true)
+        r.onclose = (e) ->
+            equals(e.status, 2000)
+            start()
