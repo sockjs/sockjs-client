@@ -9,7 +9,7 @@ while [ 1 ]; do
     node bin/render.js lib/main.js > sockjs.js && \
         coffee -o tests/ -c --bare tests-src/*.coffee && \
     while [ 1 ]; do
-        node bin/minify.js sockjs.js > sockjs-min.js
+        node bin/minify.js sockjs.js > sockjs.min.js
         echo " [*] Running http server"
         node bin/simple_http_server.js &
         SRVPID=$!
