@@ -83,3 +83,41 @@ factor_echo_large_message = (protocol) ->
         Array(4096*8).join('x'),
     ]
     return echo_factory_factory(protocol, messages, 'large_message')
+
+
+batch_factory_factory = (protocol, messages, name) ->
+    return ->
+        expect(3 + messages.length)
+        r = new SockJS(test_server_url + '/echo', [protocol])
+        ok(r)
+        counter = 0
+        r.onopen = (e) ->
+            if debug
+                log(name+'_'+protocol+'_open', e)
+            ok(true)
+            for msg in messages
+                r.send(msg)
+        r.onmessage = (e) ->
+            if debug
+                log(name+'_'+protocol+'_msg', e.data + ' ' + messages[counter])
+            equals(e.data, messages[counter])
+            counter += 1
+            if counter is messages.length
+                r.close()
+        r.onclose = (e) ->
+            if debug
+                log(name+'_'+protocol+'_close', e)
+            ok(true)
+            start()
+
+factor_batch_large = (protocol) ->
+    messages = [
+        Array(Math.pow(2,1)).join('x'),
+        Array(Math.pow(2,2)).join('x'),
+        Array(Math.pow(2,4)).join('x'),
+        Array(Math.pow(2,8)).join('x'),
+        Array(Math.pow(2,16)).join('x'),
+        Array(Math.pow(2,17)).join('x'),
+        Array(Math.pow(2,18)).join('x'),
+    ]
+    return batch_factory_factory(protocol, messages, 'batch_large')
