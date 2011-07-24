@@ -26,7 +26,7 @@ array_flatten = (arr, acc) ->
 
 minify = (data, minify_options)->
     ast = uglify.parser.parse(data)
-    ast = uglify.uglify.ast_mangle(ast)
+    ast = uglify.uglify.ast_mangle(ast, minify_options)
     ast = uglify.uglify.ast_squeeze(ast)
     uglify.uglify.gen_code(ast, minify_options)
 
@@ -74,7 +74,7 @@ main = ->
         ['-p', '--pretty', 'Prettify javascript']
         ['-m', '--minify', 'Minify javascript']
     ]
-    options = {minify:false}
+    options = {minify:false, toplevel:true}
     parser = new optparse.OptionParser(switches)
     parser.on 'pretty', ->
                    options.beautify = true
