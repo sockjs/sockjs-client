@@ -18,5 +18,5 @@ test_protocol = (protocol) ->
         asyncTest("invalid url port", test_invalid_url_port(protocol))
 
 
-for protocol in ['ws', 'jsonp', 'iframe-eventsource']
+for protocol in ['websocket', 'jsonp', 'iframe-eventsource']
     test_protocol(protocol)
