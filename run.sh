@@ -6,10 +6,8 @@ fi
 
 while [ 1 ]; do
     echo " [*] Generating javascript"
-    node bin/render.js lib/main.js > sockjs.js && \
-        coffee -o tests/ -c --bare tests-src/*.coffee && \
-        node bin/minify.js sockjs.js > sockjs.min.js && \
-        node bin/minify.js --pretty sockjs.js > sockjs.pretty.js && \
+    coffee -o tests/ -c --bare tests-src/*.coffee && \
+        coffee bin/render.coffee lib/all.js > sockjs.js && \
     while [ 1 ]; do
         echo " [*] Running http server"
         node bin/simple_http_server.js &
