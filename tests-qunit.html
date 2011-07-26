@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="static/qunit.css" type="text/css" media="screen">
   <script type="text/javascript" src="static/qunit.min.js"></script>
 
+  <script type="text/javascript" src="config.js"></script>
   <script type="text/javascript" src="tests/test-factory.js"></script>
   <script type="text/javascript" src="tests/test-run.js"></script>
 </head>
@@ -30,13 +31,6 @@
   </code>
 
 <script>
-    // by default just change the port to 9999
-    var sockjs_url = document.location.protocol + '//' + document.location.hostname + ':9999';
-    if (document.location.hostname.indexOf('popcnt') !== -1) {
-        // but if hosted, it's run on port 80, but different domain
-        sockjs_url = "http://sockjs1.popcnt.org";
-    }
-
     function log(a, e) {
             if ('console' in window && 'log' in window.console) {
                 console.log(a, e);

@@ -9,6 +9,8 @@
   <script type="text/javascript" src="sockjs.js"></script>
   <script type="text/javascript" src="static/jquery.min.js"></script>
 
+  <script type="text/javascript" src="config.js"></script>
+
   <style type="text/css">
       .cursor {
         height: 30px;
@@ -27,12 +29,6 @@
   </code>
 
 <script>
-    // by default just change the port to 9999
-    var sockjs_url = document.location.protocol + '//' + document.location.hostname + ':9999';
-    if (document.location.hostname.indexOf('popcnt') !== -1) {
-        // but if hosted, it's run on port 80, but different domain
-        sockjs_url = "http://sockjs1.popcnt.org";
-    }
     sockjs_url += '/broadcast';
 
     function log(a) {
