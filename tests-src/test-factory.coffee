@@ -2,7 +2,7 @@ echo_factory_factory = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
         a = messages.slice(0)
-        r = new SockJS(test_server_url + '/echo', [protocol])
+        r = new SockJS(sockjs_url + '/echo', [protocol])
         ok(r)
         r.onopen = (e) ->
             ok(true)
@@ -80,7 +80,7 @@ factor_echo_large_message = (protocol) ->
 batch_factory_factory = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
-        r = new SockJS(test_server_url + '/echo', [protocol])
+        r = new SockJS(sockjs_url + '/echo', [protocol])
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -113,7 +113,7 @@ factor_batch_large = (protocol) ->
 factor_user_close = (protocol) ->
     return ->
         expect(4)
-        r = new SockJS(test_server_url + '/echo', [protocol])
+        r = new SockJS(sockjs_url + '/echo', [protocol])
         ok(r)
         r.onopen = (e) ->
             ok(true)
@@ -126,7 +126,7 @@ factor_user_close = (protocol) ->
 factor_server_close = (protocol) ->
     return ->
         expect(3)
-        r = new SockJS(test_server_url + '/close', [protocol])
+        r = new SockJS(sockjs_url + '/close', [protocol])
         ok(r)
         r.onopen = (e) ->
             ok(true)
@@ -137,7 +137,7 @@ factor_server_close = (protocol) ->
 test_invalid_url_404 = (protocol) ->
     return ->
         expect(2)
-        r = new SockJS(test_server_url + '/invalid_url', [protocol])
+        r = new SockJS(sockjs_url + '/invalid_url', [protocol])
         ok(r)
         r.onopen = (e) ->
             fail(true)
@@ -148,7 +148,7 @@ test_invalid_url_404 = (protocol) ->
 test_invalid_url_500 = (protocol) ->
     return ->
         expect(2)
-        r = new SockJS(test_server_url + '/500_error', [protocol])
+        r = new SockJS(sockjs_url + '/500_error', [protocol])
         ok(r)
         r.onopen = (e) ->
             fail(true)

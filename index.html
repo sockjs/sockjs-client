@@ -6,40 +6,12 @@
 
   <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
 
-  <script type="text/javascript" src="sockjs.js"></script>
-
-  <script type="text/javascript" src="static/jquery.min.js"></script>
-
-  <link rel="stylesheet" href="static/qunit.css" type="text/css" media="screen">
-  <script type="text/javascript" src="static/qunit.min.js"></script>
-
-  <script type="text/javascript" src="tests/test-factory.js"></script>
-  <script type="text/javascript" src="tests/test-run.js"></script>
 </head>
 <body>
-  <p>
-    <h1 id="qunit-header">SockJS Test Suite</h1>
-    <h2 id="qunit-banner"></h2>
-    <div id="qunit-testrunner-toolbar"></div>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">test markup</div>
-    </p>
-  <br>
-  <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px grey solid;">
-  </code>
-
-<script>
-    var test_server_url = document.location.protocol + '//' + document.location.hostname + ':9999';
-    function log(a, e) {
-            if ('console' in window && 'log' in window.console) {
-                console.log(a, e);
-            }
-            $('#logs').append($("<code>").text(a));
-            $('#logs').append($("<pre>").text(JSON.stringify(e, null, 4)));
-            $('#logs').append($("<br>"));
-            $('#logs').scrollTop($('#logs').scrollTop()+10000);
-      }
-</script>
+  <h1>SockJS</h1>
+  <ul>
+    <li><a href="tests-qunit.html">QUnit tests</a></li>
+    <li><a href="example-cursors.html">Cursors example</a></li>
+  </ul>
 </body>
 </html>
