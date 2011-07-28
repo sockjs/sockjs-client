@@ -115,23 +115,33 @@ factor_user_close = (protocol) ->
         expect(4)
         r = new SockJS(sockjs_url + '/echo', [protocol])
         ok(r)
+        counter = 0
         r.onopen = (e) ->
-            ok(true)
+            counter += 1
+            ok(counter is 1)
             r.close(3000, "User message")
+            ok(counter is 1)
+        r.onmessage = () ->
+            fail(true)
+            counter += 1
         r.onclose = (e) ->
-            equals(e.status, 3000)
-            equals(e.reason, "User message")
+            counter += 1
+            log('user_close ' + e.status + ' ' + e.reason)
+            ok(counter is 2)
             start()
 
 factor_server_close = (protocol) ->
     return ->
-        expect(3)
+        expect(4)
         r = new SockJS(sockjs_url + '/close', [protocol])
         ok(r)
         r.onopen = (e) ->
             ok(true)
+        r.onmessage = (e) ->
+            fail(true)
         r.onclose = (e) ->
-            equals(e.status, 1001)
+            equals(e.status, 3000)
+            equals(e.reason, "Go away!")
             start()
 
 test_invalid_url_404 = (protocol) ->
@@ -139,9 +149,13 @@ test_invalid_url_404 = (protocol) ->
         expect(2)
         r = new SockJS(sockjs_url + '/invalid_url', [protocol])
         ok(r)
+        counter =
         r.onopen = (e) ->
             fail(true)
+        r.onmessage = (e) ->
+            fail(true)
         r.onclose = (e) ->
+            log('404', e)
             equals(e.status, 2000)
             start()
 
@@ -153,6 +167,7 @@ test_invalid_url_500 = (protocol) ->
         r.onopen = (e) ->
             fail(true)
         r.onclose = (e) ->
+            log('500', e)
             equals(e.status, 2000)
             start()
 
@@ -164,5 +179,6 @@ test_invalid_url_port = (protocol) ->
         r.onopen = (e) ->
             fail(true)
         r.onclose = (e) ->
+            log('port', e)
             equals(e.status, 2000)
             start()

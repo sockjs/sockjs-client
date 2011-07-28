@@ -74,7 +74,7 @@ main = ->
         ['-p', '--pretty', 'Prettify javascript']
         ['-m', '--minify', 'Minify javascript']
     ]
-    options = {minify:false, toplevel:true}
+    options = {minify: false, toplevel: true}
     parser = new optparse.OptionParser(switches)
     parser.on 'pretty', ->
                    options.beautify = true
