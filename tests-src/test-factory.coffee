@@ -8,7 +8,7 @@ echo_factory_factory = (protocol, messages) ->
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
-            equals(e.data, a[0])
+            deepEqual(e.data, a[0])
             a.shift()
             if typeof a[0] is 'undefined'
                 r.close()
@@ -19,7 +19,11 @@ echo_factory_factory = (protocol, messages) ->
             start()
 
 factor_echo_basic = (protocol) ->
-    messages = ['data']
+    messages = [ 'data' ]
+    return echo_factory_factory(protocol, messages)
+
+factor_echo_rich = (protocol) ->
+    messages = [ [1,2,3,'data'], null, "data", 1, 12.0, {a:1, b:2} ]
     return echo_factory_factory(protocol, messages)
 
 factor_echo_unicode = (protocol) ->
