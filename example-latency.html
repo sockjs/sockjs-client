@@ -42,7 +42,7 @@
 
 
     var i = 0;
-    var sjs = new SockJS(sockjs_url, ['jsonp']);
+    var sjs = new SockJS(sockjs_url, ['xhrpolling']);
     var payload = Array(1024).join('x');
     function do_send(){
         sjs.send({t: (new Date()).getTime(), payload:payload})
