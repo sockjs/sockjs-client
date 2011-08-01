@@ -41,7 +41,7 @@
       }
 
 
-    var sjs = new SockJS(sockjs_url);
+    var sjs = new SockJS(sockjs_url, ['jsonp']);
     sjs.onopen = function() {
         log('connected ' + sjs.protocol);
     };
@@ -61,13 +61,22 @@
         }
         $('#'+id).offset({top:msg.y-15, left:msg.x-15});
     };
+    var x, y;
+    var last_x, last_y;
     $(document).mousemove(function(e) {
-         var msg = {x:e.pageX, y:e.pageY, t: (new Date()).getTime(), id:myself};
+         x = e.pageX; y = e.pageY;
+    });
+    function poll() {
+         if (last_x === x && last_y === y)
+             return;
+         var msg = {x:x, y:y, t: (new Date()).getTime(), id:myself};
+         last_x = x; last_y = y;
          var raw_msg = JSON.stringify(msg);
          if (sjs.readyState === SockJS.OPEN) {
              sjs.send(raw_msg);
          }
-    });
+    };
+    setInterval(poll, 200);
 </script>
 </body>
 </html>
