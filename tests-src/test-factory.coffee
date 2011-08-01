@@ -16,7 +16,7 @@ echo_factory_factory = (protocol, messages) ->
             else
                 r.send(a[0])
         r.onclose = (e) ->
-            log('a', ''+e)
+            log('onclose', ''+e)
             ok(true)
             start()
 
