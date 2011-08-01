@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+
+  <script type="text/javascript" src="sockjs.js"></script>
+  <script type="text/javascript" src="static/jquery.min.js"></script>
+
+  <script type="text/javascript" src="config.js"></script>
+
+  <style type="text/css">
+      .cursor {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        border: 1px solid grey;
+      }
+
+  </style>
+
+</head>
+<body>
+
+  Latency: <code id="latency"></code><br>
+  <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px grey solid;">
+  </code>
+
+<script>
+    sockjs_url += '/echo';
+
+    function log(a) {
+            if ('console' in window && 'log' in window.console) {
+                console.log(a);
+            }
+            $('#logs').append($("<code>").text(a));
+            $('#logs').append($("<br>"));
+            $('#logs').scrollTop($('#logs').scrollTop()+10000);
+      }
+
+
+    var i = 0;
+    var sjs = new SockJS(sockjs_url, ['jsonp']);
+    var payload = Array(1024).join('x');
+    function do_send(){
+        sjs.send({t: (new Date()).getTime(), payload:payload})
+    }
+    function send() {
+        i += 1;
+        if (sjs.readyState === SockJS.OPEN) {
+            if( i % 2 == 0)
+                setTimeout(do_send, 500);
+            else
+                do_send();
+        }
+    }
+    sjs.onopen = function() {
+        log('connected ' + sjs.protocol);
+        send();
+    };
+    sjs.onclose = function(e) {
+        log('disconnected ' + e);
+    };
+    sjs.onmessage = function(e) {
+        var msg = e.data;
+        var td = (new Date()).getTime() - msg.t;
+        $('#latency').text('' + td + ' ms');
+        send();
+    };
+</script>
+</body>
+</html>
