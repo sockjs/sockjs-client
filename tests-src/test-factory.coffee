@@ -5,6 +5,7 @@ echo_factory_factory = (protocol, messages) ->
         r = new SockJS(sockjs_url + '/echo', [protocol])
         ok(r)
         r.onopen = (e) ->
+            log('onopen', e)
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
@@ -15,6 +16,7 @@ echo_factory_factory = (protocol, messages) ->
             else
                 r.send(a[0])
         r.onclose = (e) ->
+            log('a', ''+e)
             ok(true)
             start()
 
@@ -63,6 +65,11 @@ factor_echo_special_chars = (protocol) ->
         "\nmessage",
         "message\xff",
         "\xffmessage",
+        "A",
+        "b",
+        "c",
+        "d",
+        "e",
         "\ufffd",
         "\ufffd\u0000",
         "message\ufffd",
