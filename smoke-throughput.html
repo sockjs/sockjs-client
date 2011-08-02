@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+
+  <script type="text/javascript" src="sockjs.js"></script>
+  <script type="text/javascript" src="static/jquery.min.js"></script>
+
+  <script type="text/javascript" src="config.js"></script>
+
+  <style type="text/css">
+      .cursor {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        border: 1px solid grey;
+      }
+  </style>
+
+</head>
+<body>
+<form>
+  <select id="transport">
+  <option value="">- any - </option>
+  <option value="websocket">websocket</option>
+  <option value="xhr-multipart">xhr-multipart</option>
+  <option value="xhr-polling">xhr-polling</option>
+  <option value="iframe-eventsource">iframe-eventsource</option>
+  <option value="iframe-xhr-polling">iframe-xhr-polling</option>
+  <option value="jsonp-polling">jsonp-polling</option>
+  </select>
+  <input type="button" value="Connect" id="connect">
+  <input type="button" value="Disconnect" id="disconnect" disabled="yes">
+</form>
+
+  Latency: <code id="latency"></code><br>
+  <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px grey solid;">
+  </code>
+
+<script>
+    sockjs_url += '/echo';
+
+    function log(a) {
+            if ('console' in window && 'log' in window.console) {
+                console.log(a);
+            }
+            $('#logs').append($("<code>").text(a));
+            $('#logs').append($("<br>"));
+            $('#logs').scrollTop($('#logs').scrollTop()+10000);
+      }
+
+    var sjs;
+    function onopen() {
+            log('connected ' + sjs.protocol);
+            send();
+    };
+    function onclose(e) {
+            log('disconnected ' + e);
+            $('#connect').attr('disabled', false);
+            $('#disconnect').attr('disabled', true);
+    };
+    var payload = Array(4096).join('x');
+    function send() {
+        sjs.send({t: (new Date()).getTime(), payload:payload})
+    };
+    var i = 0;
+    function onmessage(e) {
+            var msg = e.data;
+            var td = (new Date()).getTime() - msg.t;
+            $('#latency').text(''+i +'  ' + td + ' ms');
+            i += 1;
+            send();
+    };
+
+    $('#connect').click(function() {
+        log('[connecting]');
+        $('#connect').attr('disabled', true);
+        $('#disconnect').attr('disabled', false);
+        var t = $('#transport').val() || undefined;
+        sjs = new SockJS(sockjs_url, t);
+        sjs.onopen = onopen
+        sjs.onclose = onclose;
+        sjs.onmessage = onmessage;
+    });
+    $('#disconnect').click(function() {
+        log('[disconnecting]');
+        sjs.close();
+    });
+</script>
+</body>
+</html>

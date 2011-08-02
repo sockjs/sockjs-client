@@ -2,7 +2,8 @@
 SockJS
 ======
 
-HTML5 WebSockets-like API for the older browsers.
+Pure JavaScript WebSockets-like API for browsers that don't support
+HTML5 or are running behind a proxy.
 
  * No Flash inside (no need to open port 843 - which often doesn't
    work through proxies, no need to host `crossdomain.xml`)
@@ -23,11 +24,12 @@ Protocol                                          | Browser
 Cross domain XHR - multipart                      | IE 8, Firefox 3.5+, Safari 4+
 Cross domain XHR - polling                        | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+ (through misbehaving proxy)
 [IFrame via postMessage][^3] + [EventSource][^4]  | Opera 10.70+
-[IFrame via postMessage][^3] + XHR polling        | Opera 9+ (through misbehaving proxy)
-JsonP polling                                     | (fallback)
-
+[IFrame via postMessage][^3] + XHR polling        | Opera 9+
+[JsonP][^5] polling                               | (fallback)
 
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
 [^2]: http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
 [^3]: https://developer.mozilla.org/en/DOM/window.postMessage
 [^4]: http://dev.w3.org/html5/eventsource/
+[^5]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
+

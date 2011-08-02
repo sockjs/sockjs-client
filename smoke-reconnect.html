@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+
+  <script type="text/javascript" src="sockjs.js"></script>
+  <script type="text/javascript" src="static/jquery.min.js"></script>
+
+  <script type="text/javascript" src="config.js"></script>
+
+  <style type="text/css">
+      .cursor {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        border: 1px solid grey;
+      }
+  </style>
+
+</head>
+<body>
+<form>
+  <select id="transport">
+  <option value="">- any - </option>
+  <option value="websocket">websocket</option>
+  <option value="xhr-multipart">xhr-multipart</option>
+  <option value="xhr-polling">xhr-polling</option>
+  <option value="iframe-eventsource">iframe-eventsource</option>
+  <option value="iframe-xhr-polling">iframe-xhr-polling</option>
+  <option value="jsonp-polling">jsonp-polling</option>
+  </select>
+  <input type="button" value="Start" id="connect">
+  <input type="button" value="Stop" id="disconnect" disabled="yes">
+</form>
+
+  Connected: <code id="out"></code><br>
+  <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px grey solid;">
+  </code>
+
+<script>
+    sockjs_url += '/echo';
+
+    function log(a) {
+            if ('console' in window && 'log' in window.console) {
+                console.log(a);
+            }
+            $('#logs').append($("<code>").text(a));
+            $('#logs').append($("<br>"));
+            $('#logs').scrollTop($('#logs').scrollTop()+10000);
+      }
+
+    var started = false;
+    var sjs;
+    var i = 0;
+    var protocol;
+    var t0;
+    function onopen() {
+       var td = (new Date()).getTime() - t0;
+       i += 1;
+       $('#out').text(''+i +'  ' + td + ' ms');
+       sjs.close();
+    };
+    function onclose(e) {
+        if (started && e.status === 1000) {
+            t0 = (new Date()).getTime();
+            sjs = new SockJS(sockjs_url, protocol);
+            sjs.onopen = onopen
+            sjs.onclose = onclose;
+        } else {
+            log('[stopped] ' + e);
+            $('#connect').attr('disabled', false);
+            $('#disconnect').attr('disabled', true);
+        }
+    };
+    function onmessage(e) {
+            var msg = e.data;
+            var td = (new Date()).getTime() - msg.t;
+            i += 1;
+            send();
+    };
+
+    $('#connect').click(function() {
+        started = true;
+        log('[starting]');
+        protocol = $('#transport').val() || undefined;
+        onclose({status:1000});
+        $('#connect').attr('disabled', true);
+        $('#disconnect').attr('disabled', false);
+    });
+    $('#disconnect').click(function() {
+        log('[stopping...]');
+        started = false;
+    });
+</script>
+</body>
+</html>
