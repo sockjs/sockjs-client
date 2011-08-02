@@ -42,6 +42,7 @@
 
 <script>
     sockjs_url += '/echo';
+    sockjs_opts = {devel:true, debug:true};
 
     function log(a) {
             if ('console' in window && 'log' in window.console) {
@@ -76,11 +77,11 @@
     };
 
     $('#connect').click(function() {
-        log('[connecting]');
         $('#connect').attr('disabled', true);
         $('#disconnect').attr('disabled', false);
-        var t = $('#transport').val() || undefined;
-        sjs = new SockJS(sockjs_url, t);
+        var protocol = $('#transport').val() || undefined;
+        log('[connecting] ' + protocol);
+        sjs = new SockJS(sockjs_url, protocol, sockjs_opts);
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = onmessage;

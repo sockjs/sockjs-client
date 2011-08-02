@@ -42,6 +42,7 @@
 
 <script>
     sockjs_url += '/echo';
+    sockjs_opts = {devel:true, debug:false};
 
     function log(a) {
             if ('console' in window && 'log' in window.console) {
@@ -66,7 +67,7 @@
     function onclose(e) {
         if (started && e.status === 1000) {
             t0 = (new Date()).getTime();
-            sjs = new SockJS(sockjs_url, protocol);
+            sjs = new SockJS(sockjs_url, protocol, sockjs_opts);
             sjs.onopen = onopen
             sjs.onclose = onclose;
         } else {
@@ -84,8 +85,8 @@
 
     $('#connect').click(function() {
         started = true;
-        log('[starting]');
         protocol = $('#transport').val() || undefined;
+        log('[starting] ' + protocol);
         onclose({status:1000});
         $('#connect').attr('disabled', true);
         $('#disconnect').attr('disabled', false);
