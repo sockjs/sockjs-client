@@ -1,7 +1,7 @@
 
 test_protocol = (protocol) ->
     module(protocol)
-    if not SockJS[protocol].enabled()
+    if not SockJS[protocol] or not SockJS[protocol].enabled()
         test "[unsupported]", ->
                 log('Unsupported protocol: "' + protocol + '"')
     else
@@ -19,5 +19,10 @@ test_protocol = (protocol) ->
         asyncTest("invalid url port", test_invalid_url_port(protocol))
 
 
-for protocol in ['websocket', 'xhrpolling', 'jsonp', 'iframe-eventsource', 'iframe-htmlfile']
+protocols = ['websocket',
+        'iframe-eventsource',
+        'xhr-polling',
+        'iframe-xhr-polling',
+        'jsonp-polling']
+for protocol in protocols
     test_protocol(protocol)
