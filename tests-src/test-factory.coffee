@@ -1,14 +1,14 @@
 echo_factory_factory = (protocol, messages) ->
     return ->
-        expect(3 + messages.length)
+        expect(2 + messages.length)
         a = messages.slice(0)
         r = new SockJS(sockjs_url + '/echo', [protocol])
-        ok(r)
         r.onopen = (e) ->
-            log('onopen', e)
+            log('onopen' + e)
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
+            #log('onmessage');
             deepEqual(e.data, a[0])
             a.shift()
             if typeof a[0] is 'undefined'
@@ -16,8 +16,11 @@ echo_factory_factory = (protocol, messages) ->
             else
                 r.send(a[0])
         r.onclose = (e) ->
-            log('onclose', ''+e)
-            ok(true)
+            if a.length
+                ok(false, "Transport closed prematurely.")
+            else
+                log('onclose' + e)
+                ok(true)
             start()
 
 factor_echo_basic = (protocol) ->
