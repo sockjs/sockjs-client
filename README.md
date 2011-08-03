@@ -19,9 +19,10 @@ Supported transports
 
 Protocol                                          | Browser
 ------------------------------------------------- | -------------
-[WebSocket hixie-76][^1]                          | Chrome 6-12
+[WebSocket hixie-76][^1]                          | Chrome 6-12, Safari 5, Firefox 4 (disabled), Opera 11 (disabled)
 [WebSocket hybi-10][^2]                           | Chrome 14+, Firefox 6+
-[IFrame via postMessage][^3] + [EventSource][^4]  | Opera 10.70+, Firefox 3.5+, Safari 5+
+[IFrame via postMessage][^3] + [EventSource][^4]  | Opera 10.70+, Firefox 3.5+
+[XDR streaming][^7] (CORS)                        | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+
 [XDR polling][^5] (CORS)                          | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+ (through misbehaving proxy)
 [IFrame via postMessage][^3] + XHR polling        | Opera 9+
 [JsonP][^6] polling                               | (fallback)
@@ -33,3 +34,4 @@ Protocol                                          | Browser
 [^4]: http://dev.w3.org/html5/eventsource/
 [^5]: https://secure.wikimedia.org/wikipedia/en/wiki/XMLHttpRequest#Cross-domain_requests
 [^6]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
+[^7]: http://www.debugtheweb.com/test/teststreaming.aspx
