@@ -25,7 +25,7 @@ Protocol                                          | Browser
 [XDR streaming][^7] (CORS)                        | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+
 [XDR polling][^5] (CORS)                          | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+ (through misbehaving proxy)
 [IFrame via postMessage][^3] + XHR polling        | Opera 9+
-[JsonP][^6] polling                               | (fallback)
+[JsonP polling][^6]                               | (fallback)
 
 
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
