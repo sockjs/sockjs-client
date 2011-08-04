@@ -41,7 +41,7 @@
       }
 
 
-    var sjs = new SockJS(sockjs_url, ['jsonp']);
+    var sjs = new SockJS(sockjs_url);
     sjs.onopen = function() {
         log('connected ' + sjs.protocol);
     };
