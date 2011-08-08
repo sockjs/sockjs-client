@@ -3,6 +3,7 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var compress = require('compress');
+var crypto = require('crypto');
 
 
 var port = 8000;
@@ -20,7 +21,14 @@ var mimetypes = {
     gif: 'image/gif'
 };
 
+var md5_hex = function (data) {
+    return crypto.createHash('md5').update(data).digest('hex');
+};
+
+
 var compressable_ct = ['text', 'application'];
+
+var cacheable = true;
 
 var req_fin = function(statusCode, req, res, content, encoding) {
     var gz = '';
@@ -36,10 +44,21 @@ var req_fin = function(statusCode, req, res, content, encoding) {
         gz = '(gzip)';
         encoding = 'binary';
     }
-    // According to: http://code.google.com/speed/page-speed/docs/caching.html
-    // 'vary' effectively disables caching for IE. IE users are
-    // screwed anyway.
-    res.setHeader('Vary', 'Accept-Encoding');
+    if (content) {
+        // According to: http://code.google.com/speed/page-speed/docs/caching.html
+        // 'vary' effectively disables caching for IE. IE users are
+        // screwed anyway.
+        res.setHeader('Vary', 'Accept-Encoding');
+    }
+
+    if (cacheable) {
+        var cache_for = 365 * 24 * 60 * 60; // one year.
+        // See: http://code.google.com/speed/page-speed/docs/caching.html
+        res.setHeader('Cache-Control', 'public, max-age=' + cache_for);
+        var exp = new Date();
+        exp.setTime(exp.getTime() + cache_for * 1000);
+        res.setHeader('Expires', exp.toGMTString());
+    };
 
     var cl = '';
     if (content) {
@@ -52,6 +71,7 @@ var req_fin = function(statusCode, req, res, content, encoding) {
         res.writeHead(statusCode);
         res.end(content, encoding);
     } catch (x) {}
+
     console.log(req.method, req.url, statusCode, cl, gz);
 };
 
@@ -80,13 +100,19 @@ var handler = function(req, res) {
             req_fin(304, req, res);
             return;
         }
-        res.setHeader('Last-Modified', last_modified);
+        // res.setHeader('Last-Modified', last_modified);
         fs.readFile(filename, fs_decorator(req, res, cb2));
     };
     cb2 = function (content) {
+        var md5 = '"' + md5_hex(content) + '"';
+        if (req.headers['if-none-match'] === md5) {
+            req_fin(304, req, res);
+            return;
+        }
         var mimetype = mimetypes[path.extname(filename).slice(1)] || 'text/plain';
         mimetype += '; charset=UTF-8';
         res.setHeader('Content-Type', mimetype);
+        res.setHeader('ETag', md5);
         req_fin(200, req, res, content);
     };
     fs.stat(filename, fs_decorator(req, res, cb1));
