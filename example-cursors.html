@@ -62,11 +62,13 @@
         $('#'+id).offset({top:msg.y-15, left:msg.x-15});
     };
     var x, y;
-    var last_x, last_y;
+    var last_x, last_y, tref;
     $(document).mousemove(function(e) {
          x = e.pageX; y = e.pageY;
+         if(!tref) poll();
     });
     function poll() {
+         tref = null;
          if (last_x === x && last_y === y)
              return;
          var msg = {x:x, y:y, t: (new Date()).getTime(), id:myself};
@@ -75,8 +77,8 @@
          if (sjs.readyState === SockJS.OPEN) {
              sjs.send(raw_msg);
          }
+         tref = setTimeout(poll, 200);
     };
-    setInterval(poll, 200);
 </script>
 </body>
 </html>
