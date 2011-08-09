@@ -3,4 +3,4 @@ node_modules
 sockjs.min.js
 sockjs.pretty.js
 sockjs.js
-tests/*.js
+tests/lib/*.js

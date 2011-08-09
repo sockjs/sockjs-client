@@ -6,11 +6,11 @@ fi
 
 while [ 1 ]; do
     echo " [*] Generating javascript"
-    coffee -o tests/ -c --bare tests-src/*.coffee && \
-        coffee bin/render.coffee lib/all.js > sockjs.js && \
+    coffee -o tests/lib/ -c --bare tests-src/*.coffee && \
+        coffee bin/render.coffee lib/all.js > tests/lib/sockjs.js && \
     while [ 1 ]; do
         echo " [*] Running http server"
-        node bin/simple_http_server.js &
+        node bin/simple_http_server.js --dir tests &
         SRVPID=$!
         echo $SRVPID > .pidfile.pid
 

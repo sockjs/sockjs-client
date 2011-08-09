@@ -4,10 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var compress = require('compress');
 var crypto = require('crypto');
-
-
-var port = 8000;
-var host = "0.0.0.0";
+var optparse = require('optparse');
 
 var mimetypes = {
     html: 'text/html',
@@ -27,8 +24,6 @@ var md5_hex = function (data) {
 
 
 var compressable_ct = ['text', 'application'];
-
-var cacheable = true;
 
 var req_fin = function(statusCode, req, res, content, encoding) {
     var gz = '';
@@ -51,7 +46,7 @@ var req_fin = function(statusCode, req, res, content, encoding) {
         res.setHeader('Vary', 'Accept-Encoding');
     }
 
-    if (cacheable) {
+    if (options.cacheable) {
         var cache_for = 365 * 24 * 60 * 60; // one year.
         // See: http://code.google.com/speed/page-speed/docs/caching.html
         res.setHeader('Cache-Control', 'public, max-age=' + cache_for);
@@ -92,7 +87,8 @@ var fs_decorator = function(req, res, cb) {
     };
 };
 var handler = function(req, res) {
-    var filename = url.parse(req.url).pathname.slice(1) || 'index.html';
+    var filename = options.topdir + '/';
+    filename += url.parse(req.url).pathname.slice(1) || 'index.html';
     var cb1, cb2;
     cb1 = function(stats) {
         var last_modified = stats.mtime.toGMTString();
@@ -100,7 +96,9 @@ var handler = function(req, res) {
             req_fin(304, req, res);
             return;
         }
-        // res.setHeader('Last-Modified', last_modified);
+        if (!options.cacheable) {
+            res.setHeader('Last-Modified', last_modified);
+        }
         fs.readFile(filename, fs_decorator(req, res, cb2));
     };
     cb2 = function (content) {
@@ -118,7 +116,26 @@ var handler = function(req, res) {
     fs.stat(filename, fs_decorator(req, res, cb1));
 };
 
-console.log(" [*] Listening on", host + ':' + port);
+var switches = [
+    ['-p', '--port PORT', 'Port to listen on (default: 8080)'],
+    ['-h', '--host HOST', 'Ip address to bind to (default: 0.0.0.0)'],
+    ['-d', '--dir DIR', 'Directory from which to serve files (default: .)']
+];
+
+var options = {port:8000, host:'0.0.0.0', topdir:'.', cacheable:false};
+var parser = new optparse.OptionParser(switches)
+parser.on('port', function(_,v) {
+              options.port = Number(v);
+          });
+parser.on('host', function (_,v) {
+              options.host = v;
+          });
+parser.on('dir', function (_,v) {
+              options.topdir = v;
+          });
+parser.parse(process.ARGV.slice(2));
+
+console.log(" [*] Listening on", options.host + ':' + options.port, ' serving directory:', options.topdir);
 var server = http.createServer();
 server.addListener('request', handler);
-server.listen(port, host);
+server.listen(options.port, options.host);
