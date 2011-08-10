@@ -16,12 +16,9 @@ sockjs.pretty.js: lib/*js
 tests/html/lib/sockjs.js: sockjs.js
 	cp $< $@
 
-tests/html/lib/test-factory.js: tests/html/src/test-factory.coffee
-	coffee -o tests/html/lib/ -c --bare $<
-
-tests/html/lib/test-run.js: tests/html/src/test-run.coffee
+tests/html/lib/tests.js: tests/html/src/tests.coffee
 	coffee -o tests/html/lib/ -c --bare $<
 
 test: tests
-tests: tests/html/lib/sockjs.js tests/html/lib/test-factory.js tests/html/lib/test-run.js
+tests: tests/html/lib/sockjs.js tests/html/lib/tests.js
 	node tests/server.js
