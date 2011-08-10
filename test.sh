@@ -5,12 +5,9 @@ if [ -e .pidfile.pid ]; then
 fi
 
 while [ 1 ]; do
-    echo " [*] Generating javascript"
-    coffee -o tests/lib/ -c --bare tests-src/*.coffee && \
-        coffee bin/render.coffee lib/all.js > tests/lib/sockjs.js && \
     while [ 1 ]; do
         echo " [*] Running http server"
-        node bin/simple_http_server.js --dir tests &
+        make tests &
         SRVPID=$!
         echo $SRVPID > .pidfile.pid
 
