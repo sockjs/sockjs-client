@@ -42,6 +42,12 @@ serve:
 	    sleep 0.1;					\
 	done
 
+# To release do:
+#   1) commit everything you need
+#   2) amend 'version' file
+#   3) run 'make tag', and git push/git push --tag as suggested
+#   4) run 'make upload', and suggested commands
+
 RVER:=$(shell cat version)
 VER:=$(shell ./VERSION-GEN)
 
@@ -51,7 +57,7 @@ tag:
 	git commit version -m "Release $(RVER)"
 	git tag -a v$(RVER) -m "Release $(RVER)"
 	@echo ' [*] Now run'
-	@echo 'git push --all'
+	@echo 'git push; git push --tag'
 
 upload: build
 	[ -e ../sockjs-client-gh-pages ] || 				\
