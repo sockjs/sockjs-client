@@ -25,19 +25,30 @@ tests: tests/html/lib/sockjs.js tests/html/lib/tests.js
 
 
 serve:
-	@if [ -e .pidfile.pid ]; then	\
-		kill `cat .pidfile.pid`;	\
+	@if [ -e .pidfile.pid ]; then			\
+		kill `cat .pidfile.pid`;		\
 		rm .pidfile.pid;			\
 	fi
 
-	@while [ 1 ]; do							\
+	@while [ 1 ]; do				\
 	        echo " [*] Running http server";	\
-	        make test &							\
-	        SRVPID=$$!;							\
+	        make test &				\
+	        SRVPID=$$!;				\
 	        echo $$SRVPID > .pidfile.pid;		\
 	        echo " [*] Server pid: $$SRVPID";	\
-	    inotifywait -r -q -e modify .;			\
-	    kill `cat .pidfile.pid`;		\
+	    inotifywait -r -q -e modify .;		\
+	    kill `cat .pidfile.pid`;			\
 	    rm -f .pidfile.pid;				\
-	    sleep 0.1;						\
+	    sleep 0.1;					\
 	done
+
+VER:=$(shell ./VERSION-GEN)
+upload: build
+	[ -e ../sockjs-client-gh-pages ] || 				\
+		git clone `git remote -v|tr "[:space:]" "\t"|cut -f 2`	\
+			--branch gh-pages ../sockjs-client-gh-pages
+	(cd ../sockjs-client-gh-pages; git pull;)
+	for f in sock*js; do						\
+		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(VER)\2|g'`; \
+	done
+	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html;)
