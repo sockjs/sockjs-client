@@ -2,7 +2,7 @@
 
 all: sockjs.js
 
-build: sockjs.js sockjs.min.js sockjs.pretty.js
+build: sockjs.js sockjs.min.js
 
 sockjs.js: lib/*js
 	coffee bin/render.coffee lib/all.js > $@
