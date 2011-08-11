@@ -42,7 +42,17 @@ serve:
 	    sleep 0.1;					\
 	done
 
+RVER:=$(shell cat version)
 VER:=$(shell ./VERSION-GEN)
+
+.PHONY: tag upload
+tag:
+	git tag -d v$(RVER) || true
+	git commit version -m "Release $(RVER)"
+	git tag -a v$(RVER) -m "Release $(RVER)"
+	@echo ' [*] Now run'
+	@echo 'git push --all'
+
 upload: build
 	[ -e ../sockjs-client-gh-pages ] || 				\
 		git clone `git remote -v|tr "[:space:]" "\t"|cut -f 2`	\
@@ -51,4 +61,9 @@ upload: build
 	for f in sock*js; do						\
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(VER)\2|g'`; \
 	done
+	for f in sock*js; do						\
+		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-latest\2|g'`; \
+	done
 	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html;)
+	@echo ' [*] Now run:'
+	@echo '(cd ../sockjs-client-gh-pages; git add sock*js; git commit -m sock*js index.html -m "Release $(VER)"; git push;)'
