@@ -3,16 +3,22 @@ SockJS
 ======
 
 Pure JavaScript WebSockets-like API for browsers that don't support
-HTML5 or are running behind a proxy.
+HTML5 or are running behind a restrictive proxy.
 
- * No Flash inside (no need to open port 843 - which often doesn't
-   work through proxies, no need to host `crossdomain.xml`)
+Philosophy:
+
+ * No Flash inside (no need to open port 843 - which doesn't work
+   through proxies, no need to host `crossdomain.xml`, no need
+   [to wait for 3 seconds](https://github.com/gimite/web-socket-js/issues/49)
+   in order to detect that)
  * All the transports support cross domain connections. It's possible
-   and recommended to host SockJS on different domain than your main
-   web site.
+   and recommended to host SockJS server on different domain than your
+   main web site.
+ * There is a support for at least one streaming protocol for every
+   major browser.
  * Polling transports are be used as a fallback for old browsers and
    hosts behind restrictive proxies.
-
+ * Connection establishment should be fast and lightweight.
 
 Supported transports
 --------------------
