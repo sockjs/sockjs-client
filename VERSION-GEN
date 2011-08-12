@@ -3,19 +3,15 @@
 LF='
 '
 
-VN=$(cat version)
-
-if VN=$(git describe --match "v[0-9]*" --abbrev=4 HEAD 2>/dev/null) &&
-	case "$VN" in
-	*$LF*) (exit 1) ;;
-	v[0-9]*)
-		git update-index -q --refresh
-		test -z "$(git diff-index --name-only HEAD --)" ||
-		VN="$VN-dirty" ;;
-	esac
-then
-    VN=$(echo "$VN" | sed -e 's/-/./g');
-fi
+VN=$(git describe --match "v[0-9]*" --abbrev=4 HEAD 2>/dev/null)
+case "$VN" in
+    *$LF*) (exit 1) ;;
+v[0-9]*)
+        git update-index -q --refresh
+        test -z "$(git diff-index --name-only HEAD --)" ||
+        VN="$VN-dirty" ;;
+esac
+VN=$(echo "$VN" | sed -e 's/-/./g');
 VN=$(expr "$VN" : v*'\(.*\)')
 
 echo "$VN"

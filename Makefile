@@ -1,4 +1,4 @@
-.PHONY: all build tests test
+.PHONY: all build tests test serve clean
 
 all: sockjs.js
 
@@ -42,7 +42,10 @@ serve:
 	    sleep 0.1;					\
 	done
 
-# To release do:
+clean:
+	rm -f sockjs*.js tests/html/lib/*.js
+
+# To release:
 #   1) commit everything you need
 #   2) amend 'version' file
 #   3) run 'make tag', and git push/git push --tag as suggested
@@ -53,8 +56,8 @@ VER:=$(shell ./VERSION-GEN)
 
 .PHONY: tag upload
 tag:
-	git tag -d v$(RVER) || true
-	git commit version -m "Release $(RVER)"
+	-git tag -d v$(RVER)
+	git commit $(TAG_OPTS) version -m "Release $(RVER)"
 	git tag -a v$(RVER) -m "Release $(RVER)"
 	@echo ' [*] Now run'
 	@echo 'git push; git push --tag'
