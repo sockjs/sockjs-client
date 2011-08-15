@@ -29,8 +29,8 @@ Philosophy:
 Example
 -------
 
-Generally, the SockJS mimics WebSockets API, but instead of
-`WebSocket` there is `SockJS` JavaScript object.
+SockJS mimics [WebSockets API](http://dev.w3.org/html5/websockets/),
+ instead of `WebSocket` there is `SockJS` JavaScript object.
 
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
@@ -126,6 +126,7 @@ To run QUnit tests simply point your browser to
 http://127.0.0.1:8000/.
 
 If you want the javascript to be recompiled when the source files are
-modified and automatically restart the tests run `make serve`. You
-will need 'inotifywait' command from package `inotify-tools`.
+modified and automatically restart the http server run `make
+serve`. You will need 'inotifywait' command from package
+`inotify-tools`.
 
