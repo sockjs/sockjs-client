@@ -1,6 +1,6 @@
 {
 	"name": "sockjs-client",
-	"version": "0.0.1",
+	"version": "0.0.0-unreleasable",
         "dependencies": {
                 "uglify-js": "1.0.6",
                 "coffee-script": "1.1.1",
