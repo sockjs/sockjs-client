@@ -37,7 +37,7 @@ render = (filename, depth, options) ->
                 options.comment = true
             render(args[0], depth + '    ', options)
         version: ->
-            "0.0.1"
+            options.version
         include_and_minify: (args) ->
             if args.length > 1 and args[1].indexOf('c') isnt -1
                 options.comment = true
@@ -73,13 +73,16 @@ main = ->
     switches = [
         ['-p', '--pretty', 'Prettify javascript']
         ['-m', '--minify', 'Minify javascript']
+        ['-s', '--set-version [VERSION]', 'Set the value of version tag']
     ]
-    options = {minify: false, toplevel: true}
+    options = {minify: false, toplevel: true, version: 'unknown'}
     parser = new optparse.OptionParser(switches)
     parser.on 'pretty', ->
                    options.beautify = true
     parser.on 'minify', ->
                    options.minify = true
+    parser.on 'set-version', (_, version) ->
+                   options.version = version
     filenames = parser.parse(process.ARGV.slice(2))
 
     content = for filename in filenames
