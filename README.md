@@ -29,6 +29,9 @@ Philosophy:
 Example
 -------
 
+Generally, the SockJS mimics WebSockets API, but instead of
+`WebSocket` there is `SockJS` JavaScript object.
+
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
 
@@ -78,7 +81,51 @@ Protocol                                          | Browser
 Deployment
 ----------
 
-There isn't a fully featured CDN yet, in the meantime you can use
-releases hosted on Github: http://majek.github.com/sockjs-client/ , or
-host the code yourself.
+There should be a proper CDN for SockJS, but there isn't one yet. In
+the meantime you can use releases hosted on Github:
+http://majek.github.com/sockjs-client/ , or host the code yourself.
+
+
+Development
+-----------
+
+SockJS-client uses [Node.js](http://nodejs.org/) for testing and
+javascript minification. If you want to play with SockJS code, check
+out the git repo and follow this steps:
+
+    npm install
+
+(SockJS-client uses
+[SockJS-node](https://github.com/majek/sockjs-node) for testing, you
+may want to link 'node_modules/sockjs' to directory with cloned
+SockJS-node.)
+
+To generate javascript run:
+
+    make sockjs.js
+
+To generate minified javascript run:
+
+    make sockjs.min.js
+
+(To generate both run `make build`.)
+
+
+### Testing
+
+To run qunit tests, type:
+
+    make test
+
+This command runs script from 'tests/server.js' which starts two web
+servers. First listens on http://127.0.0.1:8000/ and serves static
+files for qunit tests. Second runs on port 9999 and is a simple SockJS
+server.
+
+To run QUnit tests simply point your browser to
+http://127.0.0.1:8000/.
+
+If you want the javascript to be recompiled when the source files are
+modified and automatically restart the tests run `make serve`. You
+will need 'inotifywait' command from package `inotify-tools`.
 
