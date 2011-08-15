@@ -4,14 +4,14 @@ all: sockjs.js
 
 build: sockjs.js sockjs.min.js
 
-sockjs.js: lib/*js
-	coffee bin/render.coffee lib/all.js > $@
+sockjs.js: lib/*js version
+	coffee bin/render.coffee --set-version $(VER) lib/all.js > $@
 
-sockjs.min.js: lib/*js
-	coffee bin/render.coffee --minify lib/all.js > $@
+sockjs.min.js: lib/*js version
+	coffee bin/render.coffee --set-version $(VER) --minify lib/all.js > $@
 
-sockjs.pretty.js: lib/*js
-	coffee bin/render.coffee --minify --pretty lib/all.js > $@
+sockjs.pretty.js: lib/*js version
+	coffee bin/render.coffee --set-version $(VER) --minify --pretty lib/all.js > $@
 
 tests/html/lib/sockjs.js: sockjs.js
 	cp $< $@
@@ -47,7 +47,7 @@ clean:
 
 # To release:
 #   1) commit everything you need
-#   2) amend 'version' file
+#   2) amend 'version' file (don't commit)
 #   3) run 'make tag', and git push/git push --tag as suggested
 #   4) run 'make upload', and suggested commands
 
