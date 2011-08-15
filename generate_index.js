@@ -5,7 +5,8 @@ var url = 'https://github.com/majek/sockjs-client';
 
 var p = console.log;
 
-p('<html><head><title>'+title+'</title></head><body><h1>'+title+'</h1><ul>');
+p('<!doctype html>');
+p('<html><head><title>'+title+'</title></head><body lang="en"><h1>'+title+'</h1><ul>');
 p('Source code: <a href="'+url+'"><b>'+url+'</b></a><br><br>');
 
 var end;
