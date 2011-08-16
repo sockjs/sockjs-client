@@ -228,3 +228,20 @@ protocols = ['websocket',
         'jsonp-polling']
 for protocol in protocols
     test_protocol(protocol)
+
+
+
+
+module('other')
+
+test "amending url", ->
+    dl = document.location
+
+    r = new SockJS('//blah:1/abc', [])
+    equal(r._base_url, dl.protocol + '//blah:1/abc')
+
+    r = new SockJS('/abc', [])
+    equal(r._base_url, dl.protocol + '//' + dl.host + '/abc')
+
+    r = new SockJS('http://a:1/abc', [])
+    equal(r._base_url, 'http://a:1/abc')
