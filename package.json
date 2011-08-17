@@ -5,7 +5,7 @@
                 "uglify-js": "1.0.6",
                 "coffee-script": "1.1.1",
                 "optparse": "1.0.1",
-                "compress": "0.1.9",
+                "node-static": "0.5.9",
                 "sockjs": "*"
         }
 }

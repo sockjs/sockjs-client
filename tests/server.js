@@ -1,9 +1,28 @@
-var shs = require('./simple_http_server');
-var sts = require('./sockjs_test_server');
+var http = require('http');
+var node_static = require('node-static');
 
-var config = require('./config');
+var sockjs_app = require('./sockjs_app');
+var config = require('./config').config;
 
-config.static.topdir =  __dirname + '/html';
 
-shs.createServer(config.static);
-sts.createServer(config.sockjs);
+var static_directory = new node_static.Server(__dirname + '/html');
+
+
+var server = http.createServer();
+server.addListener('request', function(req, res) {
+                       if (req.url === '/config.js') {
+                           res.setHeader('content-type', 'application/javascript');
+                           res.writeHead(200);
+                           res.end('var sockjs_url = "' +
+                                   config.sockjs_endpoint_url + '";');
+                       } else{
+                           static_directory.serve(req, res);
+                       }
+                   });
+server.addListener('upgrade', function(req,res){
+                       res.end();
+                   });
+sockjs_app.install(config, server);
+
+console.log(" [*] Listening on", config.host + ':' + config.port);
+server.listen(config.port, config.host);
