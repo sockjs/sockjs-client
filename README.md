@@ -117,10 +117,9 @@ To run qunit tests, type:
 
     make test
 
-This command runs script from 'tests/server.js' which starts two web
-servers. First listens on http://127.0.0.1:8000/ and serves static
-files for qunit tests. Second runs on port 9999 and is a simple SockJS
-server.
+This command runs script 'tests/server.js' which starts a web server
+that listens on http://127.0.0.1:8000/ . It serves static QUnit files
+and serves a simple SockJS.
 
 To run QUnit tests simply point your browser to
 http://127.0.0.1:8000/.
