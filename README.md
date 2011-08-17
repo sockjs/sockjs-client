@@ -26,6 +26,19 @@ Philosophy:
  * The API should follow [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as closely as possible (but we're not there yet).
 
 
+Live QUnit tests and smoke tests
+--------------------------------
+
+SockJS comes with some QUnit tests and a few smoke tests (using
+[SockJS-node](https://github.com/majek/sockjs-client) on the server
+side). At the moment they are deployed in few places:
+
+ * http://sockjs.popcnt.org/ (hosted in Europe)
+ * http://sockjs.cloudfoundry.com/ (CloudFoundry, websockets not working)
+ * https://sockjs.cloudfoundry.com/ (CloudFoundry SSL, websockets not working)
+ * http://sockjs.herokuapp.com/ (Heroku, websockets not working)
+
+
 Example
 -------
 
