@@ -1,4 +1,5 @@
 .pidfile.pid
 node_modules
-sockjs*.js
+sockjs.js
+sockjs.min.js
 tests/html/lib/*.js
