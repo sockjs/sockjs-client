@@ -1,5 +1,6 @@
 {
 	"name": "sockjs-client",
+	"author": "Marek Majkowski",
 	"version": "0.0.0-unreleasable",
         "dependencies": {
                 "uglify-js": "1.0.6",
