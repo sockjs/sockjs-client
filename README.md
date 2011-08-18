@@ -25,15 +25,10 @@ Philosophy:
  * Connection establishment should be fast and lightweight.
  * The API should follow [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as closely as possible (but we're not there yet).
 
-<div class="section"><form
-action="http://groups.google.com/group/sockjs/boxsubscribe"> <div
-id="google-subscribe-input"><a
-href="http://groups.google.com/group/sockjs"
-id="google-subscribe-link">Join SockJS mailing list:</a> <input type="text" name="email"
-value="email" onblur="if (this.value == '') {this.value = 'email';}"
-onfocus="if (this.value == 'email') {this.value = '';}"
-id="google-subscribe-email"><input type="submit" name="go"
-value="Subscribe"></div></form></div>
+
+Subscribe to
+[SockJS mailing list](http://groups.google.com/group/sockjs) for
+discussions and support.
 
 
 Live QUnit tests and smoke tests
