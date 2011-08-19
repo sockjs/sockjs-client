@@ -57,7 +57,7 @@ VER:=$(shell ./VERSION-GEN)
 .PHONY: tag upload
 tag:
 	-git tag -d v$(RVER)
-	git commit $(TAG_OPTS) version -m "Release $(RVER)"
+	git commit $(TAG_OPTS) version Changelog -m "Release $(RVER)"
 	git tag -a v$(RVER) -m "Release $(RVER)"
 	@echo ' [*] Now run'
 	@echo 'git push; git push --tag'

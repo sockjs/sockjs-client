@@ -1,0 +1,11 @@
+0.0.2
+=====
+
+ * Initial support for JSESSIONID based load balancing. Currently
+   doesn't play nicely with IE XDomainRequest transport.
+
+
+0.0.1
+=====
+
+ * Initial release.
