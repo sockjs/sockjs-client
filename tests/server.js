@@ -13,8 +13,8 @@ server.addListener('request', function(req, res) {
                        if (req.url === '/config.js') {
                            res.setHeader('content-type', 'application/javascript');
                            res.writeHead(200);
-                           res.end('var sockjs_url = "' +
-                                   config.sockjs_endpoint_url + '";');
+                           res.end('var client_opts = ' +
+                                   JSON.stringify(config.client_opts) + ';');
                        } else{
                            static_directory.serve(req, res);
                        }

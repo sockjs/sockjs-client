@@ -40,9 +40,6 @@
   </code>
 
 <script>
-    sockjs_url += '/echo';
-    sockjs_opts = {devel:true, debug:false};
-
     function log(a) {
             if ('console' in window && 'log' in window.console) {
                 console.log(a);
@@ -66,7 +63,7 @@
     function onclose(e) {
         if (started && e.status === 1000) {
             t0 = (new Date()).getTime();
-            sjs = new SockJS(sockjs_url, protocol, sockjs_opts);
+            sjs = new SockJS(client_opts.url + '/echo', protocol, client_opts.sockjs_opts);
             sjs.onopen = onopen
             sjs.onclose = onclose;
         } else {

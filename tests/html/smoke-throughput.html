@@ -40,9 +40,6 @@
   </code>
 
 <script>
-    sockjs_url += '/echo';
-    sockjs_opts = {devel:true, debug:true};
-
     function log(a) {
             if ('console' in window && 'log' in window.console) {
                 console.log(a);
@@ -80,7 +77,7 @@
         $('#disconnect').attr('disabled', false);
         var protocol = $('#transport').val() || undefined;
         log('[connecting] ' + protocol);
-        sjs = new SockJS(sockjs_url, protocol, sockjs_opts);
+        sjs = new SockJS(client_opts.url + '/echo', protocol, client_opts.sockjs_opts);
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = onmessage;

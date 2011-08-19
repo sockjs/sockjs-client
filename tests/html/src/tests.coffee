@@ -1,8 +1,12 @@
+newSockJS = (path, protocol) ->
+    url = if /^http/.test(path) then path else client_opts.url + path
+    return new SockJS(url, [protocol], client_opts.sockjs_opts)
+
 echo_factory_factory = (protocol, messages) ->
     return ->
         expect(2 + messages.length)
         a = messages.slice(0)
-        r = new SockJS(sockjs_url + '/echo', [protocol])
+        r = newSockJS('/echo', protocol)
         r.onopen = (e) ->
             log('onopen ' + e)
             ok(true)
@@ -94,7 +98,7 @@ factor_echo_large_message = (protocol) ->
 batch_factory_factory = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
-        r = new SockJS(sockjs_url + '/echo', [protocol])
+        r = newSockJS('/echo', protocol)
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -127,7 +131,7 @@ factor_batch_large = (protocol) ->
 factor_user_close = (protocol) ->
     return ->
         expect(4)
-        r = new SockJS(sockjs_url + '/echo', [protocol])
+        r = newSockJS('/echo', protocol)
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -147,7 +151,7 @@ factor_user_close = (protocol) ->
 factor_server_close = (protocol) ->
     return ->
         expect(4)
-        r = new SockJS(sockjs_url + '/close', [protocol])
+        r = newSockJS('/close', protocol)
         ok(r)
         r.onopen = (e) ->
             ok(true)
@@ -161,7 +165,7 @@ factor_server_close = (protocol) ->
 test_invalid_url_404 = (protocol) ->
     return ->
         expect(2)
-        r = new SockJS(sockjs_url + '/invalid_url', [protocol])
+        r = newSockJS('/invalid_url', protocol)
         ok(r)
         counter =
         r.onopen = (e) ->
@@ -176,7 +180,7 @@ test_invalid_url_404 = (protocol) ->
 test_invalid_url_500 = (protocol) ->
     return ->
         expect(2)
-        r = new SockJS(sockjs_url + '/500_error', [protocol])
+        r = newSockJS('/500_error', protocol)
         ok(r)
         r.onopen = (e) ->
             fail(true)
@@ -188,7 +192,8 @@ test_invalid_url_500 = (protocol) ->
 test_invalid_url_port = (protocol) ->
     return ->
         expect(2)
-        r = new SockJS("http://127.0.0.1:1079", [protocol])
+        dl = document.location
+        r = newSockJS(dl.protocol + '//' + dl.hostname + ':1079', protocol)
         ok(r)
         r.onopen = (e) ->
             fail(true)
@@ -198,16 +203,24 @@ test_invalid_url_port = (protocol) ->
             start()
 
 
-
-
+# IE doesn't do array.indexOf...
+arrIndexOf = (arr, obj) ->
+     for i in [0...arr.length]
+         if arr[i] is obj
+            return i
+     return -1
 
 test_protocol = (protocol) ->
     module(protocol)
     if not SockJS[protocol] or not SockJS[protocol].enabled()
-        test "[unsupported]", ->
-                log('Unsupported protocol: "' + protocol + '"')
+        test "[unsupported by client]", ->
+                log('Unsupported protocol (by client): "' + protocol + '"')
+    else if client_opts.disabled_transports and
+          arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
+        test "[unsupported by server]", ->
+                log('Unsupported protocol (by server): "' + protocol + '"')
     else
-        asyncTest("echo", factor_echo_basic(protocol))
+        asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
         asyncTest("special_chars", factor_echo_special_chars(protocol))
@@ -228,8 +241,6 @@ protocols = ['websocket',
         'jsonp-polling']
 for protocol in protocols
     test_protocol(protocol)
-
-
 
 
 module('other')

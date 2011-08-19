@@ -29,8 +29,6 @@
   </code>
 
 <script>
-    sockjs_url += '/broadcast';
-
     function log(a) {
             if ('console' in window && 'log' in window.console) {
                 console.log(a);
@@ -41,7 +39,7 @@
       }
 
 
-    var sjs = new SockJS(sockjs_url);
+    var sjs = new SockJS(client_opts.url + '/broadcast', undefined, client_opts.sockjs_opts);
     sjs.onopen = function() {
         log('connected ' + sjs.protocol);
     };
