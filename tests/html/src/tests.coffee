@@ -212,7 +212,7 @@ arrIndexOf = (arr, obj) ->
 
 test_protocol = (protocol) ->
     module(protocol)
-    if not SockJS[protocol] or not SockJS[protocol].enabled()
+    if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
         test "[unsupported by client]", ->
                 log('Unsupported protocol (by client): "' + protocol + '"')
     else if client_opts.disabled_transports and
@@ -236,6 +236,7 @@ test_protocol = (protocol) ->
 
 protocols = ['websocket',
         'iframe-eventsource',
+        'iframe-htmlfile',
         'xhr-polling',
         'iframe-xhr-polling',
         'jsonp-polling']
