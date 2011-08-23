@@ -100,8 +100,8 @@ Where `options` is a hash which can contain:
 </dl>
 
 
-Supported transports
---------------------
+Supported transports (#1)
+-------------------------
 
 Protocol                                          | Browser
 ------------------------------------------------- | -------------
@@ -123,6 +123,20 @@ Protocol                                          | Browser
 [^6]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
 [^8]: http://cometdaily.com/2007/11/18/ie-activexhtmlfile-transport-part-ii/
+
+
+Supported transports (#2)
+-------------------------
+
+Transport              | Target browsers               | Good loadbalancer required |  Behaving proxy required
+---------------------- | ----------------------------- | -------------------------- | ------------------------
+WebSocket              | Chrome, Safari, Firefox 6+    |          yes               |          yes
+IFrame + EventSource   | Opera 10.70+                  |          no                |          yes
+IFrame + HtmlFile      | IE 8 (cookies=yes)            |          no                |          yes
+XHR streaming (CORS)   | IE 8 (cookies=no), Firefox <6 |          no                |          yes
+XHR polling (CORS)     | Chrome, Safari, Firefox, IE 8 |          no                |          no
+IFrame + XHR polling   | Opera                         |          no                |          no
+JsonP polling          | any                           |          no                |          no
 
 
 Deployment
