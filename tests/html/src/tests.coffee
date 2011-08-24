@@ -257,3 +257,18 @@ test "amending url", ->
 
     r = new SockJS('http://a:1/abc', [])
     equal(r._base_url, 'http://a:1/abc')
+
+
+test "EventEmitter", ->
+    expect(3)
+    r = new SockJS('//blah/abc', [])
+    r.addEventListener 'message', -> ok(true)
+    r.onmessage = -> fail(true)
+    bluff = -> fail(true)
+    r.addEventListener 'message', bluff
+    r.removeEventListener 'message', bluff
+    r.addEventListener 'message', bluff
+    r.addEventListener 'message', -> ok(true)
+    r.onmessage = -> ok(true)
+    r.removeEventListener 'message', bluff
+    r.dispatchEvent({type:'message'})
