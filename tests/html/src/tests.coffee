@@ -86,11 +86,15 @@ factor_echo_special_chars = (protocol) ->
 
 
 factor_echo_large_message = (protocol) ->
+    # Should be larger than 128k - the limit for a single request in
+    # some streaming transports.
     messages = [
         Array(4096).join('x'),
         Array(4096*2).join('x'),
         Array(4096*4).join('x'),
         Array(4096*8).join('x'),
+        Array(Math.pow(2,18)).join('x'),
+        Array(Math.pow(2,18)).join('x'),
     ]
     return echo_factory_factory(protocol, messages)
 
