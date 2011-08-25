@@ -239,6 +239,7 @@ test_protocol = (protocol) ->
 
 
 protocols = ['websocket',
+        'xhr-streaming',
         'iframe-eventsource',
         'iframe-htmlfile',
         'xhr-polling',
