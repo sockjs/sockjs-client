@@ -2,7 +2,7 @@
 	"name": "sockjs-client",
 	"author": "Marek Majkowski",
 	"version": "0.0.0-unreleasable",
-        "dependencies": {
+        "devDependencies": {
                 "uglify-js": "1.0.6",
                 "coffee-script": "1.1.1",
                 "optparse": "1.0.1",
