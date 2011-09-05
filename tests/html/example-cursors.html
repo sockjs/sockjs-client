@@ -17,12 +17,28 @@
         width: 30px;
         position: absolute;
         border: 1px solid grey;
+        z-index:-1;
       }
 
   </style>
 
 </head>
 <body>
+
+<form>
+  <select id="transport">
+  <option value="">- any - </option>
+  <option value="websocket">websocket</option>
+  <option value="xhr-streaming">xhr-streaming</option>
+  <option value="iframe-eventsource">iframe-eventsource</option>
+  <option value="iframe-htmlfile">iframe-htmlfile</option>
+  <option value="xhr-polling">xhr-polling</option>
+  <option value="iframe-xhr-polling">iframe-xhr-polling</option>
+  <option value="jsonp-polling">jsonp-polling</option>
+  </select>
+  <input type="button" value="Connect" id="connect">
+  <input type="button" value="Disconnect" id="disconnect" disabled="yes">
+</form>
 
   Latency: <code id="latency"></code><br>
   <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px grey solid;">
@@ -38,16 +54,34 @@
             $('#logs').scrollTop($('#logs').scrollTop()+10000);
       }
 
+    var sjs = null;
+    var protocol;
+    $('#connect').click(function() {
+        $('#connect').attr('disabled', true);
+        $('#disconnect').attr('disabled', false);
+        var protocol = $('#transport').val() || undefined;
+        log('[connecting] ' + protocol);
+        sjs = new SockJS(client_opts.url + '/broadcast', protocol, client_opts.sockjs_opts);
+        sjs.onopen = onopen
+        sjs.onclose = onclose;
+        sjs.onmessage = onmessage;
+    });
+    $('#disconnect').click(function() {
+        $('#disconnect').attr('disabled', true);
+        log('[disconnecting]');
+        sjs.close();
+    });
 
-    var sjs = new SockJS(client_opts.url + '/broadcast', undefined, client_opts.sockjs_opts);
-    sjs.onopen = function() {
+    var onopen = function() {
         log('connected ' + sjs.protocol);
     };
-    sjs.onclose = function(e) {
+    var onclose = function(e) {
         log('disconnected ' + e);
+        $('#connect').attr('disabled', false);
+        $('#disconnect').attr('disabled', true);
     };
     var myself = (''+Math.random()).substr(2);
-    sjs.onmessage = function(e) {
+    var onmessage = function(e) {
         var msg = JSON.parse(e.data);
         if (msg.id === myself) {
             var td = (new Date()).getTime() - msg.t;
@@ -65,18 +99,20 @@
          x = e.pageX; y = e.pageY;
          if(!tref) poll();
     });
-    function poll() {
+    var poll = function() {
          tref = null;
          if (last_x === x && last_y === y)
              return;
          var msg = {x:x, y:y, t: (new Date()).getTime(), id:myself};
          last_x = x; last_y = y;
          var raw_msg = JSON.stringify(msg);
-         if (sjs.readyState === SockJS.OPEN) {
+         if (sjs && sjs.readyState === SockJS.OPEN) {
              sjs.send(raw_msg);
          }
          tref = setTimeout(poll, 200);
     };
+    $('#connect').attr('disabled', false);
+    $('#disconnect').attr('disabled', true);
 </script>
 </body>
 </html>
