@@ -35,6 +35,7 @@ factor_echo_rich = (protocol) ->
     messages = [ [1,2,3,'data'], null, "data", 1, 12.0, {a:1, b:2} ]
     return echo_factory_factory(protocol, messages)
 
+
 factor_echo_unicode = (protocol) ->
     messages = [
         "Τη γλώσσα μου έδωσαν ελληνική το σπίτι φτωχικό στις αμμουδιές του ",
@@ -301,3 +302,39 @@ test "EventEmitter", ->
     r.onmessage = -> ok(true)
     r.removeEventListener 'message', bluff
     r.dispatchEvent({type:'message'})
+
+asyncTest "chunking test", ->
+    expect(25)
+    a = new Array(25)
+    go = ->
+        SockJS.chunkingTest client_opts.url + '/echo', (r) ->
+            if $.browser.msie and $.browser.version < 8
+                # on browsers with no streaming support...
+                equal(r, false)
+            else
+                equal(r, true)
+            a.shift()
+            if a.length isnt 0
+                go()
+            else
+                start()
+    go()
+
+asyncTest "chunking test, invalid url 404", ->
+        expect(1)
+        SockJS.chunkingTest client_opts.url + '/invalid_url', (r) ->
+            equal(r, false)
+            start()
+
+asyncTest "chunking test, invalid url 500", ->
+        expect(1)
+        SockJS.chunkingTest client_opts.url + '/500_error', (r) ->
+            equal(r, false)
+            start()
+
+asyncTest "chunking test, invalid url port", ->
+        expect(1)
+        dl = document.location
+        SockJS.chunkingTest dl.protocol + '//' + dl.hostname + ':1079', (r) ->
+            equal(r, false)
+            start()
