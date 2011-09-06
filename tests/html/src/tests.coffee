@@ -1,3 +1,11 @@
+protocols = ['websocket',
+        'xhr-streaming',
+        'iframe-eventsource',
+        'iframe-htmlfile',
+        'xhr-polling',
+        'iframe-xhr-polling',
+        'jsonp-polling']
+
 newSockJS = (path, protocol) ->
     url = if /^http/.test(path) then path else client_opts.url + path
     return new SockJS(url, [protocol], client_opts.sockjs_opts)
@@ -239,7 +247,7 @@ arrIndexOf = (arr, obj) ->
             return i
      return -1
 
-test_protocol = (protocol) ->
+test_protocol_messages = (protocol) ->
     module(protocol)
     if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
         test "[unsupported by client]", ->
@@ -258,20 +266,26 @@ test_protocol = (protocol) ->
 
         asyncTest("user close", factor_user_close(protocol))
         asyncTest("server close", factor_server_close(protocol))
+
+test_protocol_errors = (protocol) ->
+    module(protocol)
+    if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
+        test "[unsupported by client]", ->
+                log('Unsupported protocol (by client): "' + protocol + '"')
+    else if client_opts.disabled_transports and
+          arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
+        test "[unsupported by server]", ->
+                log('Unsupported protocol (by server): "' + protocol + '"')
+    else
+        asyncTest("user close", factor_user_close(protocol))
+        asyncTest("server close", factor_server_close(protocol))
         asyncTest("invalid url 404", test_invalid_url_404(protocol))
         asyncTest("invalid url 500", test_invalid_url_500(protocol))
         asyncTest("invalid url port", test_invalid_url_port(protocol))
 
 
-protocols = ['websocket',
-        'xhr-streaming',
-        'iframe-eventsource',
-        'iframe-htmlfile',
-        'xhr-polling',
-        'iframe-xhr-polling',
-        'jsonp-polling']
 for protocol in protocols
-    test_protocol(protocol)
+    test_protocol_messages(protocol)
 
 
 module('other')
@@ -303,22 +317,28 @@ test "EventEmitter", ->
     r.removeEventListener 'message', bluff
     r.dispatchEvent({type:'message'})
 
-asyncTest "chunking test", ->
-    expect(25)
-    a = new Array(25)
-    go = ->
-        SockJS.chunkingTest client_opts.url + '/echo', (r) ->
-            if $.browser.msie and $.browser.version < 8
-                # on browsers with no streaming support...
-                equal(r, false)
-            else
-                equal(r, true)
-            a.shift()
-            if a.length isnt 0
-                go()
-            else
-                start()
-    go()
+chunking_test_factory = (counter) ->
+    return ->
+        expect(counter)
+        a = new Array(counter)
+        go = ->
+            SockJS.chunkingTest client_opts.url + '/echo', (r) ->
+                if $.browser.msie and $.browser.version < 8
+                    # on browsers with no streaming support...
+                    equal(r, false)
+                else
+                    equal(r, true)
+                a.shift()
+                if a.length isnt 0
+                    go()
+                else
+                    start()
+        go()
+
+asyncTest "chunking test (simple)", chunking_test_factory(1)
+asyncTest "chunking test (stability)", chunking_test_factory(25)
+
+
 
 asyncTest "chunking test, invalid url 404", ->
         expect(1)
@@ -338,3 +358,7 @@ asyncTest "chunking test, invalid url port", ->
         SockJS.chunkingTest dl.protocol + '//' + dl.hostname + ':1079', (r) ->
             equal(r, false)
             start()
+
+
+for protocol in protocols
+    test_protocol_errors(protocol)
