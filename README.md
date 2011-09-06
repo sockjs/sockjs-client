@@ -39,9 +39,9 @@ SockJS comes with some QUnit tests and a few smoke tests (using
 side). At the moment they are deployed in few places:
 
  * http://sockjs.popcnt.org/ (hosted in Europe)
- * http://sockjs.cloudfoundry.com/ (CloudFoundry, websockets not working)
- * https://sockjs.cloudfoundry.com/ (CloudFoundry SSL, websockets not working)
- * http://sockjs.herokuapp.com/ (Heroku, websockets not working)
+ * http://sockjs.cloudfoundry.com/ (CloudFoundry, websockets disabled, loadbalanced)
+ * https://sockjs.cloudfoundry.com/ (CloudFoundry SSL, websockets disabled, loadbalanced)
+ * http://sockjs.herokuapp.com/ (Heroku, websockets disabled)
 
 
 Example
@@ -142,9 +142,13 @@ JsonP polling          | any                           |          no            
 Deployment
 ----------
 
-There should be a proper CDN for SockJS, but there isn't one yet. In
-the meantime you can use releases hosted on Github:
-http://majek.github.com/sockjs-client/ , or host the code yourself.
+There should be a proper CDN to host generated javascript for SockJS,
+but there isn't one yet. In the meantime you can use releases hosted
+on Github: http://majek.github.com/sockjs-client/ .
+
+For server-side deployment tricks, especially about load balancing and
+session stickiness, take a look at the
+[SockJS-node readme](https://github.com/majek/sockjs-node#readme).
 
 
 Development
@@ -182,11 +186,10 @@ This command runs script 'tests/server.js' which starts a web server
 that listens on http://127.0.0.1:8000/ . It serves static QUnit files
 and serves a simple SockJS.
 
-To run QUnit tests simply point your browser to
+To run QUnit tests simply point your browser at
 http://127.0.0.1:8000/.
 
 If you want the javascript to be recompiled when the source files are
-modified and automatically restart the http server run `make
-serve`. You will need 'inotifywait' command from package
-`inotify-tools`.
+modified and automatically restart the http server run `make serve`.
+You will need 'inotifywait' command from package `inotify-tools`.
 
