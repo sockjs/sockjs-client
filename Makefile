@@ -20,6 +20,7 @@ tests/html/lib/sockjs.js: sockjs.js
 	cp $< $@
 
 tests/html/lib/tests.js: tests/html/src/tests.coffee
+	@coffee -v > /dev/null
 	coffee -o tests/html/lib/ -c --bare $<
 
 test: tests
