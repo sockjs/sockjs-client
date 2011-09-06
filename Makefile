@@ -5,12 +5,15 @@ all: sockjs.js
 build: sockjs.js sockjs.min.js
 
 sockjs.js: lib/*js version
+	@coffee -v > /dev/null
 	coffee bin/render.coffee --set-version $(VER) lib/all.js > $@
 
 sockjs.min.js: lib/*js version
+	@coffee -v > /dev/null
 	coffee bin/render.coffee --set-version $(VER) --minify lib/all.js > $@
 
 sockjs.pretty.js: lib/*js version
+	@coffee -v > /dev/null
 	coffee bin/render.coffee --set-version $(VER) --minify --pretty lib/all.js > $@
 
 tests/html/lib/sockjs.js: sockjs.js
