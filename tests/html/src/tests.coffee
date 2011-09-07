@@ -29,9 +29,8 @@ echo_factory_factory = (protocol, messages) ->
                 r.send(a[0])
         r.onclose = (e) ->
             if a.length
-                ok(false, "Transport closed prematurely.")
+                ok(false, "Transport closed prematurely. " + e)
             else
-                log('onclose ' + e)
                 ok(true)
             start()
 
@@ -122,11 +121,12 @@ factor_echo_large_message = (protocol) ->
     # Should be larger than 128k - the limit for a single request in
     # some streaming transports.
     messages = [
-        Array(4096).join('x'),
-        Array(4096*2).join('x'),
-        Array(4096*4).join('x'),
-        Array(4096*8).join('x'),
-        Array(Math.pow(2,18)).join('x'),
+        Array(Math.pow(2,1)).join('x'),
+        Array(Math.pow(2,2)).join('x'),
+        Array(Math.pow(2,4)).join('x'),
+        Array(Math.pow(2,8)).join('x'),
+        Array(Math.pow(2,16)).join('x'),
+        Array(Math.pow(2,17)).join('x'),
         Array(Math.pow(2,18)).join('x'),
     ]
     return echo_factory_factory(protocol, messages)
@@ -148,7 +148,10 @@ batch_factory_factory = (protocol, messages) ->
             if counter is messages.length
                 r.close()
         r.onclose = (e) ->
-            ok(true)
+            if counter isnt messages.length
+                ok(false, "Transport closed prematurely. " + e)
+            else
+                ok(true)
             start()
 
 factor_batch_large = (protocol) ->
