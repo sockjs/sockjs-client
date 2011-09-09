@@ -23,7 +23,9 @@ Philosophy:
    [to wait for 3 seconds](https://github.com/gimite/web-socket-js/issues/49)
    in order to detect problems)
  * Connection establishment should be fast and lightweight.
- * The API should follow [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as closely as possible (but we're not there yet).
+ * The API should follow
+   [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as
+   closely as possible (but we're not there yet).
 
 
 Subscribe to
