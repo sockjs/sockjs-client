@@ -57,9 +57,24 @@ exports.install = function(config, server) {
                                  });
                      });
 
+    var sjs_amplify = new sockjs.Server(config.opts);
+    sjs_amplify.on('open', function(conn){
+                    console.log('    [+] amp open    ' + conn);
+                    conn.on('close', function(e) {
+                                console.log('    [-] amp close   ' + conn, e);
+                            });
+                    conn.on('message', function(e) {
+                                var n = Math.floor(Number(e.data));
+                                n = (n > 0 && n < 19) ? n : 1;
+                                console.log('    [ ] amp message: 2^' + n);
+                                conn.send(Array(Math.pow(2, n)+1).join('x'));
+                            });
+                });
+
 
     sjs_echo.installHandlers(server, {prefix:'[/]echo'});
     sjs_close.installHandlers(server, {prefix:'[/]close'});
     sjs_ticker.installHandlers(server, {prefix:'[/]ticker'});
+    sjs_amplify.installHandlers(server, {prefix:'[/]amplify'});
     sjs_broadcast.installHandlers(server, {prefix:'[/]broadcast'});
 };

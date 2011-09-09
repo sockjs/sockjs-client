@@ -125,9 +125,8 @@ factor_echo_large_message = (protocol) ->
         Array(Math.pow(2,2)).join('x'),
         Array(Math.pow(2,4)).join('x'),
         Array(Math.pow(2,8)).join('x'),
-        Array(Math.pow(2,16)).join('x'),
-        Array(Math.pow(2,17)).join('x'),
-        Array(Math.pow(2,18)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
     ]
     return echo_factory_factory(protocol, messages)
 
@@ -160,11 +159,45 @@ factor_batch_large = (protocol) ->
         Array(Math.pow(2,2)).join('x'),
         Array(Math.pow(2,4)).join('x'),
         Array(Math.pow(2,8)).join('x'),
-        Array(Math.pow(2,16)).join('x'),
-        Array(Math.pow(2,17)).join('x'),
-        Array(Math.pow(2,18)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
     ]
     return batch_factory_factory(protocol, messages)
+
+
+batch_factory_factory_amp = (protocol, messages) ->
+    return ->
+        expect(3 + messages.length)
+        r = newSockJS('/amplify', protocol)
+        ok(r)
+        counter = 0
+        r.onopen = (e) ->
+            ok(true)
+            for msg in messages
+                r.send(''+msg)
+        r.onmessage = (e) ->
+            equals(e.data.length, Math.pow(2, messages[counter]), e.data)
+            counter += 1
+            if counter is messages.length
+                r.close()
+        r.onclose = (e) ->
+            if counter isnt messages.length
+                ok(false, "Transport closed prematurely. " + e)
+            else
+                ok(true)
+            start()
+
+factor_batch_large_amp = (protocol) ->
+    messages = [
+        1,
+        2,
+        4,
+        8,
+        13,
+        15,
+        15,
+    ]
+    return batch_factory_factory_amp(protocol, messages)
 
 
 
@@ -264,8 +297,10 @@ test_protocol_messages = (protocol) ->
         asyncTest("echo2", factor_echo_rich(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
         asyncTest("special_chars", factor_echo_special_chars(protocol))
-        asyncTest("large_message", factor_echo_large_message(protocol))
-        asyncTest("batch_large", factor_batch_large(protocol))
+        asyncTest("large message (ping-pong)",
+            factor_echo_large_message(protocol))
+        asyncTest("large message (batch)", factor_batch_large(protocol))
+        asyncTest("large download", factor_batch_large_amp(protocol))
 
         asyncTest("user close", factor_user_close(protocol))
         asyncTest("server close", factor_server_close(protocol))
