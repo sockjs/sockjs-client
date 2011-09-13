@@ -171,6 +171,7 @@ SockJS-client uses [Node.js](http://nodejs.org/) for testing and
 Javascript minification. If you want to play with SockJS code, check
 out the git repo and follow this steps:
 
+    cd sockjs-client
     npm install
 
 (SockJS-client uses
