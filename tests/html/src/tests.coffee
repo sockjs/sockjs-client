@@ -302,7 +302,7 @@ test "amending url", ->
 
 
 test "EventEmitter", ->
-    expect(3)
+    expect(4)
     r = new SockJS('//blah/abc', [])
     r.addEventListener 'message', -> ok(true)
     r.onmessage = -> fail(true)
@@ -314,6 +314,15 @@ test "EventEmitter", ->
     r.onmessage = -> ok(true)
     r.removeEventListener 'message', bluff
     r.dispatchEvent({type:'message'})
+
+    # Adding the same eventlistener should be indempotent (sockjs-client #4).
+    single = -> ok(true)
+    r.addEventListener 'close', single
+    r.addEventListener 'close', single
+    r.dispatchEvent({type:'close'}) # 1 callback run
+    r.removeEventListener 'close', single
+    r.dispatchEvent({type:'close'}) # 0 runs
+
 
 chunking_test_factory = (counter) ->
     return ->
