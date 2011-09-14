@@ -1,29 +1,42 @@
 SockJS
 ======
 
-SockJS is a JavaScript library that creates a WebSockets-like object,
-which allows low latency full duplex communication between browsers
-and your web servers.
+SockJS is a browser JavaScript library that provides a WebSocket-like
+object. SockJS gives you a coherent, cross-browser, Javascript API
+which creates a low latency, full duplex, cross-domain communication
+channel between the browser and the web server.
 
-SockJS tries to use WebSockets, but it can use different transports
-for browsers that don't support HTML5 or are running behind a
-restrictive proxy.
+Under the hood SockJS tries to use native WebSockets first. If that
+fails it can use a variety of browser-specific transport protocols and
+presents them through WebSocket-like abstractions.
+
+SockJS is intended to work for all modern browsers and in environments
+which don't support WebSocket protcol, for example behind restrictive
+corporate proxies.
+
+SockJS-client does require a server counterpart:
+
+ * [SockJS-node](https://github.com/majek/sockjs-node) is a SockJS
+   server for Node.js.
+
 
 Philosophy:
 
- * All the transports support cross domain connections out of the
+ * The API should follow
+   [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as
+   closely as possible.
+ * All the transports must support cross domain connections out of the
    box. It's possible and recommended to host SockJS server on
-   different domain than your main web site.
+   different server than your main web site.
  * There is a support for at least one streaming protocol for every
    major browser.
  * Polling transports are be used as a fallback for old browsers and
    hosts behind restrictive proxies.
+ * Connection establishment should be fast and lightweight.
  * No Flash inside (no need to open port 843 - which doesn't work
    through proxies, no need to host 'crossdomain.xml', no need
    [to wait for 3 seconds](https://github.com/gimite/web-socket-js/issues/49)
    in order to detect problems)
- * Connection establishment should be fast and lightweight.
- * The API should follow [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as closely as possible (but we're not there yet).
 
 
 Subscribe to
@@ -47,8 +60,8 @@ side). At the moment they are deployed in few places:
 Example
 -------
 
-SockJS mimics [WebSockets API](http://dev.w3.org/html5/websockets/),
- instead of `WebSocket` there is `SockJS` JavaScript object.
+SockJS mimics [WebSockets API](http://dev.w3.org/html5/websockets/)
+but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
@@ -131,9 +144,9 @@ Supported transports (#2)
 Transport              | Target browsers               | Good loadbalancer required |  Behaving proxy required
 ---------------------- | ----------------------------- | -------------------------- | ------------------------
 WebSocket              | Chrome, Safari, Firefox 6+    |          yes               |          yes
+XHR streaming (CORS)   | IE 8 (cookie=no), Firefox <6 |          no                |          yes
 IFrame + EventSource   | Opera 10.70+                  |          no                |          yes
-IFrame + HtmlFile      | IE 8 (cookies=yes)            |          no                |          yes
-XHR streaming (CORS)   | IE 8 (cookies=no), Firefox <6 |          no                |          yes
+IFrame + HtmlFile      | IE 8 (cookie=yes)            |          no                |          yes
 XHR polling (CORS)     | Chrome, Safari, Firefox, IE 8 |          no                |          no
 IFrame + XHR polling   | Opera                         |          no                |          no
 JsonP polling          | any                           |          no                |          no
@@ -142,9 +155,9 @@ JsonP polling          | any                           |          no            
 Deployment
 ----------
 
-There should be a proper CDN to host generated javascript for SockJS,
-but there isn't one yet. In the meantime you can use releases hosted
-on Github: http://majek.github.com/sockjs-client/ .
+There should be a proper CDN to host generated SockJS library, but
+there isn't one yet. In the meantime you can use releases hosted on
+Github: http://majek.github.com/sockjs-client/ .
 
 For server-side deployment tricks, especially about load balancing and
 session stickiness, take a look at the
@@ -155,9 +168,10 @@ Development
 -----------
 
 SockJS-client uses [Node.js](http://nodejs.org/) for testing and
-javascript minification. If you want to play with SockJS code, check
+Javascript minification. If you want to play with SockJS code, check
 out the git repo and follow this steps:
 
+    cd sockjs-client
     npm install
 
 (SockJS-client uses
@@ -183,13 +197,12 @@ To run qunit tests, type:
     make test
 
 This command runs script 'tests/server.js' which starts a web server
-that listens on http://127.0.0.1:8000/ . It serves static QUnit files
+that listens on http://127.0.0.1:8080/ . It serves static QUnit files
 and serves a simple SockJS.
 
 To run QUnit tests simply point your browser at
-http://127.0.0.1:8000/.
+http://127.0.0.1:8080/.
 
 If you want the javascript to be recompiled when the source files are
 modified and automatically restart the http server run `make serve`.
 You will need 'inotifywait' command from package `inotify-tools`.
-

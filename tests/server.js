@@ -15,13 +15,14 @@ server.addListener('request', function(req, res) {
                            res.writeHead(200);
                            res.end('var client_opts = ' +
                                    JSON.stringify(config.client_opts) + ';');
-                       } else{
+                       } else {
                            static_directory.serve(req, res);
                        }
                    });
 server.addListener('upgrade', function(req,res){
                        res.end();
                    });
+config.response_limit = 4*1024;
 sockjs_app.install(config, server);
 
 console.log(" [*] Listening on", config.host + ':' + config.port);

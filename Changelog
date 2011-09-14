@@ -1,3 +1,15 @@
+0.0.4
+=====
+
+ * All transports were refactored, some transports were introduced:
+   htmlfile and separate xhr-streaming.
+ * Added logic to detect support for http chunking, and thus a
+   possibility to rule out streaming transports before running them.
+ * Added 'cookie' option, useful for cookie-based load balancing
+   (currently, it make a difference only for IE).
+ * Added hack to prevent EventSource from crashing Safari and Chrome.
+ * Loads and loads of other small and medium changes.
+
 0.0.2
 =====
 
