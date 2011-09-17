@@ -72,19 +72,20 @@ put that in your http head:
 After the script is loaded you can establish a connection with the
 SockJS server. Here's a simple example:
 
-    <script>
-      var sockjs = new SockJS('http://mydomain.com/my_prefix');
-      sockjs.onopen = function() {
-          console.log('open', e.data);
-      };
-      sockjs.onmessage = function(e) {
-          console.log('message', e.data);
-      };
-      sockjs.onclose = function(e) {
-          console.log('close', e.data);
-      };
-    </script>
-
+```javascript
+<script>
+   var sock = new SockJS('http://mydomain.com/my_prefix');
+   sock.onopen = function() {
+       console.log('open');
+   };
+   sock.onmessage = function(e) {
+       console.log('message', e.data);
+   };
+   sock.onclose = function() {
+       console.log('close');
+   };
+</script>
+```
 
 SockJS-client API
 -----------------
