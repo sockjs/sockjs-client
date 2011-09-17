@@ -338,6 +338,12 @@ test "amending url", ->
     r = new SockJS('http://a:1/abc', [])
     equal(r._base_url, 'http://a:1/abc')
 
+    r = new SockJS('http://a:1/abc/', [])
+    equal(r._base_url, 'http://a:1/abc')
+
+    r = new SockJS('http://a:1/abc//', [])
+    equal(r._base_url, 'http://a:1/abc')
+
 
 test "EventEmitter", ->
     expect(4)
