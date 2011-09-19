@@ -1,5 +1,12 @@
-SockJS
-======
+SockJS family:
+
+  * [SockJS-client](https://github.com/majek/sockjs-client) JavaScript client library
+  * [SockJS-node](https://github.com/majek/sockjs-node) Node.js server
+  * [SockJS-protocol](https://github.com/majek/sockjs-protocol) protocol documentation
+
+
+SockJS-client
+=============
 
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
