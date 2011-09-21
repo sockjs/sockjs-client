@@ -2,7 +2,7 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 
 var title = "SockJS releases";
-var url = 'https://github.com/majek/sockjs-client';
+var url = 'https://github.com/sockjs/sockjs-client';
 
 var p = console.log;
 
