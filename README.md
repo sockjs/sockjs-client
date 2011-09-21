@@ -1,8 +1,8 @@
 SockJS family:
 
-  * [SockJS-client](https://github.com/majek/sockjs-client) JavaScript client library
-  * [SockJS-node](https://github.com/majek/sockjs-node) Node.js server
-  * [SockJS-protocol](https://github.com/majek/sockjs-protocol) protocol documentation
+  * [SockJS-client](https://github.com/sockjs/sockjs-client) JavaScript client library
+  * [SockJS-node](https://github.com/sockjs/sockjs-node) Node.js server
+  * [SockJS-protocol](https://github.com/sockjs/sockjs-protocol) protocol documentation
 
 
 SockJS-client
@@ -23,7 +23,7 @@ corporate proxies.
 
 SockJS-client does require a server counterpart:
 
- * [SockJS-node](https://github.com/majek/sockjs-node) is a SockJS
+ * [SockJS-node](https://github.com/sockjs/sockjs-node) is a SockJS
    server for Node.js.
 
 
@@ -55,7 +55,7 @@ Live QUnit tests and smoke tests
 --------------------------------
 
 SockJS comes with some QUnit tests and a few smoke tests (using
-[SockJS-node](https://github.com/majek/sockjs-client) on the server
+[SockJS-node](https://github.com/sockjs/sockjs-client) on the server
 side). At the moment they are deployed in few places:
 
  * http://sockjs.popcnt.org/ (hosted in Europe)
@@ -73,7 +73,7 @@ but instead of `WebSocket` there is a `SockJS` Javascript object.
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
 
-    <script src="http://majek.github.com/sockjs-client/sockjs-latest.min.js">
+    <script src="http://sockjs.github.com/sockjs-client/sockjs-latest.min.js">
       </script>
 
 After the script is loaded you can establish a connection with the
@@ -165,11 +165,11 @@ Deployment
 
 There should be a proper CDN to host generated SockJS library, but
 there isn't one yet. In the meantime you can use releases hosted on
-Github: http://majek.github.com/sockjs-client/ .
+Github: http://sockjs.github.com/sockjs-client/ .
 
 For server-side deployment tricks, especially about load balancing and
 session stickiness, take a look at the
-[SockJS-node readme](https://github.com/majek/sockjs-node#readme).
+[SockJS-node readme](https://github.com/sockjs/sockjs-node#readme).
 
 
 Development
@@ -183,7 +183,7 @@ out the git repo and follow this steps:
     npm install
 
 (SockJS-client uses
-[SockJS-node](https://github.com/majek/sockjs-node) for testing, you
+[SockJS-node](https://github.com/sockjs/sockjs-node) for testing, you
 may want to link 'node_modules/sockjs' to directory with cloned
 SockJS-node.)
 
