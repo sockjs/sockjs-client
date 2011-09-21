@@ -120,6 +120,17 @@ Where `options` is a hash which can contain:
 <dd></dd>
 </dl>
 
+Although the 'SockJS' object tries to emulate the 'WebSocket'
+behaviour, it's impossible to support all features. One of the
+important SockJS limitations is the fact that you're not allowed to
+open more than one SockJS connection at a time. This limitation is
+caused by a in-browser limit of outgoing connections - usually
+browsers don't allow opening more than two outgoing
+connections. Single SockJS session requires those two connections -
+one for downloading data, other for sending messages.  Second SockJS
+session opened at the same time would most probably block and can
+result in both sessions timing out.
+
 
 Supported transports (#1)
 -------------------------
