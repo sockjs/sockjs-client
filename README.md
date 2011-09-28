@@ -2,7 +2,6 @@ SockJS family:
 
   * [SockJS-client](https://github.com/sockjs/sockjs-client) JavaScript client library
   * [SockJS-node](https://github.com/sockjs/sockjs-node) Node.js server
-  * [SockJS-ruby](https://github.com/sockjs/sockjs-ruby) Ruby server
   * [SockJS-protocol](https://github.com/sockjs/sockjs-protocol) protocol documentation
 
 
