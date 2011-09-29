@@ -73,6 +73,8 @@ exports.install = function(config, server) {
 
 
     sjs_echo.installHandlers(server, {prefix:'[/]echo'});
+    sjs_echo.installHandlers(server, {prefix:'[/]disabled_websocket_echo',
+                                      disabled_transports: ['websocket']});
     sjs_close.installHandlers(server, {prefix:'[/]close'});
     sjs_ticker.installHandlers(server, {prefix:'[/]ticker'});
     sjs_amplify.installHandlers(server, {prefix:'[/]amplify'});

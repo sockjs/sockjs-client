@@ -410,6 +410,18 @@ asyncTest "chunking test, invalid url port", ->
             equal(r, false)
             start()
 
+asyncTest "disabled websocket test", ->
+        expect(2)
+        r = newSockJS('/disabled_websocket_echo', 'websocket')
+        r.onopen = (e) ->
+            fail(true)
+        r.onmessage = (e) ->
+            fail(true)
+        r.onclose = (e) ->
+            equals(e.status, 2000)
+            equals(e.reason, "All transports failed")
+            start()
+
 
 for protocol in protocols
     test_protocol_errors(protocol)
