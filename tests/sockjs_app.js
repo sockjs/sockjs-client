@@ -5,7 +5,7 @@ exports.install = function(config, server) {
     sjs_echo.on('open', function(conn){
                     console.log('    [+] echo open    ' + conn);
                     conn.on('close', function(e) {
-                                console.log('    [-] echo close   ' + conn, e);
+                                console.log('    [-] echo close   ' + conn);
                             });
                     conn.on('message', function(e) {
                                 var d  = JSON.stringify(e.data);
@@ -21,7 +21,7 @@ exports.install = function(config, server) {
                      console.log('    [+] clos open    ' + conn);
                      conn.close(3000, "Go away!");
                      conn.on('close', function(e) {
-                                 console.log('    [-] clos close   ' + conn, e);
+                                 console.log('    [-] clos close   ' + conn);
                              });
                  });
 
@@ -36,7 +36,7 @@ exports.install = function(config, server) {
                       tref = setTimeout(schedule, 1000);
                       conn.on('close', function(e) {
                                   clearTimeout(tref);
-                                  console.log('    [-] ticker close   ' + conn, e);
+                                  console.log('    [-] ticker close   ' + conn);
                               });
                   });
 
@@ -47,7 +47,7 @@ exports.install = function(config, server) {
                          broadcast[conn.id] = conn;
                          conn.on('close', function(e) {
                                      delete broadcast[conn.id];
-                                     console.log('    [-] broadcast close' + conn, e);
+                                     console.log('    [-] broadcast close' + conn);
                                  });
                          conn.on('message', function(e) {
                                      console.log('    [-] broadcast message', e);
@@ -61,7 +61,7 @@ exports.install = function(config, server) {
     sjs_amplify.on('open', function(conn){
                     console.log('    [+] amp open    ' + conn);
                     conn.on('close', function(e) {
-                                console.log('    [-] amp close   ' + conn, e);
+                                console.log('    [-] amp close   ' + conn);
                             });
                     conn.on('message', function(e) {
                                 var n = Math.floor(Number(e.data));
