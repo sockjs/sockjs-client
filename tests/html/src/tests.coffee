@@ -203,7 +203,7 @@ factor_batch_large_amp = (protocol) ->
 
 factor_user_close = (protocol) ->
     return ->
-        expect(4)
+        expect(5)
         r = newSockJS('/echo', protocol)
         ok(r)
         counter = 0
@@ -218,12 +218,13 @@ factor_user_close = (protocol) ->
         r.onclose = (e) ->
             counter += 1
             log('user_close ' + e.code + ' ' + e.reason)
+            equals(e.wasClean, true)
             ok(counter is 2)
             start()
 
 factor_server_close = (protocol) ->
     return ->
-        expect(4)
+        expect(5)
         r = newSockJS('/close', protocol)
         ok(r)
         r.onopen = (e) ->
@@ -233,11 +234,12 @@ factor_server_close = (protocol) ->
         r.onclose = (e) ->
             equals(e.code, 3000)
             equals(e.reason, "Go away!")
+            equals(e.wasClean, true)
             start()
 
 test_invalid_url_404 = (protocol) ->
     return ->
-        expect(2)
+        expect(3)
         r = newSockJS('/invalid_url', protocol)
         ok(r)
         counter =
@@ -248,11 +250,12 @@ test_invalid_url_404 = (protocol) ->
         r.onclose = (e) ->
             log('404', e)
             equals(e.code, 2000)
+            equals(e.wasClean, false)
             start()
 
 test_invalid_url_500 = (protocol) ->
     return ->
-        expect(2)
+        expect(3)
         r = newSockJS('/500_error', protocol)
         ok(r)
         r.onopen = (e) ->
@@ -260,11 +263,12 @@ test_invalid_url_500 = (protocol) ->
         r.onclose = (e) ->
             log('500', e)
             equals(e.code, 2000)
+            equals(e.wasClean, false)
             start()
 
 test_invalid_url_port = (protocol) ->
     return ->
-        expect(2)
+        expect(3)
         dl = document.location
         r = newSockJS(dl.protocol + '//' + dl.hostname + ':1079', protocol)
         ok(r)
@@ -273,6 +277,7 @@ test_invalid_url_port = (protocol) ->
         r.onclose = (e) ->
             log('port', e)
             equals(e.code, 2000)
+            equals(e.wasClean, false)
             start()
 
 
@@ -417,7 +422,7 @@ asyncTest "chunking test, invalid url port", ->
             start()
 
 asyncTest "disabled websocket test", ->
-        expect(2)
+        expect(3)
         r = newSockJS('/disabled_websocket_echo', 'websocket')
         r.onopen = (e) ->
             fail(true)
@@ -426,6 +431,7 @@ asyncTest "disabled websocket test", ->
         r.onclose = (e) ->
             equals(e.code, 2000)
             equals(e.reason, "All transports failed")
+            equals(e.wasClean, false)
             start()
 
 
