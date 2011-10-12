@@ -217,7 +217,7 @@ factor_user_close = (protocol) ->
             counter += 1
         r.onclose = (e) ->
             counter += 1
-            log('user_close ' + e.status + ' ' + e.reason)
+            log('user_close ' + e.code + ' ' + e.reason)
             ok(counter is 2)
             start()
 
@@ -231,7 +231,7 @@ factor_server_close = (protocol) ->
         r.onmessage = (e) ->
             fail(true)
         r.onclose = (e) ->
-            equals(e.status, 3000)
+            equals(e.code, 3000)
             equals(e.reason, "Go away!")
             start()
 
@@ -247,7 +247,7 @@ test_invalid_url_404 = (protocol) ->
             fail(true)
         r.onclose = (e) ->
             log('404', e)
-            equals(e.status, 2000)
+            equals(e.code, 2000)
             start()
 
 test_invalid_url_500 = (protocol) ->
@@ -259,7 +259,7 @@ test_invalid_url_500 = (protocol) ->
             fail(true)
         r.onclose = (e) ->
             log('500', e)
-            equals(e.status, 2000)
+            equals(e.code, 2000)
             start()
 
 test_invalid_url_port = (protocol) ->
@@ -272,7 +272,7 @@ test_invalid_url_port = (protocol) ->
             fail(true)
         r.onclose = (e) ->
             log('port', e)
-            equals(e.status, 2000)
+            equals(e.code, 2000)
             start()
 
 
@@ -424,7 +424,7 @@ asyncTest "disabled websocket test", ->
         r.onmessage = (e) ->
             fail(true)
         r.onclose = (e) ->
-            equals(e.status, 2000)
+            equals(e.code, 2000)
             equals(e.reason, "All transports failed")
             start()
 
