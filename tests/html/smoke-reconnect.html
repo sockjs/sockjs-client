@@ -53,7 +53,7 @@
        sjs.close();
     };
     function onclose(e) {
-        if (started && e.status === 1000) {
+        if (started && e.code === 1000) {
             t0 = (new Date()).getTime();
             sjs = new SockJS(client_opts.url + '/echo', protocol, client_opts.sockjs_opts);
             sjs.onopen = onopen
@@ -75,7 +75,7 @@
         started = true;
         protocol = $('#transport').val() || undefined;
         log('[starting] ' + protocol);
-        onclose({status:1000});
+        onclose({code:1000});
         $('#connect').attr('disabled', true);
         $('#disconnect').attr('disabled', false);
     });
