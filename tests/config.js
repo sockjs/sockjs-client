@@ -11,6 +11,6 @@ exports.config = {
         // url, like: "http://localhost:8080"
         disabled_transports: [],
         url: '',
-        sockjs_opts: {devel:true}
+        sockjs_opts: {devel:true, debug:true}
     }
 };
