@@ -1,3 +1,17 @@
+Current
+=======
+
+ * SockJS-client can only send UTF-8 encodable strings.  Previously we
+   took advantage of rich data structures and automatically
+   json-encoded them, but this got removed.  Now, all data passed to
+   `send` will be converted to string. This is also how native
+ * `status` property on `EventClose` is renamed to `code`
+   as per Websocket API
+   WebSockets behave.
+ * The test server was updated to new `sockjs-node` API
+ * Fixed problem with Jsonp-polling transport on IE9
+ * Repository was moved - updated links.
+
 0.0.4
 =====
 
