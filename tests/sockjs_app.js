@@ -7,12 +7,12 @@ exports.install = function(config, server) {
                     conn.on('close', function() {
                                 console.log('    [-] echo close   ' + conn);
                             });
-                    conn.on('message', function(m) {
+                    conn.on('data', function(m) {
                                 var d  = JSON.stringify(m);
                                 console.log('    [ ] echo message ' + conn,
                                             d.slice(0,64)+
                                             ((d.length > 64) ? '...' : ''));
-                                conn.send(m);
+                                conn.write(m);
                             });
                 });
 
@@ -30,7 +30,7 @@ exports.install = function(config, server) {
                       console.log('    [+] ticker open   ' + conn);
                       var tref;
                       var schedule = function() {
-                          conn.send('tick!');
+                          conn.write('tick!');
                           tref = setTimeout(schedule, 1000);
                       };
                       tref = setTimeout(schedule, 1000);
@@ -49,10 +49,10 @@ exports.install = function(config, server) {
                                      delete broadcast[conn.id];
                                      console.log('    [-] broadcast close' + conn);
                                  });
-                         conn.on('message', function(m) {
+                         conn.on('data', function(m) {
                                      console.log('    [-] broadcast message', m);
                                      for(var id in broadcast) {
-                                         broadcast[id].send(m);
+                                         broadcast[id].write(m);
                                      }
                                  });
                      });
@@ -63,11 +63,11 @@ exports.install = function(config, server) {
                     conn.on('close', function() {
                                 console.log('    [-] amp close   ' + conn);
                             });
-                    conn.on('message', function(m) {
+                    conn.on('data', function(m) {
                                 var n = Math.floor(Number(m));
                                 n = (n > 0 && n < 19) ? n : 1;
                                 console.log('    [ ] amp message: 2^' + n);
-                                conn.send(Array(Math.pow(2, n)+1).join('x'));
+                                conn.write(Array(Math.pow(2, n)+1).join('x'));
                             });
                 });
 
