@@ -242,7 +242,6 @@ test_invalid_url_404 = (protocol) ->
         expect(3)
         r = newSockJS('/invalid_url', protocol)
         ok(r)
-        counter =
         r.onopen = (e) ->
             fail(true)
         r.onmessage = (e) ->
