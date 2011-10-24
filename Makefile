@@ -57,6 +57,8 @@ clean:
 
 RVER:=$(shell cat version)
 VER:=$(shell ./VERSION-GEN)
+# The first two dots: 1.2.3 -> 1.2
+MAJVER:=$(shell echo $(VER)|sed 's|^\([^.]\+\)[.]\([^.]\+\)[.]\([^.]\+\)[.].*$$|\1.\2|' )
 
 .PHONY: tag upload
 tag:
@@ -75,8 +77,12 @@ upload: build
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(VER)\2|g'`; \
 	done
 	for f in sock*js; do						\
+		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(MAJVER)\2|g'`; \
+	done
+	for f in sock*js; do						\
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-latest\2|g'`; \
 	done
-	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html;)
-	@echo ' [*] Now run:'
-	@echo '(cd ../sockjs-client-gh-pages; git add sock*js; git commit -m sock*js index.html -m "Release $(VER)"; git push;)'
+	(cd ../sockjs-client-gh-pages; git add sock*js; git commit sock*js -m "Release $(VER)";)'
+	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html; git add index.html; git commit index.html --amend -m "Release $(VER)";)'
+	@echo ' [*] Now run: '
+	@echo '(cd ../sockjs-client-gh-pages; git push;)'
