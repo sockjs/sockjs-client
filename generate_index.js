@@ -10,11 +10,11 @@ function git_mtime(file, cb) {
     var c = spawn('git', ['log','-1', '--pretty=format:%ai', file]);
     var d = [];
     c.stdout.on('data', function (data) {
-                    d.push( data.toString() );
-                });
+        d.push( data.toString() );
+    });
     c.on('exit', function () {
-             cb(d.join(''));
-         });
+        cb(d.join(''));
+    });
 }
 
 
@@ -25,21 +25,29 @@ p('Source code: <a href="'+url+'"><b>'+url+'</b></a><hr><pre>');
 var end;
 
 fs.readdir(".", function(err, files) {
-               files.sort();
-               var run = function() {
-                   var file = files.shift();
-                   if (!file) {end(); return;}
-                   if (/sock.*js/.test(file)) {
-                       var tab = Array(40 - file.length).join(' ');
-                       var stat = fs.statSync(file);
-                       git_mtime(file, function (mtime) {
-                                     p('<a href="'+file+'">'+file+'</a>' + tab + mtime + '        ' + stat.size);
-                                     run();
-                                 });
-                   } else {run();}
-               };
-               run();
-           });
+    files.sort();
+    var run = function() {
+        var file = files.shift();
+        if (!file) {
+            end();
+            return;
+        }
+        if (/sockjs-latest[.]/.test(file)) {
+            // ignore -latest
+            run();
+        } else if (/sock.*js/.test(file)) {
+            var tab = Array(40 - file.length).join(' ');
+            var stat = fs.statSync(file);
+            git_mtime(file, function (mtime) {
+                p('<a href="'+file+'">'+file+'</a>' + tab + mtime + '        ' + stat.size);
+                run();
+            });
+        } else {
+            run();
+        }
+    };
+    run();
+});
 
 end = function() {
     p('</pre></body></html>');
