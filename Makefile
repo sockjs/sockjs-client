@@ -87,5 +87,4 @@ upload: build
 	@echo ' [*] Now run: '
 	@echo '(cd ../sockjs-client-gh-pages; git push; )'
 	@echo '(cd ../sockjs-client-gh-pages; 	\
-		s3cmd sync . s3://sockjs --acl-public --exclude ".*" --include index.html --include "sockjs*.js" -v; \
-		s3cmd cfdelete s3://sockjs/index.html; )'
+		s3cmd sync . s3://sockjs --acl-public --exclude ".*" --include index.html --include "sockjs*.js"; );
