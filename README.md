@@ -188,6 +188,11 @@ that supports the protocol used by your server. For example:
 
 A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
 
+You can also use or CDN via https (using Cloud Front domain name):
+
+    <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.0.js">
+      </script>
+
 For server-side deployment tricks, especially about load balancing and
 session stickiness, take a look at the
 [SockJS-node readme](https://github.com/sockjs/sockjs-node#readme).
