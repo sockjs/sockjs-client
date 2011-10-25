@@ -39,7 +39,10 @@ fs.readdir(".", function(err, files) {
             var tab = Array(40 - file.length).join(' ');
             var stat = fs.statSync(file);
             git_mtime(file, function (mtime) {
-                p('<a href="http://cdn.sockjs.org/'+file+'">'+file+'</a>' + tab + mtime + '        ' + stat.size);
+                var http  = 'http://cdn.sockjs.org/'+file;
+                var https = 'https://d1fxtkz8shb9d2.cloudfront.net/'+file;
+                p('<a href="'+http+'">'+file+'</a>' + tab + mtime + '        ' + stat.size+
+                  '    (<a href="'+http+'">http</a>|<a href="'+https+'">https</a>)');
                 run();
             });
         } else {
