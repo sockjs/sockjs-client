@@ -21,6 +21,12 @@ echo_factory_factory = (protocol, messages) ->
             r.send(a[0])
         r.onmessage = (e) ->
             #log('onmessage ' + e);
+            x = ''+a[0]
+            if e.data != x
+                for i in [0...e.data.length]
+                    if e.data.charCodeAt(i) != x.charCodeAt(i)
+                        #console.log('source: ' + x.charCodeAt(i) + ' differs from: ' + e.data.charCodeAt(i))
+                        true
             equal(e.data, '' + a[0])
             a.shift()
             if typeof a[0] is 'undefined'
@@ -200,6 +206,21 @@ factor_batch_large_amp = (protocol) ->
     return batch_factory_factory_amp(protocol, messages)
 
 
+factor_echo_utf_encoding = (protocol) ->
+    message = for i in [0..65535] by 64
+                if i is 0x340 # chromium during xhr converts \u0340 to \u0300
+                    continue
+                if i is 0x2000  # again, chrome xhr
+                    continue
+                # ignore surrogates
+                # http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates
+                if i >= 0xD800 and i <= 0xDFFF
+                    continue
+                if i >= 62100 and i <= 65472 # again, chrome
+                    continue
+                String.fromCharCode(i)
+    return echo_factory_factory(protocol, [message.join('')])
+
 
 factor_user_close = (protocol) ->
     return ->
@@ -300,6 +321,7 @@ test_protocol_messages = (protocol) ->
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
+        asyncTest("utf encoding", factor_echo_utf_encoding(protocol))
         asyncTest("special_chars", factor_echo_special_chars(protocol))
         asyncTest("large message (ping-pong)",
             factor_echo_large_message(protocol))
