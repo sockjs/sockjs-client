@@ -39,7 +39,7 @@ fs.readdir(".", function(err, files) {
             var tab = Array(40 - file.length).join(' ');
             var stat = fs.statSync(file);
             git_mtime(file, function (mtime) {
-                p('<a href="'+file+'">'+file+'</a>' + tab + mtime + '        ' + stat.size);
+                p('<a href="http://cdn.sockjs.com/'+file+'">'+file+'</a>' + tab + mtime + '        ' + stat.size);
                 run();
             });
         } else {
