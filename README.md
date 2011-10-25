@@ -125,11 +125,11 @@ behaviour, it's impossible to support all features. One of the
 important SockJS limitations is the fact that you're not allowed to
 open more than one SockJS connection to a single domain at a time.
 This limitation is caused by a in-browser limit of outgoing
-connections - usually browsers don't allow opening more than two outgoing
-connections to a single domain. Single SockJS session requires those two connections -
-one for downloading data, other for sending messages.  Opening second SockJS
-session at the same time would most probably block and can
-result in both sessions timing out. 
+connections - usually browsers don't allow opening more than two
+outgoing connections to a single domain. Single SockJS session
+requires those two connections - one for downloading data, other for
+sending messages.  Opening second SockJS session at the same time
+would most probably block and can result in both sessions timing out.
 
 Opening more than one SockJS connection at a time is generally a
 bad practice. If you absolutely must do it, you can use
