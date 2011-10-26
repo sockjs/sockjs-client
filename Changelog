@@ -1,5 +1,5 @@
-Current
-=======
+0.1.0
+=====
 
  * SockJS-client can only send UTF-8 encodable strings.  Previously we
    took advantage of rich data structures and automatically
@@ -12,6 +12,7 @@ Current
  * Fixed problem with Jsonp-polling transport on IE9
  * Repository was moved - updated links.
 
+
 0.0.4
 =====
 
@@ -23,6 +24,7 @@ Current
    (currently, it make a difference only for IE).
  * Added hack to prevent EventSource from crashing Safari and Chrome.
  * Loads and loads of other small and medium changes.
+
 
 0.0.2
 =====
