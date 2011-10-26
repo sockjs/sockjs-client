@@ -82,9 +82,9 @@ upload: build
 	for f in sock*js; do						\
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-latest\2|g'`; \
 	done
-	(cd ../sockjs-client-gh-pages; git add sock*js; git commit sock*js -m "Release $(VER)";)'
-	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html; git add index.html; git commit index.html --amend -m "Release $(VER)";)'
+	(cd ../sockjs-client-gh-pages; git add sock*js; git commit sock*js -m "Release $(VER)";)
+	(cd ../sockjs-client-gh-pages; node generate_index.js > index.html; git add index.html; git commit index.html --amend -m "Release $(VER)";)
 	@echo ' [*] Now run: '
 	@echo '(cd ../sockjs-client-gh-pages; git push; )'
 	@echo '(cd ../sockjs-client-gh-pages; 	\
-		s3cmd sync . s3://sockjs --acl-public --exclude ".*" --include index.html --include "sockjs*.js"; );
+		s3cmd sync . s3://sockjs --acl-public --exclude ".*" --include index.html --include "sockjs*.js"; );'
