@@ -406,7 +406,8 @@ chunking_test_factory = (counter) ->
         a = new Array(counter)
         go = ->
             SockJS.chunkingTest client_opts.url + '/echo', (r) ->
-                if $.browser.msie and $.browser.version < 8
+                # N,B. IE9 in IE7 and IE8 browser modes still have window.performance
+                if $.browser.msie and $.browser.version < 8 and not window.performance
                     # on browsers with no streaming support...
                     equal(r, false)
                 else
