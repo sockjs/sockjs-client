@@ -37,6 +37,8 @@ Philosophy:
    different server than your main web site.
  * There is a support for at least one streaming protocol for every
    major browser.
+ * Streaming transports should work cross-domain and
+   should support cookies (for cookie-based sticky sessions).
  * Polling transports are be used as a fallback for old browsers and
    hosts behind restrictive proxies.
  * Connection establishment should be fast and lightweight.
