@@ -1,6 +1,7 @@
-0.1.x - current
-==============
+0.1.1
+=====
 
+ * #21 Get JsonP transport working on IE9 (Vladimir Dronnikov).
  * #26 Emit heartbeat event.
  * #27 Include license inline.
 
