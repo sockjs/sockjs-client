@@ -406,7 +406,7 @@ chunking_test_factory = (counter) ->
         a = new Array(counter)
         go = ->
             SockJS.chunkingTest client_opts.url + '/echo', (r) ->
-                if $.browser.msie and $.browser.version < 8
+                if $.browser.msie and not window.XDomainRequest
                     # on browsers with no streaming support...
                     equal(r, false)
                 else
