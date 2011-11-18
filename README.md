@@ -259,4 +259,6 @@ There are various browser quirks which we don't intend to address:
    in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
  * Some older transports may result in a browser showing "spinning
    wheel" or "busy indicator".
+ * In most of the browsers you can't open more than one SockJS
+   connection at the same time.
 
