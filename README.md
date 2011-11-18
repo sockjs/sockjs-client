@@ -261,4 +261,5 @@ There are various browser quirks which we don't intend to address:
    wheel" or "busy indicator".
  * In most of the browsers you can't open more than one SockJS
    connection to one domain at the same time.
-
+ * You shouldn't start SockJS connection before `body` loads - don't
+   create SockJS objects within `head` (see #15).
