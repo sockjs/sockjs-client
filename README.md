@@ -260,5 +260,5 @@ There are various browser quirks which we don't intend to address:
  * Some older transports may result in a browser showing "spinning
    wheel" or "busy indicator".
  * In most of the browsers you can't open more than one SockJS
-   connection at the same time.
+   connection to one domain at the same time.
 
