@@ -248,3 +248,15 @@ http://127.0.0.1:8080/.
 If you want the javascript to be recompiled when the source files are
 modified and automatically restart the http server run `make serve`.
 You will need `inotifywait` command from package `inotify-tools`.
+
+
+Browser Quirks
+--------------
+
+There are various browser quirks which we don't intend to address:
+
+ * Pressing ESC in Firefox closes SockJS connection ([described
+   in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
+ * Some older transports may result in a browser showing "spinning
+   wheel" or "busy indicator".
+
