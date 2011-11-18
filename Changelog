@@ -1,3 +1,10 @@
+0.1.x - current
+==============
+
+ * #26 Emit heartbeat event.
+ * #27 Include license inline.
+
+ 
 0.1.0
 =====
 
