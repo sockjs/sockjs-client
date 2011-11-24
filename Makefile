@@ -23,8 +23,12 @@ tests/html/lib/tests.js: tests/html/src/tests.coffee
 	@coffee -v > /dev/null
 	coffee -o tests/html/lib/ -c --bare $<
 
+tests/html/lib/unittests.js: tests/html/src/unittests.coffee
+	@coffee -v > /dev/null
+	coffee -o tests/html/lib/ -c --bare $<
+
 test: tests
-tests: tests/html/lib/sockjs.js tests/html/lib/tests.js
+tests: tests/html/lib/sockjs.js tests/html/lib/tests.js tests/html/lib/unittests.js
 	node tests/server.js
 
 
