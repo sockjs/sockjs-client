@@ -138,12 +138,6 @@ bad practice. If you absolutely must do it, you can use
 mutliple subdomains, using different subdomain for every
 SockJS connection.
 
-Currently SockJS-client is only able to send valid Unicode messages.
-Never try to send
-[unicode surrogates](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
-Less common characters can be badly encoded into UTF-8 due to various
-browser quirks, we're working a fix.
-
 
 Supported transports (#1)
 -------------------------
@@ -263,3 +257,8 @@ There are various browser quirks which we don't intend to address:
    connection to one domain at the same time.
  * You shouldn't start SockJS connection before `body` loads - don't
    create SockJS objects within `head` (see #15).
+ * Although SockJS is able deal with any Unicode characters (even
+   [invalid ones](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
+   it's advisable to use only valid characters. Using invalid
+   characters is a bit slower, as SockJS must escape them before
+   sending over the wire.
