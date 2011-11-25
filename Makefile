@@ -44,7 +44,7 @@ serve:
 	        SRVPID=$$!;				\
 	        echo $$SRVPID > .pidfile.pid;		\
 	        echo " [*] Server pid: $$SRVPID";	\
-	    inotifywait -r -q -e modify .;		\
+	    inotifywait -r -q -e modify . ../sockjs-node;\
 	    kill `cat .pidfile.pid`;			\
 	    rm -f .pidfile.pid;				\
 	    sleep 0.1;					\
