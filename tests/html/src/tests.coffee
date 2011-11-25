@@ -25,8 +25,10 @@ echo_factory_factory = (protocol, messages) ->
             if e.data != x
                 for i in [0...e.data.length]
                     if e.data.charCodeAt(i) != x.charCodeAt(i)
-                        #console.log('source: ' + x.charCodeAt(i) + ' differs from: ' + e.data.charCodeAt(i))
-                        true
+                        xx1 = ('0000' + x.charCodeAt(i).toString(16)).slice(-4)
+                        xx2 = ('0000' + e.data.charCodeAt(i).toString(16)).slice(-4)
+                        console.log('source: \\u' + xx1 + ' differs from: \\u' + xx2)
+                        break
             equal(e.data, '' + a[0])
             a.shift()
             if typeof a[0] is 'undefined'
@@ -206,20 +208,28 @@ factor_batch_large_amp = (protocol) ->
     return batch_factory_factory_amp(protocol, messages)
 
 
-factor_echo_utf_encoding = (protocol) ->
-    message = for i in [0..65535] by 64
-                if i is 0x340 # chromium during xhr converts \u0340 to \u0300
-                    continue
-                if i is 0x2000  # again, chrome xhr
-                    continue
-                # ignore surrogates
-                # http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates
-                if i >= 0xD800 and i <= 0xDFFF
-                    continue
-                if i >= 62100 and i <= 65472 # again, chrome
-                    continue
-                String.fromCharCode(i)
+
+escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff\x00-\x1f\ud800-\udfff\ufffe\uffff\u0300-\u0333\u033d-\u0346\u034a-\u034c\u0350-\u0352\u0357-\u0358\u035c-\u0362\u0374\u037e\u0387\u0591-\u05af\u05c4\u0610-\u0617\u0653-\u0654\u0657-\u065b\u065d-\u065e\u06df-\u06e2\u06eb-\u06ec\u0730\u0732-\u0733\u0735-\u0736\u073a\u073d\u073f-\u0741\u0743\u0745\u0747\u07eb-\u07f1\u0951\u0958-\u095f\u09dc-\u09dd\u09df\u0a33\u0a36\u0a59-\u0a5b\u0a5e\u0b5c-\u0b5d\u0e38-\u0e39\u0f43\u0f4d\u0f52\u0f57\u0f5c\u0f69\u0f72-\u0f76\u0f78\u0f80-\u0f83\u0f93\u0f9d\u0fa2\u0fa7\u0fac\u0fb9\u1939-\u193a\u1a17\u1b6b\u1cda-\u1cdb\u1dc0-\u1dcf\u1dfc\u1dfe\u1f71\u1f73\u1f75\u1f77\u1f79\u1f7b\u1f7d\u1fbb\u1fbe\u1fc9\u1fcb\u1fd3\u1fdb\u1fe3\u1feb\u1fee-\u1fef\u1ff9\u1ffb\u1ffd\u2000-\u2001\u20d0-\u20d1\u20d4-\u20d7\u20e7-\u20e9\u2126\u212a-\u212b\u2329-\u232a\u2adc\u302b-\u302c\uaab2-\uaab3\uf900-\ufa0d\ufa10\ufa12\ufa15-\ufa1e\ufa20\ufa22\ufa25-\ufa26\ufa2a-\ufa2d\ufa30-\ufa6d\ufa70-\ufad9\ufb1d\ufb1f\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41\ufb43-\ufb44\ufb46-\ufb4e]/g;
+
+generate_killer_string = (escapable) ->
+    s = []
+    c = for i in [0..65535]
+            String.fromCharCode(i)
+    escapable.lastIndex = 0;
+    c.join('').replace escapable,  (a) ->
+            s.push(a)
+            return ''
+    return s.join('')
+
+factor_echo_utf_encoding_simple = (protocol) ->
+    message = for i in [0..256]
+                  String.fromCharCode(i)
     return echo_factory_factory(protocol, [message.join('')])
+
+factor_echo_utf_encoding = (protocol) ->
+        message = generate_killer_string(escapable)
+        return echo_factory_factory(protocol, [message])
+
 
 
 factor_user_close = (protocol) ->
@@ -321,7 +331,10 @@ test_protocol_messages = (protocol) ->
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
-        asyncTest("utf encoding", factor_echo_utf_encoding(protocol))
+        asyncTest("utf encoding 0x00-0xFF",
+            factor_echo_utf_encoding_simple(protocol))
+        asyncTest("utf encoding killer message",
+            factor_echo_utf_encoding(protocol))
         asyncTest("special_chars", factor_echo_special_chars(protocol))
         asyncTest("large message (ping-pong)",
             factor_echo_large_message(protocol))
