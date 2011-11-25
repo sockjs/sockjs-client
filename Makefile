@@ -66,6 +66,7 @@ MAJVER:=$(shell echo $(VER)|sed 's|^\([^.]\+\)[.]\([^.]\+\)[.]\([^.]\+\)[.].*$$|
 
 .PHONY: tag upload
 tag:
+	make clean
 	-git tag -d v$(RVER)
 	git commit $(TAG_OPTS) version Changelog -m "Release $(RVER)"
 	git tag -a v$(RVER) -m "Release $(RVER)"
