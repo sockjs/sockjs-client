@@ -60,8 +60,8 @@ test 'arrIndexOf', ->
     equal(u.arrIndexOf(a, 6), -1)
 
 test 'quote', ->
-    equal(u.quote(''), '""');
-    equal(u.quote('a'), '"a"');
+    equal(u.quote(''), '""')
+    equal(u.quote('a'), '"a"')
     equal(u.quote('\t'), '"\\t"')
     equal(u.quote('\n'), '"\\n"')
     equal(u.quote('\x00\udfff\ufffe\uffff'), '"\\u0000\\udfff\\ufffe\\uffff"')
@@ -74,3 +74,4 @@ test 'quote', ->
             String.fromCharCode(i)
     all_chars = c.join('')
     ok(JSON.parse(u.quote(all_chars)) is all_chars, "Quote/unquote all 64K chars.")
+
