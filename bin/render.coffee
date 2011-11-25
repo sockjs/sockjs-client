@@ -23,6 +23,13 @@ array_flatten = (arr, acc) ->
             throw "Value is not an Array nor a String!"
     return acc
 
+stringify_unicode = (str) ->
+    str = str.replace /[\u0100-\uffff]/g, (ch) ->
+            return "\\u" + ('0000' + ch.charCodeAt(0).toString(16)).substr(-4)
+    str = str.replace /[\x00-\x1f\x7f-\xff]/g, (ch) ->
+            return "\\x" + ('00' + ch.charCodeAt(0).toString(16)).substr(-2)
+    return str
+
 
 minify = (data, minify_options)->
     ast = uglify.parser.parse(data)
@@ -88,6 +95,8 @@ main = ->
     content = for filename in filenames
         render(filename, '', options)
     content.push('\n')
-    process.stdout.write(array_flatten(content).join(''), 'utf8')
+    process.stdout.write(
+        stringify_unicode(array_flatten(content).join('')),
+        'utf8')
 
 main()
