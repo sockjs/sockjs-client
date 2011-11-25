@@ -26,7 +26,7 @@ array_flatten = (arr, acc) ->
 stringify_unicode = (str) ->
     str = str.replace /[\u0100-\uffff]/g, (ch) ->
             return "\\u" + ('0000' + ch.charCodeAt(0).toString(16)).substr(-4)
-    str = str.replace /[\x00-\x1f\x7f-\xff]/g, (ch) ->
+    str = str.replace /[\x00-\x08\x0b-\x1f\x7f-\xff]/g, (ch) ->
             return "\\x" + ('00' + ch.charCodeAt(0).toString(16)).substr(-2)
     return str
 
