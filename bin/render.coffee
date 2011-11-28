@@ -40,13 +40,15 @@ minify = (data, minify_options)->
 render = (filename, depth, options) ->
     tags =
         include: (args) ->
-            if args.length > 1 and args[1].indexOf('c') isnt -1
+            if (args.length > 1 and args[1].indexOf('c') isnt -1 and
+                     options.minify is false)
                 options.comment = true
             render(args[0], depth + '    ', options)
         version: ->
             options.version
         include_and_minify: (args) ->
-            if args.length > 1 and args[1].indexOf('c') isnt -1
+            if (args.length > 1 and args[1].indexOf('c') isnt -1 and
+                     options.minify is false)
                 options.comment = true
             d = render(args[0], depth + '    ', options)
             if options.minify
