@@ -62,8 +62,8 @@ test 'arrIndexOf', ->
 test 'quote', ->
     equal(u.quote(''), '""')
     equal(u.quote('a'), '"a"')
-    equal(u.quote('\t'), '"\\t"')
-    equal(u.quote('\n'), '"\\n"')
+    ok(u.arrIndexOf(['"\\t"', '"\\u0009"'], u.quote('\t')) isnt -1)
+    ok(u.arrIndexOf(['"\\n"', '"\\u000a"'], u.quote('\n')) isnt -1)
     equal(u.quote('\x00\udfff\ufffe\uffff'), '"\\u0000\\udfff\\ufffe\\uffff"')
     # Unicode surrogates, formally incorrect unicode datapoints:
     equal(u.quote('\ud85c\udff7\ud800\ud8ff'), '"\\ud85c\\udff7\\ud800\\ud8ff"')
