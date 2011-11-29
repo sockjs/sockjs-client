@@ -92,7 +92,7 @@ main = ->
                    options.minify = true
     parser.on 'set-version', (_, version) ->
                    options.version = version
-    filenames = parser.parse(process.ARGV.slice(2))
+    filenames = parser.parse((process.ARGV || process.argv).slice(2))
 
     content = for filename in filenames
         render(filename, '', options)
