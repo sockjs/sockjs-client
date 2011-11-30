@@ -24,7 +24,8 @@ tests/html/lib/%.js: tests/html/src/%.coffee
 	coffee -o tests/html/lib/ -c --bare $<
 
 test: tests
-tests: tests/html/lib/sockjs.js tests/html/lib/tests.js tests/html/lib/unittests.js
+tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
+		tests/html/lib/domtests.js 
 	node tests/server.js
 
 
