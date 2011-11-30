@@ -3,18 +3,18 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <script>
-    document.domain = document.domain;
-    _sockjs_onload = function(){SockJS.bootstrap_iframe();};
-  </script>
   <script src="/lib/sockjs.js"></script>
 </head>
 <body>
   <h2>Don't panic!</h2>
   <p>This is a SockJS hidden iframe. It's used for cross domain magic.</p>
   <script>
-    var window_id = document.location.hash.slice(1);
-    parent._sockjs_global(window_id).callback = function(code) {eval(code);};
-    parent._sockjs_global(window_id).open();
+    document.domain = document.domain;
+    history.navigationMode = 'compatible';
+    c = parent._sockjs_global;
+    window_id = document.location.hash.slice(1);
+    hook = c(window_id);
+    hook.callback = function(code) {eval(code);};
+    hook.open();
   </script>
 </body>
