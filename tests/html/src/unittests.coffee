@@ -44,6 +44,7 @@ test 'amendUrl', ->
 
     equal(u.amendUrl('//blah:1/abc'), dl.protocol + '//blah:1/abc')
     equal(u.amendUrl('/abc'), dl.protocol + '//' + dl.host + '/abc')
+    equal(u.amendUrl('/'), dl.protocol + '//' + dl.host)
     equal(u.amendUrl('http://a:1/abc'), 'http://a:1/abc')
     equal(u.amendUrl('http://a:1/abc/'), 'http://a:1/abc')
     equal(u.amendUrl('http://a:1/abc//'), 'http://a:1/abc')
