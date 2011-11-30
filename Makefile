@@ -23,9 +23,11 @@ tests/html/lib/%.js: tests/html/src/%.coffee
 	@coffee -v > /dev/null
 	coffee -o tests/html/lib/ -c --bare $<
 
+build_tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
+		tests/html/lib/domtests.js
+
 test: tests
-tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
-		tests/html/lib/domtests.js 
+tests: build_tests
 	node tests/server.js
 
 
@@ -35,16 +37,17 @@ serve:
 		rm .pidfile.pid;			\
 	fi
 
-	@while [ 1 ]; do				\
-	        echo " [*] Running http server";	\
-	        make test &				\
-	        SRVPID=$$!;				\
-	        echo $$SRVPID > .pidfile.pid;		\
-	        echo " [*] Server pid: $$SRVPID";	\
-	    inotifywait -r -q -e modify . ../sockjs-node;\
-	    kill `cat .pidfile.pid`;			\
-	    rm -f .pidfile.pid;				\
-	    sleep 0.1;					\
+	@while [ 1 ]; do					\
+		make build_tests;				\
+		echo " [*] Running http server";		\
+		make test &					\
+		SRVPID=$$!;					\
+		echo $$SRVPID > .pidfile.pid;			\
+		echo " [*] Server pid: $$SRVPID";		\
+		inotifywait -r -q -e modify . ../sockjs-node;	\
+		kill `cat .pidfile.pid`;			\
+		rm -f .pidfile.pid;				\
+		sleep 0.1;					\
 	done
 
 clean:
