@@ -12,7 +12,7 @@ newIframe = ->
     hook.iobj = u.createIframe('/iframe.html?a=' + Math.random() + '#' + hook.id, err)
     return hook
 
-if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
+if navigator.userAgent.indexOf('Konqueror') isnt -1
     test "onunload [unsupported by client]", ->
         ok(true)
 else
