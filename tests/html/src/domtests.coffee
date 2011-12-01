@@ -3,7 +3,7 @@ module('Dom')
 u = SockJS.getUtils()
 
 newIframe = ->
-    # Must do:
+    # Requires to put:
     #     document.domain = document.domain
     # in HEAD, for IE7
     hook = u.createHook()
@@ -14,15 +14,17 @@ newIframe = ->
 
 onunload_test_factory = (code) ->
     return ->
-        expect(2)
+        expect(3)
         hook = newIframe()
         hook.open = ->
             ok(true, 'open hook called by an iframe')
             hook.callback(code)
+        hook.load = ->
+            ok(true, 'onload hook called by an iframe')
             f = -> hook.iobj.cleanup()
             setTimeout(f, 1)
-        hook.done = ->
-            ok(true, 'done hook called by an iframe')
+        hook.unload = ->
+            ok(true, 'onunload hook called by an iframe')
             hook.del()
             start()
 
@@ -32,8 +34,11 @@ if navigator.userAgent.indexOf('Konqueror') isnt -1
 else
     asyncTest('onunload', onunload_test_factory("""
                     var u = SockJS.getUtils();
+                    u.attachEvent('load', function(){
+                        hook.load();
+                    });
                     u.attachEvent('unload', function(){
-                        hook.done();
+                        hook.unload();
                     });
                 """))
 
@@ -43,8 +48,11 @@ if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
 else
     asyncTest('onbeforeunload', onunload_test_factory("""
                     var u = SockJS.getUtils();
+                    u.attachEvent('load', function(){
+                        hook.load();
+                    });
                     u.attachEvent('beforeunload', function(){
-                        hook.done();
+                        hook.unload();
                     });
                 """))
 

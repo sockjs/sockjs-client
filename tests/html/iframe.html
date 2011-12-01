@@ -8,16 +8,14 @@
   </script>
   <script src="/lib/sockjs.js"></script>
 </head>
-<body onload="onload();">
+<body>
   <h2>Don't panic!</h2>
   <p>This is a SockJS hidden iframe. It's used for cross domain magic.</p>
   <script>
-    onload = function() {
-        c = parent._sockjs_global;
-        window_id = document.location.hash.slice(1);
-        hook = c(window_id);
-        hook.callback = function(code) {eval(code);};
-        hook.open();
-    }
+    c = parent._sockjs_global;
+    window_id = document.location.hash.slice(1);
+    hook = c(window_id);
+    hook.callback = function(code) {eval(code);};
+    hook.open();
   </script>
 </body>
