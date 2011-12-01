@@ -6,8 +6,8 @@ newIframe = ->
     document.domain = document.domain
     hook = u.createHook()
     err = ->
-        console.log('iframe error. bad.')
-    hook.iobj = u.createIframe('/iframe.html#' + hook.id, err)
+        log('iframe error. bad.')
+    hook.iobj = u.createIframe('/iframe.html?a=' + Math.random() + '#' + hook.id, err)
     return hook
 
 if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
