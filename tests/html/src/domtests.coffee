@@ -3,7 +3,9 @@ module('Dom')
 u = SockJS.getUtils()
 
 newIframe = ->
-    document.domain = document.domain
+    # Must do:
+    #     document.domain = document.domain
+    # in HEAD, for IE7
     hook = u.createHook()
     err = ->
         log('iframe error. bad.')
