@@ -34,6 +34,29 @@ else
             hook.del()
             start()
 
+if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
+    test "onbeforeunload [unsupported by client]", ->
+        ok(true)
+else
+    asyncTest 'onbeforeunload', ->
+        expect(2)
+        hook = newIframe()
+        hook.open = ->
+            ok(true, 'open hook called by an iframe')
+            hook.callback("""
+                    var u = SockJS.getUtils();
+                    u.attachEvent('beforeunload', function(){
+                        hook.done();
+                  return ;
+                    });
+                """)
+            f = -> hook.iobj.cleanup()
+            setTimeout(f, 1)
+        hook.done = ->
+            ok(true, 'done hook called by an iframe')
+            hook.del()
+            start()
+
 if not SockJS.getIframeTransport().enabled()
     test "onmessage [unsupported by client]", ->
         ok(true)
