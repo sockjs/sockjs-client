@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script>
+    document.domain = document.domain;
+  </script>
+  <script src="/lib/sockjs.js?no=cache"></script>
+  <script>
+    c = parent._sockjs_global;
+    window_id = document.location.hash.slice(1);
+    hook = c(window_id);
+    hook.callback = function(code) {eval(code);};
+    hook.open();
+  </script>
+  <script src="slow-script.js?yes=nocache"></script>
+</head>
+<body>
+  <h2>Don't panic!</h2>
+</body>

@@ -2,14 +2,14 @@ module('Dom')
 
 u = SockJS.getUtils()
 
-newIframe = ->
+newIframe = (path = '/iframe.html') ->
     # Requires to put:
     #     document.domain = document.domain
     # in HEAD, for IE7
     hook = u.createHook()
     err = ->
         log('iframe error. bad.')
-    hook.iobj = u.createIframe('/iframe.html?a=' + Math.random() + '#' + hook.id, err)
+    hook.iobj = u.createIframe(path + '?a=' + Math.random() + '#' + hook.id, err)
     return hook
 
 onunload_test_factory = (code) ->
