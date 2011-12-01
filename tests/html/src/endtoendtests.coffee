@@ -2,7 +2,7 @@ module('End to End')
 
 factory_body_check = (protocol) ->
     if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
-        n = " " + protocol + "[unsupported by client]"
+        n = " " + protocol + " [unsupported by client]"
         test n, ->
             log('Unsupported protocol (by client): "' + protocol + '"')
     else
