@@ -12,21 +12,13 @@ newIframe = ->
     hook.iobj = u.createIframe('/iframe.html?a=' + Math.random() + '#' + hook.id, err)
     return hook
 
-if navigator.userAgent.indexOf('Konqueror') isnt -1
-    test "onunload [unsupported by client]", ->
-        ok(true)
-else
-    asyncTest 'onunload', ->
+onunload_test_factory = (code) ->
+    return ->
         expect(2)
         hook = newIframe()
         hook.open = ->
             ok(true, 'open hook called by an iframe')
-            hook.callback("""
-                    var u = SockJS.getUtils();
-                    u.attachEvent('unload', function(){
-                        hook.done();
-                    });
-                """)
+            hook.callback(code)
             f = -> hook.iobj.cleanup()
             setTimeout(f, 1)
         hook.done = ->
@@ -34,28 +26,27 @@ else
             hook.del()
             start()
 
+if navigator.userAgent.indexOf('Konqueror') isnt -1
+    test "onunload [unsupported by client]", ->
+        ok(true)
+else
+    asyncTest('onunload', onunload_test_factory("""
+                    var u = SockJS.getUtils();
+                    u.attachEvent('unload', function(){
+                        hook.done();
+                    });
+                """))
+
 if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
     test "onbeforeunload [unsupported by client]", ->
         ok(true)
 else
-    asyncTest 'onbeforeunload', ->
-        expect(2)
-        hook = newIframe()
-        hook.open = ->
-            ok(true, 'open hook called by an iframe')
-            hook.callback("""
+    asyncTest('onbeforeunload', onunload_test_factory("""
                     var u = SockJS.getUtils();
                     u.attachEvent('beforeunload', function(){
                         hook.done();
-                  return ;
                     });
-                """)
-            f = -> hook.iobj.cleanup()
-            setTimeout(f, 1)
-        hook.done = ->
-            ok(true, 'done hook called by an iframe')
-            hook.del()
-            start()
+                """))
 
 if not SockJS.getIframeTransport().enabled()
     test "onmessage [unsupported by client]", ->
