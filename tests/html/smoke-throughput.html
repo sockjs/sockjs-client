@@ -66,7 +66,7 @@
         sjs.send({t: (new Date()).getTime(), payload:payload})
     };
     var i = 0;
-    function onmessage(e) {
+    function xonmessage(e) {
             var msg = e.data;
             var td = (new Date()).getTime() - msg.t;
             $('#latency').text(''+i +'  ' + td + ' ms');
@@ -82,7 +82,7 @@
         sjs = new SockJS(client_opts.url + '/echo', protocol, client_opts.sockjs_opts);
         sjs.onopen = onopen
         sjs.onclose = onclose;
-        sjs.onmessage = onmessage;
+        sjs.onmessage = xonmessage;
     });
     $('#disconnect').click(function() {
         $('#disconnect').attr('disabled', true);

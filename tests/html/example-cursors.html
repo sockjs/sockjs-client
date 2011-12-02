@@ -64,7 +64,7 @@
         sjs = new SockJS(client_opts.url + '/broadcast', protocol, client_opts.sockjs_opts);
         sjs.onopen = onopen
         sjs.onclose = onclose;
-        sjs.onmessage = onmessage;
+        sjs.onmessage = xonmessage;
     });
     $('#disconnect').click(function() {
         $('#disconnect').attr('disabled', true);
@@ -81,7 +81,7 @@
         $('#disconnect').attr('disabled', true);
     };
     var myself = (''+Math.random()).substr(2);
-    var onmessage = function(e) {
+    var xonmessage = function(e) {
         var msg = JSON.parse(e.data);
         if (msg.id === myself) {
             var td = (new Date()).getTime() - msg.t;

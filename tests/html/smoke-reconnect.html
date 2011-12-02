@@ -64,12 +64,6 @@
             $('#disconnect').attr('disabled', true);
         }
     };
-    function onmessage(e) {
-            var msg = e.data;
-            var td = (new Date()).getTime() - msg.t;
-            i += 1;
-            send();
-    };
 
     $('#connect').click(function() {
         started = true;

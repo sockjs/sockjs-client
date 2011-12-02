@@ -262,3 +262,5 @@ There are various browser quirks which we don't intend to address:
    it's advisable to use only valid characters. Using invalid
    characters is a bit slower, as SockJS must escape them before
    sending over the wire.
+ * Having a global function called `onmessage` or such is probably a
+   bad idea.
