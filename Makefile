@@ -26,7 +26,8 @@ tests/html/lib/%.js: tests/html/src/%.coffee
 	$(COFFEE) -o tests/html/lib/ -c --bare $<
 
 build_tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
-		tests/html/lib/domtests.js tests/html/lib/endtoendtests.js
+		tests/html/lib/unittests.js tests/html/lib/domtests.js \
+		tests/html/lib/endtoendtests.js
 
 test: tests
 tests: build_tests
