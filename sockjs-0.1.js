@@ -1,4 +1,4 @@
-/* SockJS client, version 0.1.1, http://sockjs.org, MIT License
+/* SockJS client, version 0.1.2, http://sockjs.org, MIT License
 
 Copyright (C) 2011 VMware, Inc.
 
@@ -108,15 +108,12 @@ SimpleEvent.prototype.toString = function() {
 
 //         [*] Including lib/utils.js
 var utils = {};
-var random_string_chars = ['a','b','c','d','e','f','g','h','i','j',
-                           'k','l','m','n','o','p','q','r','s','t',
-                           'u','v','w','x','y','z',
-                           '0','1','2','3','4','5','6','7','8','9','_'];
+var random_string_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_';
 utils.random_string = function(letters, max) {
     max = max || random_string_chars.length;
     var i, ret = [];
     for(i=0; i < letters; i++) {
-        ret.push( random_string_chars[Math.floor(Math.random() * max)] );
+        ret.push( random_string_chars.substr(Math.floor(Math.random() * max),1) );
     }
     return ret.join('');
 };
@@ -124,40 +121,10 @@ utils.random_number = function(max) {
     return Math.floor(Math.random() * max);
 };
 utils.random_number_string = function(max) {
-    var s = ''+utils.random_number(max);
     var t = (''+(max - 1)).length;
-    while (s.length < t) {s = '0' + s;}
-    return s;
+    var p = Array(t+1).join('0');
+    return (p + utils.random_number(max)).slice(-t);
 };
-
-utils.attachMessage = function(listener) {
-    utils.attachEvent('message', listener);
-};
-utils.attachEvent = function(event, listener) {
-    if (typeof _window.addEventListener !== 'undefined') {
-        _window.addEventListener(event, listener, false);
-    } else {
-        // IE quirks.
-        // According to: http://stevesouders.com/misc/test-postmessage.php
-        // the message gets delivered only to 'document', not 'window'.
-	_document.attachEvent("on" + event, listener);
-        // I get 'window' for ie8.
-	_window.attachEvent("on" + event, listener);
-    }
-};
-
-utils.detachMessage = function(listener) {
-    utils.detachEvent('message', listener);
-};
-utils.detachEvent = function(event, listener) {
-    if (typeof _window.addEventListener !== 'undefined') {
-        _window.removeEventListener(event, listener, false);
-    } else {
-        _document.detachEvent("on" + event, listener);
-	_window.detachEvent("on" + event, listener);
-    }
-};
-
 
 // Assuming that url looks like: http://asdasd:111/asd
 utils.getOrigin = function(url) {
@@ -173,6 +140,215 @@ utils.objectExtend = function(dst, src) {
         }
     }
     return dst;
+};
+
+var WPrefix = '_jp';
+
+utils.polluteGlobalNamespace = function() {
+    if (!(WPrefix in _window)) {
+        _window[WPrefix] = {};
+    }
+};
+
+utils.closeFrame = function (code, reason) {
+    return 'c'+JSON.stringify([code, reason]);
+};
+
+utils.userSetCode = function (code) {
+    return code === 1000 || (code >= 3000 && code <= 4999);
+};
+
+utils.log = function() {
+    if (_window.console && console.log && console.log.apply) {
+        console.log.apply(console, arguments);
+    }
+};
+
+utils.bind = function(fun, that) {
+    if (fun.bind) {
+        return fun.bind(that);
+    } else {
+        return function() {
+            return fun.apply(that, arguments);
+        };
+    }
+};
+
+utils.amendUrl = function(url) {
+    var dl = _document.location;
+    if (!url) {
+        throw new Error('Wrong url for SockJS');
+    }
+    //  '//abc' --> 'http://abc'
+    if (url.indexOf('//') === 0) {
+        url = dl.protocol + url;
+    }
+    // '/abc' --> 'http://localhost:80/abc'
+    if (url.indexOf('/') === 0) {
+        url = dl.protocol + '//' + dl.host + url;
+    }
+    // strip trailing slashes
+    url = url.replace(/[/]+$/,'');
+    return url;
+};
+
+// IE doesn't support [].indexOf.
+utils.arrIndexOf = function(arr, obj){
+    for(var i=0; i < arr.length; i++){
+        if(arr[i] === obj){
+            return i;
+        }
+    }
+    return -1;
+};
+
+utils.delay = function(t, fun) {
+    if(typeof t === 'function') {
+        fun = t;
+        t = 0;
+    }
+    return setTimeout(fun, t);
+};
+
+
+// Chars worth escaping, as defined by Douglas Crockford:
+//   https://github.com/douglascrockford/JSON-js/blob/47a9882cddeb1e8529e07af9736218075372b8ac/json2.js#L196
+var json_escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+    json_lookup = {
+"\u0000":"\\u0000","\u0001":"\\u0001","\u0002":"\\u0002","\u0003":"\\u0003",
+"\u0004":"\\u0004","\u0005":"\\u0005","\u0006":"\\u0006","\u0007":"\\u0007",
+"\b":"\\b","\t":"\\t","\n":"\\n","\u000b":"\\u000b","\f":"\\f","\r":"\\r",
+"\u000e":"\\u000e","\u000f":"\\u000f","\u0010":"\\u0010","\u0011":"\\u0011",
+"\u0012":"\\u0012","\u0013":"\\u0013","\u0014":"\\u0014","\u0015":"\\u0015",
+"\u0016":"\\u0016","\u0017":"\\u0017","\u0018":"\\u0018","\u0019":"\\u0019",
+"\u001a":"\\u001a","\u001b":"\\u001b","\u001c":"\\u001c","\u001d":"\\u001d",
+"\u001e":"\\u001e","\u001f":"\\u001f","\"":"\\\"","\\":"\\\\",
+"\u007f":"\\u007f","\u0080":"\\u0080","\u0081":"\\u0081","\u0082":"\\u0082",
+"\u0083":"\\u0083","\u0084":"\\u0084","\u0085":"\\u0085","\u0086":"\\u0086",
+"\u0087":"\\u0087","\u0088":"\\u0088","\u0089":"\\u0089","\u008a":"\\u008a",
+"\u008b":"\\u008b","\u008c":"\\u008c","\u008d":"\\u008d","\u008e":"\\u008e",
+"\u008f":"\\u008f","\u0090":"\\u0090","\u0091":"\\u0091","\u0092":"\\u0092",
+"\u0093":"\\u0093","\u0094":"\\u0094","\u0095":"\\u0095","\u0096":"\\u0096",
+"\u0097":"\\u0097","\u0098":"\\u0098","\u0099":"\\u0099","\u009a":"\\u009a",
+"\u009b":"\\u009b","\u009c":"\\u009c","\u009d":"\\u009d","\u009e":"\\u009e",
+"\u009f":"\\u009f","\u00ad":"\\u00ad","\u0600":"\\u0600","\u0601":"\\u0601",
+"\u0602":"\\u0602","\u0603":"\\u0603","\u0604":"\\u0604","\u070f":"\\u070f",
+"\u17b4":"\\u17b4","\u17b5":"\\u17b5","\u200c":"\\u200c","\u200d":"\\u200d",
+"\u200e":"\\u200e","\u200f":"\\u200f","\u2028":"\\u2028","\u2029":"\\u2029",
+"\u202a":"\\u202a","\u202b":"\\u202b","\u202c":"\\u202c","\u202d":"\\u202d",
+"\u202e":"\\u202e","\u202f":"\\u202f","\u2060":"\\u2060","\u2061":"\\u2061",
+"\u2062":"\\u2062","\u2063":"\\u2063","\u2064":"\\u2064","\u2065":"\\u2065",
+"\u2066":"\\u2066","\u2067":"\\u2067","\u2068":"\\u2068","\u2069":"\\u2069",
+"\u206a":"\\u206a","\u206b":"\\u206b","\u206c":"\\u206c","\u206d":"\\u206d",
+"\u206e":"\\u206e","\u206f":"\\u206f","\ufeff":"\\ufeff","\ufff0":"\\ufff0",
+"\ufff1":"\\ufff1","\ufff2":"\\ufff2","\ufff3":"\\ufff3","\ufff4":"\\ufff4",
+"\ufff5":"\\ufff5","\ufff6":"\\ufff6","\ufff7":"\\ufff7","\ufff8":"\\ufff8",
+"\ufff9":"\\ufff9","\ufffa":"\\ufffa","\ufffb":"\\ufffb","\ufffc":"\\ufffc",
+"\ufffd":"\\ufffd","\ufffe":"\\ufffe","\uffff":"\\uffff"};
+
+// Some extra characters that Chrome gets wrong, and substitutes with
+// something else on the wire.
+var extra_escapable = /[\x00-\x1f\ud800-\udfff\ufffe\uffff\u0300-\u0333\u033d-\u0346\u034a-\u034c\u0350-\u0352\u0357-\u0358\u035c-\u0362\u0374\u037e\u0387\u0591-\u05af\u05c4\u0610-\u0617\u0653-\u0654\u0657-\u065b\u065d-\u065e\u06df-\u06e2\u06eb-\u06ec\u0730\u0732-\u0733\u0735-\u0736\u073a\u073d\u073f-\u0741\u0743\u0745\u0747\u07eb-\u07f1\u0951\u0958-\u095f\u09dc-\u09dd\u09df\u0a33\u0a36\u0a59-\u0a5b\u0a5e\u0b5c-\u0b5d\u0e38-\u0e39\u0f43\u0f4d\u0f52\u0f57\u0f5c\u0f69\u0f72-\u0f76\u0f78\u0f80-\u0f83\u0f93\u0f9d\u0fa2\u0fa7\u0fac\u0fb9\u1939-\u193a\u1a17\u1b6b\u1cda-\u1cdb\u1dc0-\u1dcf\u1dfc\u1dfe\u1f71\u1f73\u1f75\u1f77\u1f79\u1f7b\u1f7d\u1fbb\u1fbe\u1fc9\u1fcb\u1fd3\u1fdb\u1fe3\u1feb\u1fee-\u1fef\u1ff9\u1ffb\u1ffd\u2000-\u2001\u20d0-\u20d1\u20d4-\u20d7\u20e7-\u20e9\u2126\u212a-\u212b\u2329-\u232a\u2adc\u302b-\u302c\uaab2-\uaab3\uf900-\ufa0d\ufa10\ufa12\ufa15-\ufa1e\ufa20\ufa22\ufa25-\ufa26\ufa2a-\ufa2d\ufa30-\ufa6d\ufa70-\ufad9\ufb1d\ufb1f\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41\ufb43-\ufb44\ufb46-\ufb4e\ufff0-\uffff]/g,
+    extra_lookup;
+
+// JSON Quote string. Use native implementation when possible.
+var JSONQuote = (JSON && JSON.stringify) || function(string) {
+    json_escapable.lastIndex = 0;
+    if (json_escapable.test(string)) {
+        string = string.replace(json_escapable, function(a) {
+            return json_lookup[a];
+        });
+    }
+    return '"' + string + '"';
+};
+
+// This may be quite slow, so let's delay until user actually uses bad
+// characters.
+var unroll_lookup = function(escapable) {
+    var i;
+    var unrolled = {}
+    var c = []
+    for(i=0; i<65536; i++) {
+        c.push( String.fromCharCode(i) );
+    }
+    escapable.lastIndex = 0;
+    c.join('').replace(escapable, function (a) {
+        unrolled[ a ] = '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+        return '';
+    });
+    escapable.lastIndex = 0;
+    return unrolled;
+};
+
+// Quote string, also taking care of unicode characters that browsers
+// often break. Especially, take care of unicode surrogates:
+//    http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates
+utils.quote = function(string) {
+    var quoted = JSONQuote(string);
+
+    // In most cases this should be very fast and good enough.
+    extra_escapable.lastIndex = 0;
+    if(!extra_escapable.test(quoted)) {
+        return quoted;
+    }
+
+    if(!extra_lookup) extra_lookup = unroll_lookup(extra_escapable);
+
+    return quoted.replace(extra_escapable, function(a) {
+        return extra_lookup[a];
+    });
+}
+//         [*] End of lib/utils.js
+
+
+//         [*] Including lib/dom.js
+// May be used by htmlfile jsonp and transports.
+var MPrefix = '_sockjs_global';
+utils.createHook = function() {
+    var window_id = 'a' + utils.random_string(8);
+    if (!(MPrefix in _window)) {
+        var map = {};
+        _window[MPrefix] = function(window_id) {
+            if (!(window_id in map)) {
+                map[window_id] = {
+                    id: window_id,
+                    del: function() {delete map[window_id];}
+                };
+            }
+            return map[window_id];
+        }
+    }
+    return _window[MPrefix](window_id);
+};
+
+
+
+utils.attachMessage = function(listener) {
+    utils.attachEvent('message', listener);
+};
+utils.attachEvent = function(event, listener) {
+    if (typeof _window.addEventListener !== 'undefined') {
+        _window.addEventListener(event, listener, false);
+    } else {
+        // IE quirks.
+        // According to: http://stevesouders.com/misc/test-postmessage.php
+        // the message gets delivered only to 'document', not 'window'.
+        _document.attachEvent("on" + event, listener);
+        // I get 'window' for ie8.
+        _window.attachEvent("on" + event, listener);
+    }
+};
+
+utils.detachMessage = function(listener) {
+    utils.detachEvent('message', listener);
+};
+utils.detachEvent = function(event, listener) {
+    if (typeof _window.addEventListener !== 'undefined') {
+        _window.removeEventListener(event, listener, false);
+    } else {
+        _document.detachEvent("on" + event, listener);
+        _window.detachEvent("on" + event, listener);
+    }
 };
 
 // Try to clear some headers, in order to save bandwidth. For
@@ -306,14 +482,6 @@ utils.createXHR = function(method, url, payload, callback) {
     };
 };
 
-var WPrefix = '_jp';
-
-utils.polluteGlobalNamespace = function() {
-    if (!(WPrefix in _window)) {
-        _window[WPrefix] = {};
-    }
-};
-
 utils.createIframe = function (iframe_url, error_callback) {
     var iframe = _document.createElement('iframe');
     var tref;
@@ -326,9 +494,19 @@ utils.createIframe = function (iframe_url, error_callback) {
     var cleanup = function() {
         if (iframe) {
             unattach();
-            iframe.parentNode.removeChild(iframe);
+            // This is required, in order to force ie7 to fire the
+            // onunload event. Setting .src must happen before the
+            // removeChild step.
             iframe.src = "about:blank";
-            iframe = null;
+            // This timeout makes chrome fire onbeforeunload event
+            // within iframe. Without the timeout it goes straight to
+            // onunload.
+            setTimeout(function() {
+                if(iframe) {
+                    iframe.parentNode.removeChild(iframe);
+                }
+                iframe = null;
+            }, 0);
             utils.detachEvent('unload', cleanup);
         }
     };
@@ -404,66 +582,38 @@ utils.createHtmlfile = function (iframe_url, error_callback) {
     };
 };
 
-utils.closeFrame = function (code, reason) {
-    return 'c'+JSON.stringify([code, reason]);
-};
-
-utils.userSetCode = function (code) {
-    return code === 1000 || (code >= 3000 && code <= 4999);
-};
-
-utils.log = function() {
-    if (_window.console && console.log && console.log.apply) {
-        console.log.apply(console, arguments);
-    }
-};
-
-utils.bind = function(fun, that) {
-    if (fun.bind) {
-        return fun.bind(that);
+var DocumentGuard = function() {
+    var that = this;
+    var emit = function(state_name) {
+        that.state = DocumentGuard[state_name];
+        var e = {state: that.state, name: state_name};
+        that.dispatchEvent(new SimpleEvent('change', e));
+        that.dispatchEvent(new SimpleEvent(state_name, e));
+    };
+    emit('init');
+    if(!!_document.body) {
+        emit('load');
     } else {
-        return function() {
-            return fun.apply(that, arguments);
-        };
+        utils.attachEvent('load', function() {
+            emit('load');
+        });
     }
+    utils.attachEvent('beforeunload', function() {
+        emit('beforeunload');
+    });
+    utils.attachEvent('unload', function() {
+        emit('unload');
+    });
 };
 
-utils.amendUrl = function(url) {
-    var dl = _document.location;
-    if (!url) {
-        throw new Error('Wrong url for SockJS');
-    }
-    //  '//abc' --> 'http://abc'
-    if (url.indexOf('//') === 0) {
-        url = dl.protocol + url;
-    }
-    // '/abc' --> 'http://localhost:80/abc'
-    if (url.indexOf('/') === 0) {
-        url = dl.protocol + '//' + dl.host + url;
-    }
-    // strip trailing slashes
-    url = url.replace(/[/]+$/,'');
-    return url;
-};
+DocumentGuard.prototype = new REventTarget();
+DocumentGuard.init = 0;
+DocumentGuard.load = 1;
+DocumentGuard.beforeunload = 2;
+DocumentGuard.unload = 3;
 
-// IE doesn't support [].indexOf.
-utils.arrIndexOf = function(arr, obj){
-	for(var i=0; i < arr.length; i++){
-		if(arr[i] === obj){
-			return i;
-		}
-	}
-    return -1;
-};
-
-utils.delay = function(t, fun) {
-    if(typeof t === 'function') {
-        fun = t;
-        t = 0;
-    }
-    return setTimeout(fun, t);
-};
-//         [*] End of lib/utils.js
+var _document_guard = new DocumentGuard();
+//         [*] End of lib/dom.js
 
 
 //         [*] Including lib/sockjs.js
@@ -496,7 +646,7 @@ var SockJS = function(url, protocols, options) {
 // Inheritance
 SockJS.prototype = new REventTarget();
 
-SockJS.version = "0.1.1.dirty";
+SockJS.version = "0.1.2";
 
 SockJS.CONNECTING = 0;
 SockJS.OPEN = 1;
@@ -635,6 +785,18 @@ SockJS.prototype._try_next_protocol = function(close_event) {
                          }, that._options);
             return true;
         }
+        // Some protocols require access to `body`, what if were in
+        // the `head`?
+        if (SockJS[protocol] &&
+            SockJS[protocol].need_body === true &&
+            !_document.body) {
+            that._protocols.unshift(protocol);
+            that.protocol = 'waiting-for-load';
+            utils.attachEvent('load', function(){
+                that._try_next_protocol();
+            });
+            return true;
+        }
 
         if (!SockJS[protocol] ||
               (SockJS[protocol].need_chunking === true &&
@@ -668,7 +830,7 @@ SockJS.prototype.send = function(data) {
     if (that.readyState === SockJS.CONNECTING)
         throw new Error('INVALID_STATE_ERR');
     if (that.readyState === SockJS.OPEN) {
-        that._transport.doSend(JSON.stringify('' + data));
+        that._transport.doSend(utils.quote('' + data));
     }
     return true;
 };
@@ -687,6 +849,17 @@ var WebSocketTransport = SockJS.websocket = function(ri, trans_url) {
     that.ri = ri;
     that.url = url;
     var Constructor = window.WebSocket || window.MozWebSocket;
+
+    if(_document_guard.state >= DocumentGuard.beforeunload) {
+        // Firefox has an interesting bug. If a websocket connection
+        // is created after onbeforeunload, it stays alive even when
+        // user navigates away from the page. In such situation let's
+        // lie - let's not open the ws connection at all. See:
+        // https://github.com/sockjs/sockjs-client/issues/28
+        utils.log("Can't open a WebSocket connection after onbeforeunload!");
+        return;
+    }
+
     that.ws = new Constructor(that.url);
     that.ws.onmessage = function(e) {
         that.ri._didMessage(e.data);
@@ -1004,6 +1177,9 @@ JsonPTransport.enabled = function() {
     return true;
 };
 
+JsonPTransport.need_body = true;
+
+
 JsonPTransport.prototype.doCleanup = function() {
     var that = this;
     that._is_closing = true;
@@ -1294,6 +1470,15 @@ var chunkingTestUncached = SockJS.chunkingTest = function(base_url, callback, op
         doChunkingTest(base_url, callback, true);
         return;
     }
+    if(!_document.body) {
+        utils.attachEvent('load', function(){
+            chunkingTestWithBody(base_url, callback, options);
+        });
+    } else {
+        chunkingTestWithBody(base_url, callback, options);
+    }
+}
+var chunkingTestWithBody = function(base_url, callback, options) {
     // 2. Iframe
     if (IframeTransport.enabled()) {
         var ifr = new IframeTransport();
@@ -1361,6 +1546,7 @@ EventSourceIframeTransport.enabled = function () {
 };
 
 EventSourceIframeTransport.need_chunking = true;
+EventSourceIframeTransport.need_body = true;
 
 
 var EventSourceTransport = FacadeJS['w-iframe-eventsource'] = function (ri, trans_url) {
@@ -1397,6 +1583,8 @@ XhrPollingIframeTransport.prototype = new IframeTransport();
 XhrPollingIframeTransport.enabled = function () {
     return window.XMLHttpRequest && IframeTransport.enabled();
 };
+
+XhrPollingIframeTransport.need_body = true;
 
 
 var XhrPollingITransport = FacadeJS['w-iframe-xhr-polling'] = function (ri, trans_url) {
@@ -1442,6 +1630,7 @@ HtmlFileIframeTransport.enabled = function (options) {
 };
 
 HtmlFileIframeTransport.need_chunking = true;
+HtmlFileIframeTransport.need_body = true;
 
 
 var HtmlFileTransport = FacadeJS['w-iframe-htmlfile'] = function (ri, trans_url) {
@@ -1655,6 +1844,18 @@ XhrReceiver.prototype.abort = function() {
     }
 };
 //         [*] End of lib/trans-receiver-xhr.js
+
+
+//         [*] Including lib/test-hooks.js
+// For testing
+SockJS.getUtils = function(){
+    return utils;
+};
+
+SockJS.getIframeTransport = function(){
+    return IframeTransport;
+};
+//         [*] End of lib/test-hooks.js
 
                   return SockJS;
           })();
