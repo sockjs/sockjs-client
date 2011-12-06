@@ -1,3 +1,18 @@
+current
+=======
+
+ * #29 - Allow all unicode characters to be send over SockJS.
+ * #15 - SockJS should now work fine even if the connection is started
+   in HEAD, before BODY is loaded.
+ * #28 - In rare circumstances WebSocket connection can be left intact
+   after the page is unloaded in FireFox.
+ * Updated scripts to work with Node 0.6.
+ * Initial work to do better QUnit testing.
+ * Updated the minifying script (always escape unicode chars, remove
+   trailing comment).
+ * Use string instead of array of chars (utils.js:random_number_string).
+	
+    
 0.1.1
 =====
 
@@ -5,7 +20,7 @@
  * #26 Emit heartbeat event.
  * #27 Include license inline.
 
- 
+
 0.1.0
 =====
 
