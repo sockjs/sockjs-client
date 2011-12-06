@@ -1,27 +1,29 @@
 .PHONY: all build tests test serve clean
 
+COFFEE:=./node_modules/.bin/coffee
+
 all: sockjs.js
 
 build: sockjs.js sockjs.min.js
 
 sockjs.js: lib/*js version
-	@coffee -v > /dev/null
-	coffee bin/render.coffee --set-version $(VER) lib/all.js > $@
+	@$(COFFEE) -v > /dev/null
+	$(COFFEE) bin/render.coffee --set-version $(VER) lib/all.js > $@
 
 sockjs.min.js: lib/*js version
-	@coffee -v > /dev/null
-	coffee bin/render.coffee --set-version $(VER) --minify lib/all.js > $@
+	@$(COFFEE) -v > /dev/null
+	$(COFFEE) bin/render.coffee --set-version $(VER) --minify lib/all.js > $@
 
 sockjs.pretty.js: lib/*js version
-	@coffee -v > /dev/null
-	coffee bin/render.coffee --set-version $(VER) --minify --pretty lib/all.js > $@
+	@$(COFFEE) -v > /dev/null
+	$(COFFEE) bin/render.coffee --set-version $(VER) --minify --pretty lib/all.js > $@
 
 tests/html/lib/sockjs.js: sockjs.js
 	cp $< $@
 
 tests/html/lib/%.js: tests/html/src/%.coffee
-	@coffee -v > /dev/null
-	coffee -o tests/html/lib/ -c --bare $<
+	@$(COFFEE) -v > /dev/null
+	$(COFFEE) -o tests/html/lib/ -c --bare $<
 
 build_tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
 		tests/html/lib/domtests.js tests/html/lib/endtoendtests.js
