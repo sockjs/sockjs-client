@@ -231,6 +231,7 @@ server for that. To run it (by default it will be listening on port 8081):
 
     cd sockjs-node
     npm install --dev
+    make build
     make test_server
 
 At this point you're ready to run a SockJS-client server that will
@@ -245,9 +246,14 @@ At that point you should have two web servers running: sockjs-node on
 [http://localhost:8080/](http://localhost:8080/) you should be able
 run the QUnit tests against your sockjs-node server.
 
-If you want to test the sockjs completely you also must change the
-`sockjs_url` that is used by SockJS-node test server. To do that
-edit the `config.js` file:
+If you look at your browser console you will see warnings like that:
+
+    Incompatibile SockJS! Main site uses: "a", the iframe: "b".
+
+This is due to a fact that SockJS-node test server is using compiled
+javascript from CDN, rather than your freshly compiled version. To fix
+that you must amend `sockjs_url` that is used by SockJS-node test
+server. Edit the `config.js` file:
 
     vim sockjs-node/examples/test_server/config.js
 
@@ -255,7 +261,7 @@ And replace `sockjs_url` setting which by default points to CDN:
 
     sockjs_url: 'http://cdn.sockjs.org/sockjs-0.1.min.js',
 
-to a compiled sockjs javascript that you're serving. For example:
+to a freshly compiled sockjs, for example:
 
     sockjs_url: 'http://localhost:8080/lib/sockjs.js',
 

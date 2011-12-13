@@ -84,6 +84,7 @@ upload: build
 	for f in sock*js; do						\
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(VER)\2|g'`; \
 	done
+	echo "Majver=$(MAJVER)"
 	for f in sock*js; do						\
 		cp $$f ../sockjs-client-gh-pages/`echo $$f|sed 's|\(sockjs\)\(.*[.]js\)|\1-$(MAJVER)\2|g'`; \
 	done
