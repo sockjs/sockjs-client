@@ -200,26 +200,22 @@ session stickiness, take a look at the
 [SockJS-node readme](https://github.com/sockjs/sockjs-node#readme).
 
 
-Development
------------
+Development and testing
+-----------------------
 
-SockJS-client uses [Node.js](http://nodejs.org/) for testing and
-Javascript minification. If you want to play with SockJS code, check
-out the git repo and follow this steps:
+SockJS-client needs [Node.js](http://nodejs.org/) for running a test
+server and JavaScript minification. If you want to work on
+SockJS-client source code, check out the git repo and follow this
+steps:
 
     cd sockjs-client
     npm install
 
-(SockJS-client uses
-[SockJS-node](https://github.com/sockjs/sockjs-node) for testing, you
-may want to link 'node_modules/sockjs' to directory with cloned
-SockJS-node.)
-
-To generate javascript run:
+To generate JavaScript run:
 
     make sockjs.js
 
-To generate minified javascript run:
+To generate minified JavaScript run:
 
     make sockjs.min.js
 
@@ -228,20 +224,45 @@ To generate minified javascript run:
 
 ### Testing
 
-To run qunit tests, type:
+Once you compiled SockJS-client you may want to check if your changes
+pass all the tests. To run the tests you need a server that can answer
+various SockJS requests. A common way is to use `SockJS-node` test
+server for that. To run it (by default it will be listening on port 8081):
 
+    cd sockjs-node
+    npm install --dev
+    make test_server
+
+At this point you're ready to run a SockJS-client server that will
+server your freshly compiled JavaScript and various static http and
+javscript files (by default it will run on port 8080).
+
+    cd sockjs-client
     make test
 
-This command runs script 'tests/server.js' which starts a web server
-that listens on http://127.0.0.1:8080/ . It serves static QUnit files
-and serves a simple SockJS.
+At that point you should have two web servers running: sockjs-node on
+8081 and sockjs-client on 8080. When you open the browser on
+[http://localhost:8080/](http://localhost:8080/) you should be able
+run the QUnit tests against your sockjs-node server.
 
-To run QUnit tests simply point your browser at
-http://127.0.0.1:8080/.
+If you want to test the sockjs completely you also must change the
+`sockjs_url` that is used by SockJS-node test server. To do that
+edit the `config.js` file:
 
-If you want the javascript to be recompiled when the source files are
-modified and automatically restart the http server run `make serve`.
-You will need `inotifywait` command from package `inotify-tools`.
+    vim sockjs-node/examples/test_server/config.js
+
+And replace `sockjs_url` setting which by default points to CDN:
+
+    sockjs_url: 'http://cdn.sockjs.org/sockjs-0.1.min.js',
+
+to a compiled sockjs javascript that you're serving. For example:
+
+    sockjs_url: 'http://localhost:8080/lib/sockjs.js',
+
+
+Additionally, if you're doing more serious development consider using
+`make serve`, which will automatically reload the server when you
+modify the source code.
 
 
 Browser Quirks
