@@ -209,7 +209,7 @@ SockJS-client source code, check out the git repo and follow this
 steps:
 
     cd sockjs-client
-    npm install
+    npm install --dev
 
 To generate JavaScript run:
 
