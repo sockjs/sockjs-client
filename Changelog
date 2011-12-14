@@ -1,6 +1,8 @@
 dev
 ===
 
+ * #34 - Don't ever reuse `session_id`, especially when trying
+   fallback protocols.
  * The test server got moved from SockJS-client to SockJS-node.
 
 
