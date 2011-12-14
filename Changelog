@@ -1,3 +1,9 @@
+dev
+===
+
+ * The test server got moved from SockJS-client to SockJS-node.
+
+
 0.1.2
 =====
 
