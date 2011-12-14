@@ -253,7 +253,7 @@ If you look at your browser console you will see warnings like that:
 This is due to a fact that SockJS-node test server is using compiled
 javascript from CDN, rather than your freshly compiled version. To fix
 that you must amend `sockjs_url` that is used by SockJS-node test
-server. Edit the `config.js` file:
+server. Edit the [`config.js`](https://github.com/sockjs/sockjs-node/blob/master/examples/test_server/config.js) file:
 
     vim sockjs-node/examples/test_server/config.js
 
@@ -265,6 +265,11 @@ to a freshly compiled sockjs, for example:
 
     sockjs_url: 'http://localhost:8080/lib/sockjs.js',
 
+
+Also, if you want to run tests agains SockJS server not running on
+`localhost:8081` you may want to edit the
+[`tests/config.js`](https://github.com/sockjs/sockjs-client/blob/master/tests/config.js)
+file.
 
 Additionally, if you're doing more serious development consider using
 `make serve`, which will automatically reload the server when you
