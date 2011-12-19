@@ -289,10 +289,11 @@ There are various browser quirks which we don't intend to address:
    connection to one domain at the same time.
  * You shouldn't start SockJS connection before `body` loads - don't
    create SockJS objects within `head` (see #15).
- * Although SockJS is able deal with any Unicode characters (even
-   [invalid ones](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
+ * Although SockJS is trying to escape any strange Unicode characters
+   (even
+   [invalid ones, like surrogates](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
    it's advisable to use only valid characters. Using invalid
-   characters is a bit slower, as SockJS must escape them before
-   sending over the wire.
+   characters is a bit slower, and may not work with SockJS servers
+   that have a proper Unicode support.
  * Having a global function called `onmessage` or such is probably a
    bad idea.
