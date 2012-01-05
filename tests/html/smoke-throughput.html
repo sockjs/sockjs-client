@@ -63,11 +63,11 @@
     };
     var payload = Array(4096).join('x');
     function send() {
-        sjs.send({t: (new Date()).getTime(), payload:payload})
+        sjs.send(JSON.stringify({t: (new Date()).getTime(), payload:payload}));
     };
     var i = 0;
     function xonmessage(e) {
-            var msg = e.data;
+            var msg = JSON.parse(e.data);
             var td = (new Date()).getTime() - msg.t;
             $('#latency').text(''+i +'  ' + td + ' ms');
             i += 1;
