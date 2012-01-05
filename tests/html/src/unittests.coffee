@@ -60,6 +60,14 @@ test 'arrIndexOf', ->
     equal(u.arrIndexOf(a, null), -1)
     equal(u.arrIndexOf(a, 6), -1)
 
+test 'arrSkip', ->
+    a = [1,2,3,4,5]
+    deepEqual(u.arrSkip(a, 1), [2,3,4,5])
+    deepEqual(u.arrSkip(a, 2), [1,3,4,5])
+    deepEqual(u.arrSkip(a, 11), [1,2,3,4,5])
+    deepEqual(u.arrSkip(a, 'a'), [1,2,3,4,5])
+    deepEqual(u.arrSkip(a, '1'), [1,2,3,4,5])
+
 test 'quote', ->
     equal(u.quote(''), '""')
     equal(u.quote('a'), '"a"')
