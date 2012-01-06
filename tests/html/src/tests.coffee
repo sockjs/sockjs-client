@@ -388,48 +388,6 @@ test "EventEmitter", ->
     r.dispatchEvent({type:'close'}) # 0 runs
 
 
-chunking_test_factory = (counter) ->
-    return ->
-        expect(counter)
-        a = new Array(counter)
-        go = ->
-            SockJS.chunkingTest client_opts.url + '/echo', (r) ->
-                if $.browser.msie and not window.XDomainRequest
-                    # on browsers with no streaming support...
-                    equal(r, false)
-                else
-                    equal(r, true)
-                a.shift()
-                if a.length isnt 0
-                    go()
-                else
-                    start()
-        go()
-
-asyncTest "chunking test (simple)", chunking_test_factory(1)
-asyncTest "chunking test (stability)", chunking_test_factory(25)
-
-
-
-asyncTest "chunking test, invalid url 404", ->
-        expect(1)
-        SockJS.chunkingTest client_opts.url + '/invalid_url', (r) ->
-            equal(r, false)
-            start()
-
-asyncTest "chunking test, invalid url 500", ->
-        expect(1)
-        SockJS.chunkingTest client_opts.url + '/500_error', (r) ->
-            equal(r, false)
-            start()
-
-asyncTest "chunking test, invalid url port", ->
-        expect(1)
-        dl = document.location
-        SockJS.chunkingTest dl.protocol + '//' + dl.hostname + ':1079', (r) ->
-            equal(r, false)
-            start()
-
 asyncTest "disabled websocket test", ->
         expect(3)
         r = newSockJS('/disabled_websocket_echo', 'websocket')
