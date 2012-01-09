@@ -89,10 +89,64 @@ else
                         start()
 
 
+ajax_simple_factory = (name) ->
+    asyncTest name + ' simple', ->
+        expect(2)
+        x = new u[name]('GET', '/simple.txt', null)
+        x.onfinish = (status, text) ->
+            equal(text.length, 2051)
+            equal(text.slice(-2), 'b\n')
+            start()
+
+ajax_streaming_factory = (name) ->
+    asyncTest name + ' streaming', ->
+        expect(3)
+        x = new u[name]('GET', '/streaming.txt', null)
+        chunkno = 0
+        x.onchunk = (status, text) ->
+            switch chunkno
+                when 0
+                    equal(text.length, 2049)
+                    equal(text.slice(-2), 'a\n')
+            chunkno += 1
+        x.onfinish = (status, text) ->
+            equal(text.slice(-4), 'a\nb\n')
+            start()
 
 
+test_wrong_url = (name, url, statuses) ->
+    expect(2)
+    x = new u[name]('GET', url, null)
+    x.onchunk = ->
+        fail(true)
+    x.onfinish = (status, text) ->
+        ok(u.arrIndexOf(statuses, status) isnt -1)
+        equal(text, '')
+        start()
 
-# 1. data url
-# 2. wrong uri
-# 3. mass run - to verify mem leaks
+ajax_wrong_port_factory = (name) ->
+    for port in [25, 8999, 65300]
+        asyncTest name + ' wrong port ' + port, ->
+            test_wrong_url(name, 'http://localhost:'+port+'/streaming.txt', [0])
 
+
+ajax_simple_factory('XHRObject')
+if window.XDomainRequest
+    ajax_simple_factory('XDRObject')
+
+if not window.ActiveXObject
+    # Ajax streaming is not working in ie.
+    ajax_streaming_factory('XHRObject')
+if window.XDomainRequest
+    ajax_streaming_factory('XDRObject')
+
+ajax_wrong_port_factory('XHRObject')
+if window.XDomainRequest
+    ajax_wrong_port_factory('XDRObject')
+
+asyncTest 'XHRObject wrong url', ->
+    # Opera responds with 0, all other browsers with 404
+    test_wrong_url('XHRObject', '/wrong_url_indeed.txt', [0, 404])
+if window.XDomainRequest
+    asyncTest 'XDRObject wrong url', ->
+        test_wrong_url('XDRObject', '/wrong_url_indeed.txt', [0])
