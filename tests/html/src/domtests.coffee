@@ -100,16 +100,14 @@ ajax_simple_factory = (name) ->
 
 ajax_streaming_factory = (name) ->
     asyncTest name + ' streaming', ->
-        expect(3)
+        expect(4)
         x = new u[name]('GET', '/streaming.txt', null)
-        chunkno = 0
         x.onchunk = (status, text) ->
-            switch chunkno
-                when 0
-                    equal(text.length, 2049)
-                    equal(text.slice(-2), 'a\n')
-            chunkno += 1
+            equal(status, 200)
+            ok(text.length <= 2049)
+            delete x.onchunk
         x.onfinish = (status, text) ->
+            equal(status, 200)
             equal(text.slice(-4), 'a\nb\n')
             start()
 
