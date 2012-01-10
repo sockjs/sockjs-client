@@ -125,7 +125,7 @@ test_wrong_url = (name, url, statuses) ->
 ajax_wrong_port_factory = (name) ->
     for port in [25, 8999, 65300]
         asyncTest name + ' wrong port ' + port, ->
-            test_wrong_url(name, 'http://localhost:'+port+'/streaming.txt', [0])
+            test_wrong_url(name, 'http://localhost:'+port+'/wrong_url_indeed.txt', [0])
 
 
 ajax_simple_factory('XHRObject')
