@@ -8,8 +8,7 @@ factory_body_check = (protocol) ->
     else
         asyncTest protocol, ->
             expect(5)
-            path = '/echo'
-            url = if /^http/.test(path) then path else client_opts.url + path
+            url = client_opts.url + '/echo'
 
             code = """
             hook.test_body(!!document.body, typeof document.body);
