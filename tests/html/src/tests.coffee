@@ -27,7 +27,7 @@ echo_factory_factory = (protocol, messages) ->
                     if e.data.charCodeAt(i) != x.charCodeAt(i)
                         xx1 = ('0000' + x.charCodeAt(i).toString(16)).slice(-4)
                         xx2 = ('0000' + e.data.charCodeAt(i).toString(16)).slice(-4)
-                        console.log('source: \\u' + xx1 + ' differs from: \\u' + xx2)
+                        log('source: \\u' + xx1 + ' differs from: \\u' + xx2)
                         break
             equal(e.data, '' + a[0])
             a.shift()
