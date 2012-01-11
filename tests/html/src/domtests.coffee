@@ -113,6 +113,8 @@ ajax_streaming_factory = (name) ->
 
 
 test_wrong_url = (name, url, statuses) ->
+    if window.console and console.log
+        console.log(' [*] Connecting to wrong url ' + url)
     expect(2)
     x = new u[name]('GET', url, null)
     x.onchunk = ->
