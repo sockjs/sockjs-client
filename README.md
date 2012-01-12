@@ -112,15 +112,15 @@ var sockjs = new SockJS(url, protocols, options);
 
 Where `options` is a hash which can contain:
 
- *  *debug (boolean)*
+ *  **debug (boolean)**
 
     Print more debugging messages using 'console.log'.
 
- *  *devel (boolean)*
+ *  **devel (boolean)**
 
     Development mode. Currently settint it affects only caching of 'iframe.html'.
 
- *  *cookie (boolean)*
+ *  **cookie (boolean)**
 
     Disables transports which doesn't support cookies (ie: XDR on
     IE). Usefull for load balancing based on sticky sessions provided
