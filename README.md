@@ -142,6 +142,43 @@ bad practice. If you absolutely must do it, you can use
 mutliple subdomains, using different subdomain for every
 SockJS connection.
 
+Supported transports, by browser
+--------------------------------
+
+Browser         | Websockets       | Streaming | Polling
+----------------|------------------|-----------|-----------
+IE 7            | no               | no        | jsonp-polling
+IE 8, 9 (cookies=no) |    no       | xhr-streaming*  | xhr-polling*
+IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
+Chrome 6-12     | hixie-76         | xhr-streaming   | xhr-polling
+Chrome 14+      | hybi-10          | xhr-streaming   | xhr-polling
+Firefox <10     | no               | xhr-streaming   | xhr-polling
+Firefox 10+     | hybi-10          | xhr-streaming   | xhr-polling
+Safari 5        | hixie-76         | xhr-streaming   | xhr-polling
+Opera 10.7+     | no               | iframe-eventsource | iframe-xhr-polling
+Konqueror       | no               | no        | jsonp-polling
+
+*: IE 8+ supports XDomainRequest, which is esentially a better
+   AJAX/XHR that can do requests across domains. But, unfortunately it
+   doesn't send any cookies, which makes it inaproppriate for some
+   deployments (for example when load balancer requires JSESSIONID
+   cookie).
+
+Supported transports, by name
+-----------------------------
+
+Transport            | References
+---------------------|-----------
+websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
+websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
+xhr-streaming        | A simple streaming transport, using [cross domain XHR][^5]
+                     | or [XDR][^9] [streaming][^7] capability (readyState=3).
+iframe-eventsource   | [EventSource][^4] used from an [iframe via postMessage][^3].
+iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
+xhr-polling          | Long-polling using [cross domain XHR][5] or [XDR][9].
+iframe-xhr-polling   | Long-polling using normal AJAX from an
+                     | [iframe via postMessage][^3].
+jsnop-polling        | Old fasioned and slow [JSONP polling][^6].
 
 Supported transports (#1)
 -------------------------
@@ -166,6 +203,7 @@ Protocol                                          | Browser
 [^6]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
 [^8]: http://cometdaily.com/2007/11/18/ie-activexhtmlfile-transport-part-ii/
+[^9]: http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
 
 
 Supported transports (#2)
