@@ -112,18 +112,19 @@ var sockjs = new SockJS(url, protocols, options);
 
 Where `options` is a hash which can contain:
 
-<dl>
-<dt>debug (boolean)</dt>
-<dd>Print more debugging messages using 'console.log'.</dd>
-<dt>devel (boolean)</dt>
-<dd>Development mode. Currently settint it affects only caching of 'iframe.html'.</dd>
-<dt>cookie (boolean)</dt>
-<dd>Disables transports which doesn't support cookies (ie: XDR on
-    IE). Usefull for load balancing based on sticky sessions provided by
-    JSESSIONID cookie.</dd>
-<dt></dt>
-<dd></dd>
-</dl>
+ * *debug (boolean)*
+
+   Print more debugging messages using 'console.log'.
+
+ * *devel (boolean)*
+
+   Development mode. Currently settint it affects only caching of 'iframe.html'.
+
+ * *cookie (boolean)*
+
+   Disables transports which doesn't support cookies (ie: XDR on
+   IE). Usefull for load balancing based on sticky sessions provided
+   by JSESSIONID cookie.
 
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all features. One of the
