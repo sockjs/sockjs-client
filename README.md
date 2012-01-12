@@ -145,9 +145,9 @@ SockJS connection.
 Supported transports, by browser
 --------------------------------
 
-Browser         | Websockets       | Streaming | Polling
-----------------|------------------|-----------|-----------
-IE 7            | no               | no        | jsonp-polling
+_Browser_       | _Websockets_     | _Streaming_ | _Polling_
+----------------|------------------|-------------|-----------
+IE 7            | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xhr-streaming&dagger;  | xhr-polling&dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
 Chrome 6-12     | hixie-76         | xhr-streaming   | xhr-polling
@@ -156,46 +156,29 @@ Firefox <10     | no               | xhr-streaming   | xhr-polling
 Firefox 10+     | hybi-10          | xhr-streaming   | xhr-polling
 Safari 5        | hixie-76         | xhr-streaming   | xhr-polling
 Opera 10.7+     | no               | iframe-eventsource | iframe-xhr-polling
-Konqueror       | no               | no        | jsonp-polling
+Konqueror       | no               | no          | jsonp-polling
 
 
- *  **&dagger;**
-
-    IE 8+ supports XDomainRequest, which is esentially a better
-    AJAX/XHR that can do requests across domains. But, unfortunately
-    it doesn't send any cookies, which makes it inaproppriate for some
-    deployments (for example when load balancer requires JSESSIONID
-    cookie).
+ * **&dagger;**: IE 8+ supports [XDomainRequest][^9], which is
+    esentially a modified AJAX/XHR that can do requests across
+    domains. But unfortunately it doesn't send any cookies, which
+    makes it inaproppriate for deployments when the load balancer uses
+    JSESSIONID cookie to do sticky sessions.
 
 
 Supported transports, by name
 -----------------------------
 
-Transport            | References
----------------------|-----------
+_Transport_          | _References_
+---------------------|---------------
 websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
 websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
 xhr-streaming        | A simple streaming transport, using [cross domain XHR][^5] or [XDR][^9] [streaming][^7] capability (readyState=3).
 iframe-eventsource   | [EventSource][^4] used from an [iframe via postMessage][^3].
 iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
-xhr-polling          | Long-polling using [cross domain XHR][5] or [XDR][9].
+xhr-polling          | Long-polling using [cross domain XHR][^5] or [XDR][^9].
 iframe-xhr-polling   | Long-polling using normal AJAX from an [iframe via postMessage][^3].
-jsnop-polling        | Old fasioned and slow [JSONP polling][^6].
-
-
-Supported transports (#1)
--------------------------
-
-Protocol                                          | Browser
-------------------------------------------------- | -------------
-[WebSocket hixie-76][^1]                          | Chrome 6-12, Safari 5, Firefox 4 (disabled), Opera 11 (disabled)
-[WebSocket hybi-10][^2]                           | Chrome 14+, Firefox 6+
-[IFrame via postMessage][^3] + [EventSource][^4]  | Opera 10.70+, Firefox 3.5+
-[XDR (CORS) streaming][^7]                        | IE 8 (no cookies), Firefox 3.5+, Safari 4+, Chrome 3+
-[IFrame via postMessage][^3] + [HtmlFile][^8]     | IE 8 (with cookies)
-[XDR (CORS) polling][^5]                          | IE 8, Firefox 3.5+, Safari 4+, Chrome 3+ (through misbehaving proxy)
-[IFrame via postMessage][^3] + XHR polling        | Opera 9+
-[JsonP polling][^6]                               | (rough and slow fallback)
+jsnop-polling        | Slow and old fashioned [JSONP polling][^6].
 
 
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
@@ -207,20 +190,6 @@ Protocol                                          | Browser
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
 [^8]: http://cometdaily.com/2007/11/18/ie-activexhtmlfile-transport-part-ii/
 [^9]: http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
-
-
-Supported transports (#2)
--------------------------
-
-Transport              | Target browsers               | Good loadbalancer required |  Behaving proxy required
----------------------- | ----------------------------- | -------------------------- | ------------------------
-WebSocket              | Chrome, Safari, Firefox 6+    |          yes               |          yes
-XHR streaming (CORS)   | IE 8 (cookie=no), Firefox <6 |          no                |          yes
-IFrame + EventSource   | Opera 10.70+                  |          no                |          yes
-IFrame + HtmlFile      | IE 8 (cookie=yes)            |          no                |          yes
-XHR polling (CORS)     | Chrome, Safari, Firefox, IE 8 |          no                |          no
-IFrame + XHR polling   | Opera                         |          no                |          no
-JsonP polling          | any                           |          no                |          no
 
 
 Deployment
