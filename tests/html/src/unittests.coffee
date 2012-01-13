@@ -84,3 +84,64 @@ test 'quote', ->
     all_chars = c.join('')
     ok(JSON.parse(u.quote(all_chars)) is all_chars, "Quote/unquote all 64K chars.")
 
+test 'detectProtocols', ->
+    chrome_probed = {
+        'websocket': true
+        'xdr-streaming': false
+        'xhr-streaming': true
+        'iframe-eventsource': true
+        'iframe-htmlfile': true
+        'xdr-polling': false
+        'xhr-polling': true
+        'iframe-xhr-polling': true
+        'jsonp-polling': true
+    }
+    # Chrome
+    deepEqual(u.detectProtocols(chrome_probed, null, {}),
+            ['websocket', 'xhr-streaming', 'xhr-polling'])
+    deepEqual(u.detectProtocols(chrome_probed, null, {websocket:false}),
+            ['xhr-streaming', 'xhr-polling'])
+    # Opera
+    opera_probed = {
+        'websocket': false
+        'xdr-streaming': false
+        'xhr-streaming': false
+        'iframe-eventsource': true
+        'iframe-htmlfile': true
+        'xdr-polling': false
+        'xhr-polling': false
+        'iframe-xhr-polling': true
+        'jsonp-polling': true
+    }
+    deepEqual(u.detectProtocols(opera_probed, null, {}),
+            ['iframe-eventsource', 'iframe-xhr-polling'])
+    # IE 6, IE 7
+    ie6_probed = {
+        'websocket': false
+        'xdr-streaming': false
+        'xhr-streaming': false
+        'iframe-eventsource': false
+        'iframe-htmlfile': false
+        'xdr-polling': false
+        'xhr-polling': false
+        'iframe-xhr-polling': false
+        'jsonp-polling': true
+    }
+    deepEqual(u.detectProtocols(ie6_probed, null, {}),
+            ['jsonp-polling'])
+    # IE 8, IE 9
+    ie8_probed = {
+        'websocket': false
+        'xdr-streaming': true
+        'xhr-streaming': false
+        'iframe-eventsource': false
+        'iframe-htmlfile': true
+        'xdr-polling': true
+        'xhr-polling': false
+        'iframe-xhr-polling': true
+        'jsonp-polling': true
+    }
+    deepEqual(u.detectProtocols(ie8_probed, null, {}),
+            ['xdr-streaming', 'xdr-polling'])
+    deepEqual(u.detectProtocols(ie8_probed, null, {cookie_needed:true}),
+            ['iframe-htmlfile', 'iframe-xhr-polling'])
