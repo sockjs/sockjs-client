@@ -148,7 +148,7 @@ Supported transports, by browser
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
 ----------------|------------------|-------------|-----------
 IE 7            | no               | no          | jsonp-polling
-IE 8, 9 (cookies=no) |    no       | xhr-streaming &dagger; | xhr-polling &dagger;
+IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
 Chrome 6-12     | hixie-76         | xhr-streaming   | xhr-polling
 Chrome 14+      | hybi-10          | xhr-streaming   | xhr-polling
@@ -165,10 +165,9 @@ Konqueror       | no               | no          | jsonp-polling
     makes it inaproppriate for deployments when the load balancer uses
     JSESSIONID cookie to do sticky sessions.
 
- * **&Dagger;**: Opera 11.00 and Firefox 4.0 shipped with websockets
-     "hixie-76", but disabled the protocol due to security worries
-     just before releasing it. Native Websockets can be enabled by
-     manually chaning a browser setting.
+ * **&Dagger;**: Firefox 4.0 and Opera 11.00 and shipped with disabled
+     Websockets "hixie-76". They can still be enabled by manually
+     changing a browser setting.
 
 Supported transports, by name
 -----------------------------
@@ -177,10 +176,12 @@ _Transport_          | _References_
 ---------------------|---------------
 websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
 websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
-xhr-streaming        | A simple streaming transport, using [cross domain XHR][^5] or [XDR][^9] [streaming][^7] capability (readyState=3).
+xhr-streaming        | Transport using [Cross domain XHR][^5] [streaming][^7] capability (readyState=3).
+xdr-streaming        | Transport using [XDomainRequest][^9] [streaming][^7] capability (readyState=3).
 iframe-eventsource   | [EventSource][^4] used from an [iframe via postMessage][^3].
 iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
-xhr-polling          | Long-polling using [cross domain XHR][^5] or [XDR][^9].
+xhr-polling          | Long-polling using [cross domain XHR][^5].
+xdr-polling          | Long-polling using [XDomainRequest][^9].
 iframe-xhr-polling   | Long-polling using normal AJAX from an [iframe via postMessage][^3].
 jsnop-polling        | Slow and old fashioned [JSONP polling][^6].
 
