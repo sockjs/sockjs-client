@@ -29,6 +29,7 @@
   <select id="transport">
   <option value="">- any - </option>
   <option value="websocket">websocket</option>
+  <option value="not-websocket">- not websocket -</option>
   <option value="xdr-streaming">xdr-streaming</option>
   <option value="xhr-streaming">xhr-streaming</option>
   <option value="iframe-eventsource">iframe-eventsource</option>
@@ -62,6 +63,16 @@
         $('#connect').attr('disabled', true);
         $('#disconnect').attr('disabled', false);
         var protocol = $('#transport').val() || undefined;
+        if (protocol === 'not-websocket') {
+            protocol = ['xdr-streaming',
+                      'xhr-streaming',
+                      'iframe-eventsource',
+                      'iframe-htmlfile',
+                      'xdr-polling',
+                      'xhr-polling',
+                      'iframe-xhr-polling',
+                      'jsonp-polling'];
+        }
         log('[connecting] ' + protocol);
         sjs = new SockJS(client_opts.url + '/broadcast', protocol, client_opts.sockjs_opts);
         sjs.onopen = onopen
