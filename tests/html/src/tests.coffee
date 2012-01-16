@@ -270,49 +270,6 @@ factor_server_close = (protocol) ->
             equals(e.wasClean, true)
             start()
 
-test_invalid_url_404 = (protocol) ->
-    return ->
-        expect(3)
-        r = newSockJS('/invalid_url', protocol)
-        ok(r)
-        r.onopen = (e) ->
-            fail(true)
-        r.onmessage = (e) ->
-            fail(true)
-        r.onclose = (e) ->
-            log('404', e)
-            equals(e.code, 2000)
-            equals(e.wasClean, false)
-            start()
-
-test_invalid_url_500 = (protocol) ->
-    return ->
-        expect(3)
-        r = newSockJS('/500_error', protocol)
-        ok(r)
-        r.onopen = (e) ->
-            fail(true)
-        r.onclose = (e) ->
-            log('500', e)
-            equals(e.code, 2000)
-            equals(e.wasClean, false)
-            start()
-
-test_invalid_url_port = (protocol) ->
-    return ->
-        expect(3)
-        dl = document.location
-        r = newSockJS(dl.protocol + '//' + dl.hostname + ':1079', protocol)
-        ok(r)
-        r.onopen = (e) ->
-            fail(true)
-        r.onclose = (e) ->
-            log('port', e)
-            equals(e.code, 2000)
-            equals(e.wasClean, false)
-            start()
-
-
 # IE doesn't do array.indexOf...
 arrIndexOf = (arr, obj) ->
      for i in [0...arr.length]
@@ -345,20 +302,6 @@ test_protocol_messages = (protocol) ->
 
         asyncTest("user close", factor_user_close(protocol))
         asyncTest("server close", factor_server_close(protocol))
-
-test_protocol_errors = (protocol) ->
-    module(protocol)
-    if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
-        test "[unsupported by client]", ->
-                log('Unsupported protocol (by client): "' + protocol + '"')
-    else if client_opts.disabled_transports and
-          arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
-        test "[unsupported by server]", ->
-                log('Unsupported protocol (by server): "' + protocol + '"')
-    else
-        asyncTest("invalid url 404", test_invalid_url_404(protocol))
-        asyncTest("invalid url 500", test_invalid_url_500(protocol))
-        asyncTest("invalid url port", test_invalid_url_port(protocol))
 
 
 for protocol in protocols
@@ -403,6 +346,3 @@ asyncTest "disabled websocket test", ->
             equals(e.wasClean, false)
             start()
 
-
-for protocol in protocols
-    test_protocol_errors(protocol)

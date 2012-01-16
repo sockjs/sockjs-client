@@ -47,3 +47,34 @@ body_protocols = ['iframe-eventsource',
             'jsonp-polling']
 for protocol in body_protocols
     factory_body_check(protocol)
+
+
+module('connection errors')
+asyncTest "invalid url 404", ->
+    expect(4)
+    r = newSockJS('/invalid_url', 'jsonp-polling')
+    ok(r)
+    r.onopen = (e) ->
+        fail(true)
+    r.onmessage = (e) ->
+        fail(true)
+    r.onclose = (e) ->
+        log('404', e)
+        equals(e.code, 1002)
+        equals(e.reason, 'Can\'t connect to server')
+        equals(e.wasClean, false)
+        start()
+
+asyncTest "invalid url port", ->
+    expect(4)
+    dl = document.location
+    r = newSockJS(dl.protocol + '//' + dl.hostname + ':1079', 'jsonp-polling')
+    ok(r)
+    r.onopen = (e) ->
+        fail(true)
+    r.onclose = (e) ->
+        log('port', e)
+        equals(e.code, 1002)
+        equals(e.reason, 'Can\'t connect to server')
+        equals(e.wasClean, false)
+        start()
