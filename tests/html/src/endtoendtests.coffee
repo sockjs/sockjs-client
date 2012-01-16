@@ -86,3 +86,16 @@ asyncTest "invalid url port", ->
             equals(e.reason, 'All transports failed')
         equals(e.wasClean, false)
         start()
+
+asyncTest "disabled websocket test", ->
+        expect(3)
+        r = newSockJS('/disabled_websocket_echo', 'websocket')
+        r.onopen = (e) ->
+            fail(true)
+        r.onmessage = (e) ->
+            fail(true)
+        r.onclose = (e) ->
+            equals(e.code, 2000)
+            equals(e.reason, "All transports failed")
+            equals(e.wasClean, false)
+            start()

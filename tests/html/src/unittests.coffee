@@ -145,3 +145,25 @@ test 'detectProtocols', ->
             ['xdr-streaming', 'xdr-polling'])
     deepEqual(u.detectProtocols(ie8_probed, null, {cookie_needed:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
+
+test "EventEmitter", ->
+    expect(4)
+    r = new SockJS('//blah/abc', [])
+    r.addEventListener 'message', -> ok(true)
+    r.onmessage = -> fail(true)
+    bluff = -> fail(true)
+    r.addEventListener 'message', bluff
+    r.removeEventListener 'message', bluff
+    r.addEventListener 'message', bluff
+    r.addEventListener 'message', -> ok(true)
+    r.onmessage = -> ok(true)
+    r.removeEventListener 'message', bluff
+    r.dispatchEvent({type:'message'})
+
+    # Adding the same eventlistener should be indempotent (sockjs-client #4).
+    single = -> ok(true)
+    r.addEventListener 'close', single
+    r.addEventListener 'close', single
+    r.dispatchEvent({type:'close'}) # 1 callback run
+    r.removeEventListener 'close', single
+    r.dispatchEvent({type:'close'}) # 0 runs
