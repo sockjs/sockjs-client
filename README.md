@@ -147,7 +147,7 @@ Supported transports, by browser
 
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
 ----------------|------------------|-------------|-----------
-IE 7            | no               | no          | jsonp-polling
+IE 6, 7         | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
 Chrome 6-12     | hixie-76         | xhr-streaming   | xhr-polling
