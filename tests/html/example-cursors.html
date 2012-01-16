@@ -19,7 +19,6 @@
         border: 1px solid gray;
         z-index: -1;
       }
-
   </style>
 
 </head>
@@ -61,7 +60,7 @@
     var protocol;
     $('#connect').click(function() {
         $('#connect').attr('disabled', true);
-        $('#disconnect').attr('disabled', false);
+        $('#disconnect').each(function(_,e){e.disabled='';});
         var protocol = $('#transport').val() || undefined;
         if (protocol === 'not-websocket') {
             protocol = ['xdr-streaming',
@@ -90,7 +89,7 @@
     };
     var onclose = function(e) {
         log('disconnected ' + e);
-        $('#connect').attr('disabled', false);
+        $('#connect').each(function(_,e){e.disabled='';});
         $('#disconnect').attr('disabled', true);
     };
     var myself = (''+Math.random()).substr(2);
@@ -124,7 +123,7 @@
          }
          tref = setTimeout(poll, 200);
     };
-    $('#connect').attr('disabled', false);
+    $('#connect').each(function(_,e){e.disabled='';});
     $('#disconnect').attr('disabled', true);
 </script>
 </body>

@@ -62,7 +62,7 @@
             sjs.onclose = onclose;
         } else {
             log('[stopped] ' + e);
-            $('#connect').attr('disabled', false);
+            $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
         }
     };
@@ -73,7 +73,7 @@
         log('[starting] ' + protocol);
         onclose({code:1000});
         $('#connect').attr('disabled', true);
-        $('#disconnect').attr('disabled', false);
+        $('#disconnect').each(function(_,e){e.disabled='';});
     });
     $('#disconnect').click(function() {
         $('#disconnect').attr('disabled', true);

@@ -50,7 +50,7 @@
     };
     function onclose(e) {
             log('disconnected ' + e);
-            $('#connect').attr('disabled', false);
+            $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
     };
     var payload = Array(4096).join('x');
@@ -68,7 +68,7 @@
 
     $('#connect').click(function() {
         $('#connect').attr('disabled', true);
-        $('#disconnect').attr('disabled', false);
+        $('#disconnect').each(function(_,e){e.disabled='';});
         var protocol = $('#transport').val() || undefined;
         log('[connecting] ' + protocol);
         sjs = new SockJS(client_opts.url + '/echo', protocol, client_opts.sockjs_opts);
