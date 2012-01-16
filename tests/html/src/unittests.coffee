@@ -148,7 +148,7 @@ test 'detectProtocols', ->
 
 test "EventEmitter", ->
     expect(4)
-    r = new SockJS('//blah/abc', [])
+    r = new SockJS('//wrongdomainthatdoesntresolveatall/abc', [])
     r.addEventListener 'message', -> ok(true)
     r.onmessage = -> fail(true)
     bluff = -> fail(true)
