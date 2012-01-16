@@ -183,7 +183,7 @@ iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
 xhr-polling          | Long-polling using [cross domain XHR][^5].
 xdr-polling          | Long-polling using [XDomainRequest][^9].
 iframe-xhr-polling   | Long-polling using normal AJAX from an [iframe via postMessage][^3].
-jsnop-polling        | Slow and old fashioned [JSONP polling][^6].
+jsnop-polling        | Slow and old fashioned [JSONP polling][^6]. This transport will show "busy indicator" (aka: "spinning wheel").
 
 
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
@@ -302,12 +302,10 @@ There are various browser quirks which we don't intend to address:
 
  * Pressing ESC in Firefox closes SockJS connection ([described
    in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
- * Some older transports may result in a browser showing "spinning
-   wheel" or "busy indicator".
+ * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator").
  * In most of the browsers you can't open more than one SockJS
-   connection to one domain at the same time.
- * You shouldn't start SockJS connection before `body` loads - don't
-   create SockJS objects within `head` (see #15).
+   connection to one domain at the same time (with the exception
+   of native websockets).
  * Although SockJS is trying to escape any strange Unicode characters
    (even
    [invalid ones, like surrogates](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
@@ -315,4 +313,4 @@ There are various browser quirks which we don't intend to address:
    characters is a bit slower, and may not work with SockJS servers
    that have a proper Unicode support.
  * Having a global function called `onmessage` or such is probably a
-   bad idea.
+   bad idea, as it could be called by the built-in `postMessage` API.
