@@ -59,9 +59,13 @@ asyncTest "invalid url 404", ->
     r.onmessage = (e) ->
         fail(true)
     r.onclose = (e) ->
-        log('404', e)
-        equals(e.code, 1002)
-        equals(e.reason, 'Can\'t connect to server')
+        if u.isXHRCorsCapable() < 4
+            equals(e.code, 1002)
+            equals(e.reason, 'Can\'t connect to server')
+        else
+            # IE 7 doesn't look at /info, unfortunately
+            equals(e.code, 2000)
+            equals(e.reason, 'All transports failed')
         equals(e.wasClean, false)
         start()
 
@@ -73,8 +77,12 @@ asyncTest "invalid url port", ->
     r.onopen = (e) ->
         fail(true)
     r.onclose = (e) ->
-        log('port', e)
-        equals(e.code, 1002)
-        equals(e.reason, 'Can\'t connect to server')
+        if u.isXHRCorsCapable() < 4
+            equals(e.code, 1002)
+            equals(e.reason, 'Can\'t connect to server')
+        else
+            # IE 7 doesn't look at /info, unfortunately
+            equals(e.code, 2000)
+            equals(e.reason, 'All transports failed')
         equals(e.wasClean, false)
         start()
