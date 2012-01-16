@@ -183,7 +183,7 @@ iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
 xhr-polling          | Long-polling using [cross domain XHR][^5].
 xdr-polling          | Long-polling using [XDomainRequest][^9].
 iframe-xhr-polling   | Long-polling using normal AJAX from an [iframe via postMessage][^3].
-jsnop-polling        | Slow and old fashioned [JSONP polling][^6]. This transport will show "busy indicator" (aka: "spinning wheel").
+jsnop-polling        | Slow and old fashioned [JSONP polling][^6]. This transport will show "busy indicator" (aka: "spinning wheel") when sending data.
 
 
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
@@ -302,7 +302,8 @@ There are various browser quirks which we don't intend to address:
 
  * Pressing ESC in Firefox closes SockJS connection ([described
    in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
- * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator").
+ * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator")
+   when sending data.
  * In most of the browsers you can't open more than one SockJS
    connection to one domain at the same time (with the exception
    of native websockets).
