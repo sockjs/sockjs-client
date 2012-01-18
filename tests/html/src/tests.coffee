@@ -20,7 +20,7 @@ echo_factory_factory = (protocol, messages) ->
         a = messages.slice(0)
         r = newSockJS('/echo', protocol)
         r.onopen = (e) ->
-            log('onopen ' + e)
+            #log('onopen ' + e)
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
@@ -248,7 +248,7 @@ factor_user_close = (protocol) ->
             r.close(3000, "User message")
             ok(counter is 1)
         r.onmessage = () ->
-            fail(true)
+            ok(false)
             counter += 1
         r.onclose = (e) ->
             counter += 1
@@ -265,7 +265,7 @@ factor_server_close = (protocol) ->
         r.onopen = (e) ->
             ok(true)
         r.onmessage = (e) ->
-            fail(true)
+            ok(false)
         r.onclose = (e) ->
             equals(e.code, 3000)
             equals(e.reason, "Go away!")

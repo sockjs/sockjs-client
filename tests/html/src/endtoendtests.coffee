@@ -56,9 +56,9 @@ asyncTest "invalid url 404", ->
     r = newSockJS('/invalid_url', 'jsonp-polling')
     ok(r)
     r.onopen = (e) ->
-        fail(true)
+        ok(false)
     r.onmessage = (e) ->
-        fail(true)
+        ok(false)
     r.onclose = (e) ->
         if u.isXHRCorsCapable() < 4
             equals(e.code, 1002)
@@ -76,7 +76,7 @@ asyncTest "invalid url port", ->
     r = newSockJS(dl.protocol + '//' + dl.hostname + ':1079', 'jsonp-polling')
     ok(r)
     r.onopen = (e) ->
-        fail(true)
+        ok(false)
     r.onclose = (e) ->
         if u.isXHRCorsCapable() < 4
             equals(e.code, 1002)
@@ -92,9 +92,9 @@ asyncTest "disabled websocket test", ->
         expect(3)
         r = newSockJS('/disabled_websocket_echo', 'websocket')
         r.onopen = (e) ->
-            fail(true)
+            ok(false)
         r.onmessage = (e) ->
-            fail(true)
+            ok(false)
         r.onclose = (e) ->
             equals(e.code, 2000)
             equals(e.reason, "All transports failed")

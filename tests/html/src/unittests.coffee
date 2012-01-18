@@ -151,8 +151,8 @@ test "EventEmitter", ->
     r = new SockJS('//wrongdomainthatdoesntresolveatall/abc', null,
                    {protocols_whitelist: []})
     r.addEventListener 'message', -> ok(true)
-    r.onmessage = -> fail(true)
-    bluff = -> fail(true)
+    r.onmessage = -> ok(false)
+    bluff = -> ok(false)
     r.addEventListener 'message', bluff
     r.removeEventListener 'message', bluff
     r.addEventListener 'message', bluff
