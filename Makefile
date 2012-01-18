@@ -77,6 +77,7 @@ tag:
 	@echo 'git push; git push --tag'
 
 upload: build
+	echo "Majver=$(MAJVER)"
 	[ -e ../sockjs-client-gh-pages ] || 				\
 		git clone `git remote -v|tr "[:space:]" "\t"|cut -f 2`	\
 			--branch gh-pages ../sockjs-client-gh-pages
