@@ -100,3 +100,21 @@ asyncTest "disabled websocket test", ->
             equals(e.reason, "All transports failed")
             equals(e.wasClean, false)
             start()
+
+asyncTest "close on close", ->
+    expect(4)
+    r = newSockJS('/close', 'jsonp-polling')
+    r.onopen = (e) ->
+        ok(true)
+    r.onmessage = (e) ->
+        ok(false)
+    r.onclose = (e) ->
+        equals(e.code, 3000)
+        equals(e.reason, "Go away!")
+        equals(e.wasClean, true)
+        r.onclose = ->
+            ok(false)
+        r.close()
+
+        u.delay 10, ->
+            start()
