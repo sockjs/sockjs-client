@@ -1,5 +1,5 @@
-dev
-===
+0.2.0
+=====
 
  * The API had changed - use `protocols_whitelist` option instead of
    passing an array of protocols as a second argument to SockJS constructor.
