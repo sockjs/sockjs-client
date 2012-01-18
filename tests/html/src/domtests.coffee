@@ -104,7 +104,7 @@ ajax_streaming_factory = (name) ->
         x = new u[name]('GET', '/streaming.txt', null)
         x.onchunk = (status, text) ->
             equal(status, 200)
-            ok(text.length <= 2049)
+            ok(text.length <= 2049, 'Most likely you\'re behind a transparent Proxy that can\'t do streaming. QUnit tests won\'t work properly. Sorry!')
             delete x.onchunk
         x.onfinish = (status, text) ->
             equal(status, 200)

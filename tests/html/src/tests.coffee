@@ -281,13 +281,13 @@ arrIndexOf = (arr, obj) ->
 
 test_protocol_messages = (protocol) ->
     module(protocol)
-    if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
+    if not SockJS[protocol] or not SockJS[protocol].enabled()
         test "[unsupported by client]", ->
                 log('Unsupported protocol (by client): "' + protocol + '"')
     else if client_opts.disabled_transports and
           arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
-        test "[unsupported by server]", ->
-                log('Unsupported protocol (by server): "' + protocol + '"')
+        test "[disabled by config]", ->
+                log('Disabled by config: "' + protocol + '"')
     else
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
@@ -308,4 +308,3 @@ test_protocol_messages = (protocol) ->
 
 for protocol in protocols
     test_protocol_messages(protocol)
-
