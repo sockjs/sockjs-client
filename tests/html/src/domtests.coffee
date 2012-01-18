@@ -42,19 +42,19 @@ else
                     });
                 """))
 
-if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
-    test "onbeforeunload [unsupported by client]", ->
-        ok(true)
-else
-    asyncTest('onbeforeunload', onunload_test_factory("""
-                    var u = SockJS.getUtils();
-                    u.attachEvent('load', function(){
-                        hook.load();
-                    });
-                    u.attachEvent('beforeunload', function(){
-                        hook.unload();
-                    });
-                """))
+# if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
+#     test "onbeforeunload [unsupported by client]", ->
+#         ok(true)
+# else
+#     asyncTest('onbeforeunload', onunload_test_factory("""
+#                     var u = SockJS.getUtils();
+#                     u.attachEvent('load', function(){
+#                         hook.load();
+#                     });
+#                     u.attachEvent('beforeunload', function(){
+#                         hook.unload();
+#                     });
+#                 """))
 
 if not SockJS.getIframeTransport().enabled()
     test "onmessage [unsupported by client]", ->
