@@ -78,7 +78,7 @@ but instead of `WebSocket` there is a `SockJS` Javascript object.
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
 
-    <script src="http://cdn.sockjs.org/sockjs-0.1.min.js">
+    <script src="http://cdn.sockjs.org/sockjs-0.2.min.js">
       </script>
 
 After the script is loaded you can establish a connection with the
@@ -209,14 +209,14 @@ In order to utilize best performance you should use the SockJS-client
 releases hosted on SockJS CDN. You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
-    <script src="http://cdn.sockjs.org/sockjs-0.1.min.js">
+    <script src="http://cdn.sockjs.org/sockjs-0.2.min.js">
       </script>
 
 A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
 
 You can also use or CDN via https (using Cloud Front domain name):
 
-    <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.1.js">
+    <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.2.js">
       </script>
 
 For server-side deployment tricks, especially about load balancing and
@@ -283,7 +283,7 @@ server. Edit the [`config.js`](https://github.com/sockjs/sockjs-node/blob/master
 
 And replace `sockjs_url` setting which by default points to CDN:
 
-    sockjs_url: 'http://cdn.sockjs.org/sockjs-0.1.min.js',
+    sockjs_url: 'http://cdn.sockjs.org/sockjs-0.2.min.js',
 
 to a freshly compiled sockjs, for example:
 
