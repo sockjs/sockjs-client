@@ -2,7 +2,7 @@
 =====
 
  * The API had changed - use `protocols_whitelist` option instead of
-   passing an array of protocols as a second argument to SockJS constructor.
+   passing  an array of protocols as a second argument to SockJS constructor.
  * Dropped 'chunking-test' functionality and replace it with 'info'.
  * Rewritten protocol-choosing alogirthm, see "utils.detectProtocols" method.
  * Use dynamic protocol timeouts based on RTT, not hardcoded 5 seconds
