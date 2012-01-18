@@ -107,24 +107,29 @@ SockJS-client API
 Similar to 'WebSocket' class 'SockJS' constructor takes one, or more arguments:
 
 ```javascript
-var sockjs = new SockJS(url, protocols, options);
+var sockjs = new SockJS(url, _reserved, options);
 ```
 
 Where `options` is a hash which can contain:
 
  *  **debug (boolean)**
 
-    Print more debugging messages using 'console.log'.
+    Print some debugging messages using 'console.log'.
 
  *  **devel (boolean)**
 
-    Development mode. Currently settint it affects only caching of 'iframe.html'.
+    Development mode. Currently setting it disables caching of the
+    'iframe.html'.
 
- *  **cookie (boolean)**
+ *  **protocols_whitelist (list of strings)**
 
-    Disables transports which doesn't support cookies (ie: XDR on
-    IE). Usefull for load balancing based on sticky sessions provided
-    by JSESSIONID cookie.
+    Sometimes it is useful to disable some fallback protocols. This
+    option allows you to supply a list protocols that may be used by
+    SockJS. By default all available protocols will be used, which is
+    equivalent to supplying: "['websocket', 'xdr-streaming', 'xhr-streaming',
+    'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling',
+    'iframe-xhr-polling', 'jsonp-polling']"
+
 
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all features. One of the

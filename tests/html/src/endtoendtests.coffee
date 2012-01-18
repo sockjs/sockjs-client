@@ -13,7 +13,8 @@ factory_body_check = (protocol) ->
             code = """
             hook.test_body(!!document.body, typeof document.body);
 
-            var sock = new SockJS('""" + url + """', '""" + protocol + """');
+            var sock = new SockJS('""" + url + """', null,
+                                  {protocols_whitelist:['""" + protocol + """']});
             sock.onopen = function() {
                 var m = hook.onopen();
                 sock.send(m);
