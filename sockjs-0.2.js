@@ -1,4 +1,4 @@
-/* SockJS client, version 0.2.0.dirty, http://sockjs.org, MIT License
+/* SockJS client, version 0.2.0, http://sockjs.org, MIT License
 
 Copyright (C) 2011 VMware, Inc.
 
@@ -808,7 +808,7 @@ var SockJS = function(url, dep_protocols_whitelist, options) {
 // Inheritance
 SockJS.prototype = new REventTarget();
 
-SockJS.version = "0.2.0.dirty";
+SockJS.version = "0.2.0";
 
 SockJS.CONNECTING = 0;
 SockJS.OPEN = 1;
