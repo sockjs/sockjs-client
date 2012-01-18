@@ -1,10 +1,20 @@
 dev
 ===
 
+ * The API had changed - use `protocols_whitelist` option instead of 
+   passing an array of protocols as a second argument to SockJS constructor.
+ * Drop 'chunking-test' functionality and replace it with 'info'.
+ * Completely refactor protocol-choosing alogirhtm, see utils.detectProtocols method.
+ * Use dynamic protocol timeouts based on RTT, not hardcoded 5 seconds
  * #34 - Don't ever reuse `session_id`, especially when trying
    fallback protocols.
  * The test server got moved from SockJS-client to SockJS-node.
-
+ * Don't test unicode surrogates - it can't work in some environments.
+ * XHR/XDR helpers were rewritten, ajax transports were simplified.
+ * Added a domain check in the iframe to improve security.
+ * SockJS will now trigger 1002 error if there is a problem during handshake
+   instead of 2000 error.
+ * Smoke-throughput test is renamed to smoke-latency.
 
 0.1.2
 =====
