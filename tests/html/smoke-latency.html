@@ -53,9 +53,8 @@
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
     };
-    var payload = Array(4096).join('x');
     function send() {
-        sjs.send(JSON.stringify({t: (new Date()).getTime(), payload:payload}));
+        sjs.send(JSON.stringify({t: (new Date()).getTime()}));
     };
     var i = 0;
     function xonmessage(e) {
