@@ -21,6 +21,19 @@ test 'getOrigin', ->
     equal(u.getOrigin('http://a.b/c'), 'http://a.b')
     equal(u.getOrigin('http://a.b:123/c'), 'http://a.b:123')
 
+test "getParentDomain", ->
+    domains =
+        'localhost': 'localhost'
+        '127.0.0.1': '127.0.0.1'
+        'a.b.c.d':   'b.c.d'
+        'a.b.c.d.e': 'b.c.d.e'
+        '[::1]':     '[::1]'
+        'a.org':     'org'
+        'a2.a3.org': 'a3.org'
+
+    for k of domains
+        equal(u.getParentDomain(k), domains[k])
+
 test 'objectExtend', ->
     deepEqual(u.objectExtend({}, {}), {})
     a = {a:1};
