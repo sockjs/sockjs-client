@@ -3,8 +3,8 @@
 	"author": "Marek Majkowski",
 	"version": "0.0.0-unreleasable",
         "devDependencies": {
-                "uglify-js": "1.1.1",
-                "coffee-script": "1.1.1",
+                "uglify-js": "1.2.5",
+                "coffee-script": "1.2.x",
                 "optparse": "1.0.3",
                 "node-static": "0.5.9"
         }
