@@ -313,8 +313,7 @@ There are various browser quirks which we don't intend to address:
    connection to one domain at the same time (with the exception
    of native websockets).
  * Although SockJS is trying to escape any strange Unicode characters
-   (even
-   [invalid ones, like surrogates](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates),
+   (even invalid ones - [like surrogates \xD800-\xDBFF](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates) or [\xFFFE and \xFFFF](https://en.wikipedia.org/wiki/Unicode#Character_General_Category))
    it's advisable to use only valid characters. Using invalid
    characters is a bit slower, and may not work with SockJS servers
    that have a proper Unicode support.
