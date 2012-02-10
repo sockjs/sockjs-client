@@ -319,3 +319,9 @@ There are various browser quirks which we don't intend to address:
    that have a proper Unicode support.
  * Having a global function called `onmessage` or such is probably a
    bad idea, as it could be called by the built-in `postMessage` API.
+ * Serving an html page that uses SockJS from `file://` url will not
+   work. This is due to a badly thought through
+   [CORS specification](http://dvcs.w3.org/hg/cors/raw-file/tip/Overview.html)
+   It is impossible to receive response to an Ajax request with
+   cookies set (`withCredentials` set to `true`) sent from a `file://`
+   origin.
