@@ -5,7 +5,8 @@ exports.config = {
         sockjs_opts: {
             devel: true,
             debug: true,
-            info: {websocket:true, cookie_need:false}
+            // websocket:false
+            info: {cookie_needed:false}
         }
     },
 
