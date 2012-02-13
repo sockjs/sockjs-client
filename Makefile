@@ -66,7 +66,7 @@ clean:
 RVER:=$(shell cat version)
 VER:=$(shell ./VERSION-GEN)
 # The first two dots: 1.2.3 -> 1.2
-MAJVER:=$(shell echo $(VER)|sed 's|^\([^.]\+\)[.]\([^.]\+\)[.]\([^.]\+\)[.].*$$|\1.\2|' )
+MAJVER:=$(shell echo $(VER)|sed 's|^\([^.]\+[.][^.]\+\).*$$|\1|' )
 
 .PHONY: prepare-release tag upload
 prepare-release:
@@ -104,4 +104,4 @@ upload: build
 	@echo ' [*] Now run: '
 	@echo '(cd ../sockjs-client-gh-pages; git push; )'
 	@echo '(cd ../sockjs-client-gh-pages; 	\
-		s3cmd sync . s3://sockjs --acl-public --exclude ".*" --include index.html --include $(ARTIFACTS); );'
+		s3cmd put --acl-public index.html $(ARTIFACTS) s3://sockjs; );'
