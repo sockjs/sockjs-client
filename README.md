@@ -325,3 +325,6 @@ There are various browser quirks which we don't intend to address:
    It is impossible to receive response to an Ajax request with
    cookies set (`withCredentials` set to `true`) sent from a `file://`
    origin.
+ * From SockJS point of view there is nothing special about
+   SSL/HTTPS. Connecting between unencrypted and encrypted sites
+   should work just fine.
