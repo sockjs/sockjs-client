@@ -1,3 +1,11 @@
+0.2.1
+=====
+
+ * "smoke-latency.html" test was unnecesairly sending too much data.
+ * Bumped core dependencies (coffee-script and uglify-js)
+ * Minor updates to the README, few cosmetic changes in the code.
+
+
 0.2.0
 =====
 
