@@ -7,6 +7,14 @@ SockJS family:
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
   * [vert.x](https://github.com/purplefox/vert.x) Java/vert.x server
 
+Work in progress:
+
+  * [SockJS-ruby](https://github.com/sockjs/sockjs-ruby)
+  * [SockJS-netty](https://github.com/cgbystrom/sockjs-netty)
+  * [SockJS-gevent](https://github.com/sdiehl/sockjs-gevent)
+  * [pyramid-SockJS](https://github.com/fafhrd91/pyramid_sockjs)
+  * [wildcloud-websockets](https://github.com/wildcloud/wildcloud-websockets)
+
 
 SockJS-client
 =============
