@@ -336,3 +336,10 @@ There are various browser quirks which we don't intend to address:
  * From SockJS point of view there is nothing special about
    SSL/HTTPS. Connecting between unencrypted and encrypted sites
    should work just fine.
+ * Although SockJS does best to support both prefix and cookie based
+   sticky sessions, the latter may not work well cross-domain with
+   browsers that don't accept third-party cookies by default (Safari).
+   In order to get around this make sure you're connecting to sockjs
+   from the same parent domain as the main site. For example
+   'sockjs.a.com' is able to set cookies if you're connecting from
+   'www.a.com' or 'a.com'.
