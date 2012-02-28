@@ -144,8 +144,8 @@ behaviour, it's impossible to support all features. One of the
 important SockJS limitations is the fact that you're not allowed to
 open more than one SockJS connection to a single domain at a time.
 This limitation is caused by a in-browser limit of outgoing
-connections - usually browsers don't allow opening more than two
-outgoing connections to a single domain. Single SockJS session
+connections - usually [browsers don't allow opening more than two
+outgoing connections to a single domain](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser). Single SockJS session
 requires those two connections - one for downloading data, other for
 sending messages.  Opening second SockJS session at the same time
 would most probably block and can result in both sessions timing out.
@@ -317,9 +317,9 @@ There are various browser quirks which we don't intend to address:
    in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
  * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator")
    when sending data.
- * In most of the browsers you can't open more than one SockJS
-   connection to one domain at the same time (with the exception
-   of native websockets).
+ * You can't open more than one SockJS connection to one domain at the
+   same time due to [the browsers limit of consurrent connections](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser)
+   (this limit is not counting native websockets connections).
  * Although SockJS is trying to escape any strange Unicode characters
    (even invalid ones - [like surrogates \xD800-\xDBFF](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates) or [\xFFFE and \xFFFF](https://en.wikipedia.org/wiki/Unicode#Character_General_Category))
    it's advisable to use only valid characters. Using invalid
