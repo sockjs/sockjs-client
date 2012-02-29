@@ -21,6 +21,24 @@ test 'getOrigin', ->
     equal(u.getOrigin('http://a.b/c'), 'http://a.b')
     equal(u.getOrigin('http://a.b:123/c'), 'http://a.b:123')
 
+test 'isSameOriginUrl', ->
+    ok(u.isSameOriginUrl('http://localhost', 'http://localhost/'))
+    ok(u.isSameOriginUrl('http://localhost', 'http://localhost/abc'))
+    ok(u.isSameOriginUrl('http://localhost/', 'http://localhost'))
+    ok(u.isSameOriginUrl('http://localhost', 'http://localhost'))
+    ok(u.isSameOriginUrl('http://localhost', 'http://localhost:8080') is false)
+    ok(u.isSameOriginUrl('http://localhost:8080', 'http://localhost') is false)
+    ok(u.isSameOriginUrl('http://localhost:8080', 'http://localhost:8080/'))
+    ok(u.isSameOriginUrl('http://127.0.0.1:80/', 'http://127.0.0.1:80/a'))
+    ok(u.isSameOriginUrl('http://127.0.0.1:80', 'http://127.0.0.1:80/a'))
+    ok(u.isSameOriginUrl('http://localhost', 'http://localhost:80') is false)
+    ok(u.isSameOriginUrl('http://127.0.0.1/', 'http://127.0.0.1:80/a') is false)
+    ok(u.isSameOriginUrl('http://127.0.0.1:9', 'http://127.0.0.1:9999') is false)
+    ok(u.isSameOriginUrl('http://127.0.0.1:99', 'http://127.0.0.1:9999') is false)
+    ok(u.isSameOriginUrl('http://127.0.0.1:999', 'http://127.0.0.1:9999') is false)
+    ok(u.isSameOriginUrl('http://127.0.0.1:9999', 'http://127.0.0.1:9999'))
+    ok(u.isSameOriginUrl('http://127.0.0.1:99999', 'http://127.0.0.1:9999') is false)
+
 test "getParentDomain", ->
     domains =
         'localhost': 'localhost'
