@@ -210,6 +210,23 @@ jsonp-polling        | Slow and old fashioned [JSONP polling][^6]. This transpor
 [^9]: http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
 
 
+Connecting to SockJS without the client
+---------------------------------------
+
+Although the main point of SockJS it to enable browser-to-server
+connectivity, it is possible to connect to SockJS from an external
+application. Any SockJS server complying with 0.2 protocol does
+support a raw WebSocket url. The raw WebSocket url for the test server
+looks like:
+
+ * ws://localhost:8081/echo/websocket
+
+You can connect any WebSocket RFC 6455 compliant WebSocket client to
+this url. This can be a command line client, external application,
+third party code or even a browser (though I don't know why you would
+want to do so).
+
+
 Deployment
 ----------
 
