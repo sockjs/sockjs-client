@@ -177,6 +177,21 @@ test 'detectProtocols', ->
     deepEqual(u.detectProtocols(ie8_probed, null, {cookie_needed:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
 
+    # Check if protocols are picked up correctly when served from file://
+    deepEqual(u.detectProtocols(chrome_probed, null, {null_origin:true}),
+            ['websocket', 'iframe-eventsource', 'iframe-xhr-polling'])
+    deepEqual(u.detectProtocols(chrome_probed, null,
+                                {websocket:false, null_origin:true}),
+            ['iframe-eventsource', 'iframe-xhr-polling'])
+
+    deepEqual(u.detectProtocols(opera_probed, null, {null_origin:true}),
+            ['iframe-eventsource', 'iframe-xhr-polling'])
+
+    deepEqual(u.detectProtocols(ie6_probed, null, {null_origin:true}),
+            ['jsonp-polling'])
+    deepEqual(u.detectProtocols(ie8_probed, null, {null_origin:true}),
+            ['iframe-htmlfile', 'iframe-xhr-polling'])
+
 test "EventEmitter", ->
     expect(4)
     r = new SockJS('//wrongdomainthatdoesntresolveatall/abc', null,

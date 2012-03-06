@@ -155,8 +155,8 @@ bad practice. If you absolutely must do it, you can use
 mutliple subdomains, using different subdomain for every
 SockJS connection.
 
-Supported transports, by browser
---------------------------------
+Supported transports, by browser (html served from http:// or https://)
+-----------------------------------------------------------------------
 
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
 ----------------|------------------|-------------|-----------
@@ -181,6 +181,21 @@ Konqueror       | no               | no          | jsonp-polling
  * **&Dagger;**: Firefox 4.0 and Opera 11.00 and shipped with disabled
      Websockets "hixie-76". They can still be enabled by manually
      changing a browser setting.
+
+Supported transports, by browser (html served from file://)
+-----------------------------------------------------------
+
+Sometimes you may want to serve your html from "file://" address - for
+development or if you're using PhoneGap or similar technologies. But
+due to the Cross Origin Policy files served from "file://" have no
+Origin, and that means some of SockJS transports won't work. For this
+reason the SockJS protocol table is different than usually, major
+differences are:
+
+_Browser_       | _Websockets_  | _Streaming_        | _Polling_
+----------------|---------------|--------------------|-----------
+IE 8, 9         | same as above | iframe-htmlfile    | iframe-xhr-polling
+Other           | same as above | iframe-eventsource | iframe-xhr-polling
 
 Supported transports, by name
 -----------------------------
@@ -344,12 +359,6 @@ There are various browser quirks which we don't intend to address:
    that have a proper Unicode support.
  * Having a global function called `onmessage` or such is probably a
    bad idea, as it could be called by the built-in `postMessage` API.
- * Serving an html page that uses SockJS from `file://` url will not
-   work. This is due to a badly thought through
-   [CORS specification](http://dvcs.w3.org/hg/cors/raw-file/tip/Overview.html)
-   It is impossible to receive response to an Ajax request with
-   cookies set (`withCredentials` set to `true`) sent from a `file://`
-   origin.
  * From SockJS point of view there is nothing special about
    SSL/HTTPS. Connecting between unencrypted and encrypted sites
    should work just fine.
