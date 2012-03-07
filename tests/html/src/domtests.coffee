@@ -118,7 +118,7 @@ test_wrong_url = (name, url, statuses) ->
     expect(2)
     x = new u[name]('GET', url, null)
     x.onchunk = ->
-        ok(false)
+        ok(false, "chunk shall not be received")
     x.onfinish = (status, text) ->
         ok(u.arrIndexOf(statuses, status) isnt -1)
         equal(text, '')
