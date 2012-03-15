@@ -1,11 +1,18 @@
 {
-	"name": "sockjs-client",
-	"author": "Marek Majkowski",
-	"version": "0.0.0-unreleasable",
-        "devDependencies": {
-                "uglify-js": "1.2.5",
-                "coffee-script": "1.2.x",
-                "optparse": "1.0.3",
-                "node-static": "0.5.9"
-        }
+	"name"        : "sockjs-client",
+	"author"      : "Marek Majkowski",
+    "version"     : "0.0.0-unreleasable",
+    "description" : "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
+    "keywords"    : ["websockets", "websocket"],
+    "homepage"    : "http://sockjs.org",
+
+    "repository": {"type" : "git",
+                   "url" : "https://github.com/sockjs/sockjs-client.git"},
+    "devDependencies": {
+        "uglify-js"     : "1.2.5",
+        "coffee-script" : "1.2.x",
+        "optparse"      : "1.0.3",
+        "node-static"   : "0.5.9"
+    },
+    "private": true
 }
