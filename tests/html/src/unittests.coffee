@@ -176,6 +176,22 @@ test 'detectProtocols', ->
             ['xdr-streaming', 'xdr-polling'])
     deepEqual(u.detectProtocols(ie8_probed, null, {cookie_needed:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
+    # IE 10
+    ie10_probed = {
+        'websocket': true
+        'xdr-streaming': true
+        'xhr-streaming': true
+        'iframe-eventsource': false
+        'iframe-htmlfile': true
+        'xdr-polling': true
+        'xhr-polling': true
+        'iframe-xhr-polling': true
+        'jsonp-polling': true
+    }
+    deepEqual(u.detectProtocols(ie10_probed, null, {}),
+            ['websocket', 'xhr-streaming', 'xhr-polling'])
+    deepEqual(u.detectProtocols(ie10_probed, null, {cookie_needed:true}),
+            ['websocket', 'xhr-streaming', 'xhr-polling'])
 
     # Check if protocols are picked up correctly when served from file://
     deepEqual(u.detectProtocols(chrome_probed, null, {null_origin:true}),
@@ -191,6 +207,8 @@ test 'detectProtocols', ->
             ['jsonp-polling'])
     deepEqual(u.detectProtocols(ie8_probed, null, {null_origin:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
+    deepEqual(u.detectProtocols(ie10_probed, null, {null_origin:true}),
+            ['websocket', 'iframe-htmlfile', 'iframe-xhr-polling'])
 
 test "EventEmitter", ->
     expect(4)
