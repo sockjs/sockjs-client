@@ -345,8 +345,8 @@ Browser Quirks
 
 There are various browser quirks which we don't intend to address:
 
- * Pressing ESC in Firefox closes SockJS connection ([described
-   in socket.io thread](https://groups.google.com/group/socket_io/browse_thread/thread/a705e4cb532e8808)).
+ * Pressing ESC in Firefox closes SockJS connection. For a workaround
+   and discussion see [#18](https://github.com/sockjs/sockjs-client/issues/18).
  * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator")
    when sending data.
  * You can't open more than one SockJS connection to one domain at the
