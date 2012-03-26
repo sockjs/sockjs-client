@@ -81,7 +81,7 @@ else
                         hook.iobj.loaded()
                         ok(true, 'start frame send')
                         origin = u.getOrigin(u.amendUrl('/'))
-                        hook.iobj.iframe.contentWindow.postMessage(hook.id + ' ' + 's' , origin)
+                        hook.iobj.post(hook.id + ' ' + 's' , origin)
                     when 'e'
                         ok(true, 'done hook called by an iframe')
                         hook.iobj.cleanup()
