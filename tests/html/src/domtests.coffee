@@ -130,23 +130,23 @@ ajax_wrong_port_factory = (name) ->
             test_wrong_url(name, 'http://localhost:'+port+'/wrong_url_indeed.txt', [0])
 
 
-ajax_simple_factory('XHRObject')
+ajax_simple_factory('XHRLocalObject')
 if window.XDomainRequest
     ajax_simple_factory('XDRObject')
 
 if not window.ActiveXObject
     # Ajax streaming is not working in ie.
-    ajax_streaming_factory('XHRObject')
+    ajax_streaming_factory('XHRLocalObject')
 if window.XDomainRequest
     ajax_streaming_factory('XDRObject')
 
-ajax_wrong_port_factory('XHRObject')
+ajax_wrong_port_factory('XHRLocalObject')
 if window.XDomainRequest
     ajax_wrong_port_factory('XDRObject')
 
-asyncTest 'XHRObject wrong url', ->
+asyncTest 'XHRLocalObject wrong url', ->
     # Opera responds with 0, all other browsers with 404
-    test_wrong_url('XHRObject', '/wrong_url_indeed.txt', [0, 404])
+    test_wrong_url('XHRLocalObject', '/wrong_url_indeed.txt', [0, 404])
 if window.XDomainRequest
     asyncTest 'XDRObject wrong url', ->
         test_wrong_url('XDRObject', '/wrong_url_indeed.txt', [0])
