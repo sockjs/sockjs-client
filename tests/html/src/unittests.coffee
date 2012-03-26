@@ -83,6 +83,10 @@ test 'amendUrl', ->
     raises(t, 'Wrong url')
     t = -> u.amendUrl(false)
     raises(t, 'Wrong url')
+    t = -> u.amendUrl('http://abc?a=a')
+    raises(t, 'Only basic urls are supported')
+    t = -> u.amendUrl('http://abc#a')
+    raises(t, 'Only basic urls are supported')
 
 test 'arrIndexOf', ->
     a = [1,2,3,4,5]
