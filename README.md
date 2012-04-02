@@ -71,10 +71,9 @@ SockJS comes with some QUnit tests and a few smoke tests (using
 [SockJS-node](https://github.com/sockjs/sockjs-client) on the server
 side). At the moment they are deployed in few places:
 
- * http://sockjs.popcnt.org/ (hosted in Europe)
+ * http://sockjs.popcnt.org/ and https://sockjs.popcnt.org/ (hosted in Europe)
  * http://sockjs.cloudfoundry.com/ (CloudFoundry, websockets disabled, loadbalanced)
  * https://sockjs.cloudfoundry.com/ (CloudFoundry SSL, websockets disabled, loadbalanced)
- * http://sockjs.herokuapp.com/ (Heroku, websockets disabled)
 
 
 Example
