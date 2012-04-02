@@ -1,3 +1,23 @@
+0.3.0
+=====
+
+ * Temporarily disabled iframe tests - they are failing unpredictably.
+ * #57 - pointing an iframe to "about:blank" during cleanup caused
+   Opera to messup history.
+ * #55 - Improved iframe abstraction (reduced a possible mem leak)
+ * Refactored AJAX abstractions, for better CORS handing - again.
+ * Add additional parent origin security check to an iframe.
+ * Urls with hashes or query strings can't be passed to SockJS.
+ * #18 - Mention workaround for Firefox ESC key issue
+ * #53 - AMD compliance
+ * sockjs/sockjs-protocol#28 - always use square brackets for
+   websocket frames
+ * #51 - initial support for IE10 - try XHR before XDR
+ * #28 - handle onunload / onbeforeunload in a more robust fashion
+ * #49 - support SockJS-client being used from files served from
+   file:// urls.
+
+
 0.2.1
 =====
 
