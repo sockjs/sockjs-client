@@ -369,3 +369,5 @@ There are various browser quirks which we don't intend to address:
    from the same parent domain as the main site. For example
    'sockjs.a.com' is able to set cookies if you're connecting from
    'www.a.com' or 'a.com'.
+ * Trying to connect from secure "https://" to insecure "http://" is
+   not good idea. The other way around should be fine.
