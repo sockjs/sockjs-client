@@ -41,13 +41,13 @@ factory_body_check = (protocol) ->
                 hook.del()
                 start()
 
-module('sockjs in head')
-body_protocols = ['iframe-eventsource',
-            'iframe-htmlfile',
-            'iframe-xhr-polling',
-            'jsonp-polling']
-for protocol in body_protocols
-    factory_body_check(protocol)
+# module('sockjs in head')
+# body_protocols = ['iframe-eventsource',
+#             'iframe-htmlfile',
+#             'iframe-xhr-polling',
+#             'jsonp-polling']
+# for protocol in body_protocols
+#     factory_body_check(protocol)
 
 
 module('connection errors')
