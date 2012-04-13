@@ -37,9 +37,15 @@ else
                     u.attachEvent('load', function(){
                         hook.load();
                     });
-                    u.attachEvent('unload', function(){
-                        hook.unload();
-                    });
+                    var w = 0;
+                    var run = function(){
+                        if(w === 0) {
+                            w = 1;
+                            hook.unload();
+                        }
+                    };
+                    u.attachEvent('beforeunload', run);
+                    u.attachEvent('unload', run);
                 """))
 
 # if navigator.userAgent.indexOf('Konqueror') isnt -1 or $.browser.opera
