@@ -162,10 +162,11 @@ _Browser_       | _Websockets_     | _Streaming_ | _Polling_
 IE 6, 7         | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
-Chrome 6-12     | hixie-76         | xhr-streaming   | xhr-polling
-Chrome 14+      | hybi-10          | xhr-streaming   | xhr-polling
+IE 10           | RFC6455          | xhr-streaming   | xhr-polling
+Chrome 6-13     | hixie-76         | xhr-streaming   | xhr-polling
+Chrome 14+      | hybi-10 / RFC6455| xhr-streaming   | xhr-polling
 Firefox <10     | no &Dagger;      | xhr-streaming   | xhr-polling
-Firefox 10+     | hybi-10          | xhr-streaming   | xhr-polling
+Firefox 10+     | hybi-10 / RFC6455| xhr-streaming   | xhr-polling
 Safari 5        | hixie-76         | xhr-streaming   | xhr-polling
 Opera 10.70+    | no &Dagger;      | iframe-eventsource | iframe-xhr-polling
 Konqueror       | no               | no          | jsonp-polling
