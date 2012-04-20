@@ -373,3 +373,5 @@ There are various browser quirks which we don't intend to address:
    'www.a.com' or 'a.com'.
  * Trying to connect from secure "https://" to insecure "http://" is
    not good idea. The other way around should be fine.
+ * Long polling is known to cause problems on Heroku, but
+   [workaround for SockJS is available](https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187).
