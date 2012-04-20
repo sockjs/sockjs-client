@@ -162,11 +162,11 @@ _Browser_       | _Websockets_     | _Streaming_ | _Polling_
 IE 6, 7         | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
-IE 10           | RFC6455          | xhr-streaming   | xhr-polling
+IE 10           | rfc6455          | xhr-streaming   | xhr-polling
 Chrome 6-13     | hixie-76         | xhr-streaming   | xhr-polling
-Chrome 14+      | hybi-10 / RFC6455| xhr-streaming   | xhr-polling
+Chrome 14+      | hybi-10 / rfc6455| xhr-streaming   | xhr-polling
 Firefox <10     | no &Dagger;      | xhr-streaming   | xhr-polling
-Firefox 10+     | hybi-10 / RFC6455| xhr-streaming   | xhr-polling
+Firefox 10+     | hybi-10 / rfc6455| xhr-streaming   | xhr-polling
 Safari 5        | hixie-76         | xhr-streaming   | xhr-polling
 Opera 10.70+    | no &Dagger;      | iframe-eventsource | iframe-xhr-polling
 Konqueror       | no               | no          | jsonp-polling
@@ -202,6 +202,7 @@ Supported transports, by name
 
 _Transport_          | _References_
 ---------------------|---------------
+websocket (rfc6455)  | [rfc 6455][^10]
 websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
 websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
 xhr-streaming        | Transport using [Cross domain XHR][^5] [streaming][^7] capability (readyState=3).
@@ -223,6 +224,7 @@ jsonp-polling        | Slow and old fashioned [JSONP polling][^6]. This transpor
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
 [^8]: http://cometdaily.com/2007/11/18/ie-activexhtmlfile-transport-part-ii/
 [^9]: http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
+[^10]: http://www.rfc-editor.org/rfc/rfc6455.txt
 
 
 Connecting to SockJS without the client
