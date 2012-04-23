@@ -216,7 +216,7 @@ test 'detectProtocols', ->
 
 test "EventEmitter", ->
     expect(4)
-    r = new SockJS('//wrongdomainthatdoesntresolveatall/abc', null,
+    r = new SockJS('//1.2.3.4/wrongurl', null,
                    {protocols_whitelist: []})
     r.addEventListener 'message', -> ok(true)
     r.onmessage = -> ok(false)
@@ -236,3 +236,4 @@ test "EventEmitter", ->
     r.dispatchEvent({type:'close'}) # 1 callback run
     r.removeEventListener 'close', single
     r.dispatchEvent({type:'close'}) # 0 runs
+    r.close()
