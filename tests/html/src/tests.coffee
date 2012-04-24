@@ -11,7 +11,8 @@ protocols = ['websocket',
 newSockJS = (path, protocol) ->
     url = if /^http/.test(path) then path else client_opts.url + path
     options = jQuery.extend({}, client_opts.sockjs_opts)
-    options.protocols_whitelist = [protocol]
+    if protocol
+        options.protocols_whitelist = [protocol]
     return new SockJS(url, null, options)
 
 echo_factory_factory = (protocol, messages) ->
