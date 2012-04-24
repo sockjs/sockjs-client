@@ -1,3 +1,23 @@
+0.3.1
+=====
+
+ * #61 - Meteor guys found that we unintentionally catch "onopen" errors.
+ * #63 - Meteorjs guys found that xhr-streaming on Safari sometimes
+   left busy cursor running.
+ * Increased allowed time for websocket transport (from 1 rtt to 2),
+   this should make ws transport more reliable over SSL, at the cost
+   of slightly longer connection time for users with blocked ws.
+ * #57 - previous fix didn't really work, sockjs-client still left
+   a mess in browsers history when using iframe transports. This
+   is fixed now.
+ * #60 - Opera 12 (next) claims to do AJAX2 / CORS, but can't
+   do xhr-streaming.
+ * #58 - onunload test sometimes failed on Safari on windows
+ * Updated readme WRT websocket protocols
+ * Updated readme WRT deployments on heroku
+ * Add minimalistic license block to every source file.
+
+
 0.3.0
 =====
 
