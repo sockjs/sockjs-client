@@ -25,12 +25,12 @@
 </head>
 <body>
   <p>
-    <h1 id="qunit-header">SockJS Test Suite</h1>
+    <h1 id="qunit-header">SockJS QUnit Test Suite</h1>
     <h2 id="qunit-banner"></h2>
     <div id="qunit-testrunner-toolbar"></div>
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">test markup</div>
+    <div id="qunit-fixture"></div>
     </p>
   <br>
   <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px gray solid;">
@@ -46,7 +46,7 @@
             $('#logs').append($("<br>"));
             $('#logs').scrollTop($('#logs').scrollTop()+10000);
       }
-      log('Running against:' + client_opts.url);
+      log('Running against: ' + client_opts.url);
 </script>
 </body>
 </html>
