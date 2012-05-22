@@ -119,16 +119,17 @@ asyncTest "close on close", ->
         u.delay 10, ->
             start()
 
-# Test for #61
-asyncTest "EventEmitter exception handling", ->
-    expect(1)
-    r = newSockJS('/echo', 'xhr-streaming')
-    prev_onerror = window.onerror
-    window.onerror = (e) ->
-        ok(/onopen error/.test(''+e))
-        window.onerror = prev_onerror
-        r.close()
-    r.onopen = (e) ->
-        throw "onopen error"
-    r.onclose = ->
-        start()
+# Test for #61, doesn't work on IE
+if 'ActiveXObject' not of window
+    asyncTest "EventEmitter exception handling", ->
+        expect(1)
+        r = newSockJS('/echo', 'xhr-streaming')
+        prev_onerror = window.onerror
+        window.onerror = (e) ->
+            ok(/onopen error/.test(''+e))
+            window.onerror = prev_onerror
+            r.close()
+        r.onopen = (e) ->
+            throw "onopen error"
+        r.onclose = ->
+            start()
