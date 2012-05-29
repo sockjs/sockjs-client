@@ -17,7 +17,7 @@ heartbeat_test_factory = (protocol) ->
         r = newSockJS('/echo', protocol)
         r.onopen = (e) ->
             ok(true)
-            r._sendHeartbeat()
+            r._sendEmpty()
             r.send('a')
         r.onmessage = (e) ->
             equal(e.data, 'a')
@@ -32,7 +32,7 @@ heartbeat_test_factory = (protocol) ->
         r = newSockJS('/heartbeat', protocol)
         r.onopen = (e) ->
             ok(true)
-            r._sendHeartbeat()
+            r._sendEmpty()
         r.onmessage = (e) ->
             equal(e.data, 'heartbeat')
             r.close()
