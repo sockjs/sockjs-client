@@ -45,6 +45,7 @@ heartbeat_test_factory = (protocol) ->
         r = newSockJS('/heartbeat', protocol)
         r.onopen = (e) ->
             ok(true)
+            r.send('gimme heartbeat')
         r.onheartbeat = (e) ->
             ok(true)
             r.close()
