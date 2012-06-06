@@ -257,13 +257,6 @@ factor_server_close = (protocol) ->
             equals(e.wasClean, true)
             start()
 
-# IE doesn't do array.indexOf...
-arrIndexOf = (arr, obj) ->
-     for i in [0...arr.length]
-         if arr[i] is obj
-            return i
-     return -1
-
 test_protocol_messages = (protocol) ->
     module(protocol)
     if not SockJS[protocol] or not SockJS[protocol].enabled()
