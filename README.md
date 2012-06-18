@@ -15,6 +15,7 @@ Work in progress:
   * [pyramid-SockJS](https://github.com/fafhrd91/pyramid_sockjs)
   * [wildcloud-websockets](https://github.com/wildcloud/wildcloud-websockets)
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone)
+  * [SockJS-twisted](https://github.com/Fugiman/sockjs-twisted/)
 
 
 SockJS-client
