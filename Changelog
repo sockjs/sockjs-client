@@ -1,3 +1,9 @@
+0.3.2
+=====
+
+ * #77 - Getting /info on modern browsers when html is served from
+         file:// urls was broken.
+
 0.3.1
 =====
 
