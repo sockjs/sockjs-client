@@ -14,5 +14,5 @@
         "optparse"      : "1.0.3",
         "node-static"   : "0.5.9"
     },
-    "private": true
+    "main": "sockjs.js"
 }
