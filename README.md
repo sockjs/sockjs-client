@@ -16,6 +16,7 @@ Work in progress:
   * [wildcloud-websockets](https://github.com/wildcloud/wildcloud-websockets)
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone)
   * [SockJS-twisted](https://github.com/Fugiman/sockjs-twisted/)
+  * [wai-SockJS](https://github.com/Palmik/wai-sockjs)
 
 
 SockJS-client
