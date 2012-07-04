@@ -161,7 +161,7 @@ Supported transports, by browser (html served from http:// or https://)
 -----------------------------------------------------------------------
 
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
-----------------|------------------|-------------|-----------
+----------------|------------------|-------------|-------------------
 IE 6, 7         | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
@@ -196,7 +196,7 @@ reason the SockJS protocol table is different than usually, major
 differences are:
 
 _Browser_       | _Websockets_  | _Streaming_        | _Polling_
-----------------|---------------|--------------------|-----------
+----------------|---------------|--------------------|-------------------
 IE 8, 9         | same as above | iframe-htmlfile    | iframe-xhr-polling
 Other           | same as above | iframe-eventsource | iframe-xhr-polling
 
