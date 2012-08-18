@@ -17,6 +17,7 @@ Work in progress:
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone)
   * [SockJS-twisted](https://github.com/Fugiman/sockjs-twisted/)
   * [wai-SockJS](https://github.com/Palmik/wai-sockjs)
+  * [SockJS-perl](https://github.com/vti/sockjs-perl)
 
 
 SockJS-client
