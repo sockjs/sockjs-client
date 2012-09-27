@@ -161,7 +161,7 @@ Supported transports, by browser (html served from http:// or https://)
 -----------------------------------------------------------------------
 
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
-----------------|------------------|-------------|-----------
+----------------|------------------|-------------|-------------------
 IE 6, 7         | no               | no          | jsonp-polling
 IE 8, 9 (cookies=no) |    no       | xdr-streaming &dagger; | xdr-polling &dagger;
 IE 8, 9 (cookies=yes)|    no       | iframe-htmlfile | iframe-xhr-polling
@@ -196,7 +196,7 @@ reason the SockJS protocol table is different than usually, major
 differences are:
 
 _Browser_       | _Websockets_  | _Streaming_        | _Polling_
-----------------|---------------|--------------------|-----------
+----------------|---------------|--------------------|-------------------
 IE 8, 9         | same as above | iframe-htmlfile    | iframe-xhr-polling
 Other           | same as above | iframe-eventsource | iframe-xhr-polling
 
@@ -278,6 +278,7 @@ SockJS-client source code, check out the git repo and follow this
 steps:
 
     cd sockjs-client
+    npm install
     npm install --dev
 
 To generate JavaScript run:
@@ -299,6 +300,7 @@ various SockJS requests. A common way is to use `SockJS-node` test
 server for that. To run it (by default it will be listening on port 8081):
 
     cd sockjs-node
+    npm install
     npm install --dev
     make build
     make test_server
