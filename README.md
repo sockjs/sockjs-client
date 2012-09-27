@@ -278,6 +278,7 @@ SockJS-client source code, check out the git repo and follow this
 steps:
 
     cd sockjs-client
+    npm install
     npm install --dev
 
 To generate JavaScript run:
@@ -299,6 +300,7 @@ various SockJS requests. A common way is to use `SockJS-node` test
 server for that. To run it (by default it will be listening on port 8081):
 
     cd sockjs-node
+    npm install
     npm install --dev
     make build
     make test_server
