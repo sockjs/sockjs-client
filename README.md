@@ -11,7 +11,7 @@ Work in progress:
 
   * [SockJS-ruby](https://github.com/sockjs/sockjs-ruby)
   * [SockJS-netty](https://github.com/cgbystrom/sockjs-netty)
-  * [SockJS-gevent](https://github.com/sdiehl/sockjs-gevent)
+  * [SockJS-gevent](https://github.com/sdiehl/sockjs-gevent) ([SockJS-gevent fork](https://github.com/njoyce/sockjs-gevent))
   * [pyramid-SockJS](https://github.com/fafhrd91/pyramid_sockjs)
   * [wildcloud-websockets](https://github.com/wildcloud/wildcloud-websockets)
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone)
