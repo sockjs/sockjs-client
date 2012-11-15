@@ -1,3 +1,16 @@
+0.3.4
+=====
+
+ * Mentioned njoyce's fork of sockjs-gevent.
+ * #90 - Don't catch onbeforeunload event - it breaks javascript://
+   links in IE.
+ * IE mangles 204 response code for 1223 on ajax, see:
+   http://bugs.jquery.com/ticket/1450
+ * Make `new` optional for SockJS constructor (via substack).
+ * It is impossible to cancel JSONP polling request - compensate for that.
+ * Refactored EventEmitter prototype (used only internally)
+
+
 0.3.2
 =====
 
