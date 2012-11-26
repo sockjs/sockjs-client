@@ -9,6 +9,7 @@
  * Make `new` optional for SockJS constructor (via substack).
  * It is impossible to cancel JSONP polling request - compensate for that.
  * Refactored EventEmitter prototype (used only internally)
+ * #66 - Failure to post data to /xhr_send should kill the session
 
 
 0.3.2
