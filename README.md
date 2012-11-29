@@ -303,6 +303,7 @@ server for that. To run it (by default it will be listening on port 8081):
     cd sockjs-node
     npm install
     npm install --dev
+    ln -s .. node_modules/sockjs
     make build
     make test_server
 
