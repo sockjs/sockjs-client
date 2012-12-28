@@ -8,18 +8,26 @@ protocols = ['websocket',
         'iframe-xhr-polling',
         'jsonp-polling']
 
-newSockJS = (path, protocol) ->
+url_and_options = (path, protocol) ->
     url = if /^http/.test(path) then path else client_opts.url + path
     options = jQuery.extend({}, client_opts.sockjs_opts)
     if protocol
         options.protocols_whitelist = [protocol]
+    [url, options]
+
+newSockJS = (path, protocol) ->
+    [url, options] = url_and_options(path, protocol)
     return new SockJS(url, null, options)
 
-echo_factory_factory = (protocol, messages) ->
+cons_without_new = (path, protocol) ->
+    [url, options] = url_and_options(path, protocol)
+    return SockJS(url, null, options)
+
+echo_factory_factory = (protocol, messages, cons = newSockJS) ->
     return ->
         expect(2 + messages.length)
         a = messages.slice(0)
-        r = newSockJS('/echo', protocol)
+        r = cons('/echo', protocol)
         r.onopen = (e) ->
             #log('onopen ' + e)
             ok(true)
@@ -46,6 +54,10 @@ echo_factory_factory = (protocol, messages) ->
             else
                 ok(true)
             start()
+
+factor_echo_without_new = (protocol) ->
+    messages = [ 'data' ]
+    return echo_factory_factory(protocol, messages, cons_without_new)
 
 factor_echo_basic = (protocol) ->
     messages = [ 'data' ]
@@ -290,6 +302,7 @@ test_protocol_messages = (protocol) ->
         test "[disabled by config]", ->
                 log('Disabled by config: "' + protocol + '"')
     else
+        asyncTest("echo0", factor_echo_without_new(protocol))
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
