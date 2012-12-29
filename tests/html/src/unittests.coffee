@@ -237,3 +237,24 @@ test "EventEmitter", ->
     r.removeEventListener 'close', single
     r.dispatchEvent({type:'close'}) # 0 runs
     r.close()
+
+
+instanceof_working = false
+try
+    obj = {}
+    instanceof_working = obj instanceof Object
+catch x
+    #pass
+
+if not instanceof_working
+    test "[NoConstructor unsupported by client]", ->
+        log('NoConstructor unsupported by client')
+else
+    test "NoConstructor", ->
+        expect(2)
+        r = new SockJS('//1.2.3.4/blah', null, {protocols_whitelist: []})
+        ok(r instanceof SockJS)
+        r.close()
+        r = SockJS('//1.2.3.4/blah', null, {protocols_whitelist: []})
+        ok(r instanceof SockJS)
+        r.close()
