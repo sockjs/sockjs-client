@@ -385,4 +385,6 @@ There are various browser quirks which we don't intend to address:
  * Don't use "javascript:" links on a page that uses SockJS. For
    some reason clickling on this type of link breaks XDR/XHR requests
    on IE (see [#90](https://github.com/sockjs/sockjs-client/issues/90)).
- * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If you're a serious SockJS user consider using SSL.
+ * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
+   you're a serious SockJS user consider using SSL
+   ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
