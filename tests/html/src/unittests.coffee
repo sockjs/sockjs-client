@@ -88,6 +88,13 @@ test 'amendUrl', ->
     t = -> u.amendUrl('http://abc#a')
     raises(t, 'Only basic urls are supported')
 
+    # For some browsers http://localhost:80/ is not in the same origin
+    # as http://localhost/. Remove explicit port number in such cases. See #74
+    equal(u.amendUrl('http://a:80/abc'), 'http://a/abc')
+    equal(u.amendUrl('https://a:443/abc'), 'https://a/abc')
+    equal(u.amendUrl('https://a:80/abc'), 'https://a:80/abc')
+    equal(u.amendUrl('http://a:443/abc'), 'http://a:443/abc')
+
 test 'arrIndexOf', ->
     a = [1,2,3,4,5]
     equal(u.arrIndexOf(a, 1), 0)
