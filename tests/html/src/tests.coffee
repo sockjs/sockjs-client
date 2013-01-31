@@ -178,6 +178,41 @@ factor_batch_large = (protocol) ->
     return batch_factory_factory(protocol, messages)
 
 
+bufferedAmount_factory = (protocol, messages) ->
+    return ->
+        expect(4 + messages.length)
+        r = newSockJS('/echo', protocol)
+        ok(r)
+        counter = 0
+        r.onopen = (e) ->
+            equal(r.bufferedAmount, 0)
+            for msg in messages
+                r.send(msg)
+            ok(r.bufferedAmount > 0)
+        r.onmessage = (e) ->
+            equals(e.data, messages[counter])
+            counter += 1
+            if counter is messages.length
+                r.close()
+        r.onclose = (e) ->
+            if counter isnt messages.length
+                ok(false, "Transport closed prematurely. " + e)
+            else
+                ok(true)
+            start()
+
+bufferedAmount = (protocol) ->
+    messages = [
+        Array(Math.pow(2,1)).join('x'),
+        Array(Math.pow(2,2)).join('x'),
+        Array(Math.pow(2,4)).join('x'),
+        Array(Math.pow(2,8)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
+        Array(Math.pow(2,13)).join('x'),
+    ]
+    return bufferedAmount_factory(protocol, messages)
+
+
 batch_factory_factory_amp = (protocol, messages) ->
     return ->
         expect(3 + messages.length)
@@ -301,6 +336,7 @@ test_protocol_messages = (protocol) ->
         asyncTest("large message (ping-pong)",
             factor_echo_large_message(protocol))
         asyncTest("large message (batch)", factor_batch_large(protocol))
+        asyncTest("bufferedAmount", bufferedAmount(protocol))
         asyncTest("large download", factor_batch_large_amp(protocol))
 
         asyncTest("user close", factor_user_close(protocol))
