@@ -3,11 +3,12 @@ SockJS family:
   * [SockJS-client](https://github.com/sockjs/sockjs-client) JavaScript client library
   * [SockJS-node](https://github.com/sockjs/sockjs-node) Node.js server
   * [SockJS-erlang](https://github.com/sockjs/sockjs-erlang) Erlang server
+  * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone) Python/Cyclone/Twisted server
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
-  * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
-  * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone) Python/Cyclone/Twisted server
   * [Spring Framework](http://projects.spring.io/spring-framework) Java server
+  * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
+  * [Xitrum](http://ngocdaothanh.github.io/xitrum/) Scala server
 
 Work in progress:
 
