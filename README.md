@@ -4,6 +4,7 @@ SockJS family:
   * [SockJS-node](https://github.com/sockjs/sockjs-node) Node.js server
   * [SockJS-erlang](https://github.com/sockjs/sockjs-erlang) Erlang server
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
+  * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
 
 Work in progress:
@@ -14,7 +15,6 @@ Work in progress:
   * [pyramid-SockJS](https://github.com/fafhrd91/pyramid_sockjs)
   * [wildcloud-websockets](https://github.com/wildcloud/wildcloud-websockets)
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone)
-  * [SockJS-twisted](https://github.com/Fugiman/sockjs-twisted/)
   * [wai-SockJS](https://github.com/Palmik/wai-sockjs)
   * [SockJS-perl](https://github.com/vti/sockjs-perl)
   * [SockJS-go](https://github.com/igm/sockjs-go/)
