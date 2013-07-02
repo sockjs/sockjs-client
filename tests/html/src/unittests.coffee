@@ -222,7 +222,7 @@ test 'detectProtocols', ->
             ['websocket', 'iframe-htmlfile', 'iframe-xhr-polling'])
 
 test "EventEmitter", ->
-    expect(4)
+    expect(6)
     r = new SockJS('//1.2.3.4/wrongurl', null,
                    {protocols_whitelist: []})
     r.addEventListener 'message', -> ok(true)
@@ -235,6 +235,27 @@ test "EventEmitter", ->
     r.onmessage = -> ok(true)
     r.removeEventListener 'message', bluff
     r.dispatchEvent({type:'message'})
+
+    # Listeners added mid-dispatch do not get run, however listeners
+    # removed mid-dispatch that have not yet run also don't run.
+    log = []
+    handler0 = -> log.push(0)
+    handler1 = ->
+        log.push(1)
+        r.removeEventListener 'test', handler0
+        r.removeEventListener 'test', handler2
+        r.addEventListener 'test', handler3
+    handler2 = -> log.push(2)
+    handler3 = -> log.push(3)
+    r.addEventListener 'test', handler0
+    r.addEventListener 'test', handler1
+    r.addEventListener 'test', handler2
+
+    r.dispatchEvent({type:'test'})
+    deepEqual(log, [0, 1])
+    log = []
+    r.dispatchEvent({type:'test'})
+    deepEqual(log, [1, 3])
 
     # Adding the same eventlistener should be indempotent (sockjs-client #4).
     single = -> ok(true)
