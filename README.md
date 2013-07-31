@@ -260,7 +260,7 @@ that supports the protocol used by your server. For example:
 
 A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
 
-You can also use or CDN via https (using Cloud Front domain name):
+You can also use our CDN via https (using Cloud Front domain name):
 
     <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.js">
       </script>
