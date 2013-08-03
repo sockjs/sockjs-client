@@ -222,7 +222,7 @@ test 'detectProtocols', ->
             ['websocket', 'iframe-htmlfile', 'iframe-xhr-polling'])
 
 test "EventEmitter", ->
-    expect(6)
+    expect(7)
     r = new SockJS('//1.2.3.4/wrongurl', null,
                    {protocols_whitelist: []})
     r.addEventListener 'message', -> ok(true)
@@ -236,26 +236,45 @@ test "EventEmitter", ->
     r.removeEventListener 'message', bluff
     r.dispatchEvent({type:'message'})
 
-    # Listeners added mid-dispatch do not get run, however listeners
-    # removed mid-dispatch that have not yet run also don't run.
-    log = []
+    # Per DOM Level 3, addEventListener and removeEventListener does not effect
+    # a pending dispatchEvent. This is consistent with IE and older Opera, but
+    # not other browsers (which implement the DOM Level 2 behavior). IE's is
+    # simpler, so we mimic it as this is not an important edge case.
+    #
+    # See https://github.com/sockjs/sockjs-client/pull/127
     handler0 = -> log.push(0)
     handler1 = ->
         log.push(1)
         r.removeEventListener 'test', handler0
         r.removeEventListener 'test', handler2
         r.addEventListener 'test', handler3
+        r.addEventListener 'test', handler4
     handler2 = -> log.push(2)
-    handler3 = -> log.push(3)
+    handler3 = ->
+        log.push(3)
+        r.removeEventListener 'test', handler1
+        r.removeEventListener 'test', handler3
+        r.removeEventListener 'test', handler4
+    handler4 = -> log.push(4)
     r.addEventListener 'test', handler0
     r.addEventListener 'test', handler1
     r.addEventListener 'test', handler2
 
-    r.dispatchEvent({type:'test'})
-    deepEqual(log, [0, 1])
+    # Should run the registered listeners when first calling.
     log = []
     r.dispatchEvent({type:'test'})
-    deepEqual(log, [1, 3])
+    deepEqual(log, [0, 1, 2])
+
+    # Should run the new listeners and not crash even though we remove the last
+    # one mid-dispatch.
+    log = []
+    r.dispatchEvent({type:'test'})
+    deepEqual(log, [1, 3, 4])
+
+    # All event listeners gone. Should run none.
+    log = []
+    r.dispatchEvent({type:'test'})
+    deepEqual(log, [])
 
     # Adding the same eventlistener should be indempotent (sockjs-client #4).
     single = -> ok(true)
