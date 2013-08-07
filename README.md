@@ -33,7 +33,7 @@ fails it can use a variety of browser-specific transport protocols and
 presents them through WebSocket-like abstractions.
 
 SockJS is intended to work for all modern browsers and in environments
-which don't support WebSocket protcol, for example behind restrictive
+which don't support WebSocket protocol, for example behind restrictive
 corporate proxies.
 
 SockJS-client does require a server counterpart:
@@ -260,7 +260,7 @@ that supports the protocol used by your server. For example:
 
 A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
 
-You can also use or CDN via https (using Cloud Front domain name):
+You can also use our CDN via https (using Cloud Front domain name):
 
     <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.js">
       </script>
