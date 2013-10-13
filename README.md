@@ -137,6 +137,10 @@ Where `options` is a hash which can contain:
     'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling',
     'iframe-xhr-polling', 'jsonp-polling']"
 
+ *  **subprotocols (list of strings)**
+
+    Allows WebSocket [subprotocols](http://tools.ietf.org/html/rfc6455#section-1.9) to be specified.
+
 
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all features. One of the

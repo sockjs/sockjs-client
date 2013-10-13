@@ -6,7 +6,8 @@ exports.config = {
             devel: true,
             debug: true,
             // websocket:false
-            info: {cookie_needed:false}
+            //subprotocols: ['testing']
+            info: {cookie_needed:false},
         }
     },
 
