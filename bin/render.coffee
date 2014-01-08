@@ -9,7 +9,7 @@
 
 fs = require('fs')
 uglify = require('uglify-js')
-optparse = require('optparse')
+optimist = require('optimist')
 
 array_flatten = (arr, acc) ->
     if typeof acc is 'undefined'
@@ -86,20 +86,34 @@ render = (filename, depth, options) ->
 
 
 main = ->
-    switches = [
-        ['-p', '--pretty', 'Prettify javascript']
-        ['-m', '--minify', 'Minify javascript']
-        ['-s', '--set-version [VERSION]', 'Set the value of version tag']
-    ]
-    options = {minify: false, toplevel: true, version: 'unknown'}
-    parser = new optparse.OptionParser(switches)
-    parser.on 'pretty', ->
-                   options.beautify = true
-    parser.on 'minify', ->
-                   options.minify = true
-    parser.on 'set-version', (_, version) ->
-                   options.version = version
-    filenames = parser.parse((process.ARGV || process.argv).slice(2))
+    argv = optimist.options({
+        'c': {
+            alias: 'comment',
+            default: false,
+            describe: 'Add comments',
+        },
+        'm': {
+            alias: 'minify',
+            default: true,
+            describe: 'Minify javascript',
+        },
+        'p': {
+            alias: 'pretty',
+            default: true,
+            describe: 'Prettify javascript',
+        },
+        's': {
+            alias: 'set-version',
+            default: 'unknown',
+            describe: 'Set the value of version tag',
+        }})
+        .boolean('c')
+        .boolean('m')
+        .boolean('p')
+        .string('s')
+        .argv
+    options = {comment: argv.comment, minify: argv.minify, pretty: argv.pretty, toplevel: true, version: (argv.s || "unknown")}
+    filenames = argv._
 
     content = for filename in filenames
         render(filename, '', options)
