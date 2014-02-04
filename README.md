@@ -354,7 +354,7 @@ There are various browser quirks which we don't intend to address:
  * Jsonp-polling transport will show a "spinning wheel" (aka. "busy indicator")
    when sending data.
  * You can't open more than one SockJS connection to one domain at the
-   same time due to [the browsers limit of consurrent connections](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser)
+   same time due to [the browsers limit of concurrent connections](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser)
    (this limit is not counting native websockets connections).
  * Although SockJS is trying to escape any strange Unicode characters
    (even invalid ones - [like surrogates \xD800-\xDBFF](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates) or [\xFFFE and \xFFFF](https://en.wikipedia.org/wiki/Unicode#Character_General_Category))
