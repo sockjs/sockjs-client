@@ -84,25 +84,24 @@ but instead of `WebSocket` there is a `SockJS` Javascript object.
 First, you need to load SockJS JavaScript library, for example you can
 put that in your http head:
 
-    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
-      </script>
+```html
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+```
 
 After the script is loaded you can establish a connection with the
 SockJS server. Here's a simple example:
 
 ```javascript
-<script>
-   var sock = new SockJS('http://mydomain.com/my_prefix');
-   sock.onopen = function() {
-       console.log('open');
-   };
-   sock.onmessage = function(e) {
-       console.log('message', e.data);
-   };
-   sock.onclose = function() {
-       console.log('close');
-   };
-</script>
+var sock = new SockJS('http://mydomain.com/my_prefix');
+sock.onopen = function sockOnopen() {
+    console.log('open');
+};
+sock.onmessage = function sockOnmessage(e) {
+    console.log('message', e.data);
+};
+sock.onclose = function sockOnclose() {
+    console.log('close');
+};
 ```
 
 SockJS-client API
@@ -250,15 +249,17 @@ In order to utilize best performance you should use the SockJS-client
 releases hosted on SockJS CDN. You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
-    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
-      </script>
+```html
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+```
 
 A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
 
 You can also use our CDN via https (using Cloud Front domain name):
 
-    <script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.js">
-      </script>
+```html
+<script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.js"></script>
+```
 
 For server-side deployment tricks, especially about load balancing and
 session stickiness, take a look at the
@@ -303,7 +304,7 @@ server for that. To run it (by default it will be listening on port 8081):
     make test_server
 
 At this point you're ready to run a SockJS-client server that will
-server your freshly compiled JavaScript and various static http and
+serve your freshly compiled JavaScript and various static http and
 javscript files (by default it will run on port 8080).
 
     cd sockjs-client
@@ -313,6 +314,8 @@ At that point you should have two web servers running: sockjs-node on
 8081 and sockjs-client on 8080. When you open the browser on
 [http://localhost:8080/](http://localhost:8080/) you should be able
 run the QUnit tests against your sockjs-node server.
+
+#### Testing hiccups
 
 If you look at your browser console you will see warnings like that:
 
