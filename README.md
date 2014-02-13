@@ -72,7 +72,7 @@ QUnit tests and smoke tests
 ---------------------------
 
 SockJS comes with some QUnit tests and a few smoke tests (using
-[SockJS-node](https://github.com/sockjs/sockjs-client) on the server
+[SockJS-node](https://github.com/sockjs/sockjs-node) on the server
 side).
 
 Example
