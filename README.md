@@ -7,6 +7,7 @@ SockJS family:
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone) Python/Cyclone/Twisted server
+  * [Spring Framework](http://projects.spring.io/spring-framework) Java server
 
 Work in progress:
 
