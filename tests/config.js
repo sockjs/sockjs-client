@@ -2,11 +2,11 @@ exports.config = {
     client_opts: {
         // Address of a sockjs test server.
         url: 'http://localhost:8081',
+        //protocols: ['sockjs-test', 'bogus'],
         sockjs_opts: {
             devel: true,
             debug: true,
             // websocket:false
-            //subprotocols: ['testing']
             info: {cookie_needed:false},
         }
     },
