@@ -83,7 +83,7 @@ SockJS mimics [WebSockets API](http://dev.w3.org/html5/websockets/)
 but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load SockJS JavaScript library, for example you can
-put that in your http head:
+put that in your html head:
 
     <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
       </script>
@@ -145,13 +145,13 @@ open more than one SockJS connection to a single domain at a time.
 This limitation is caused by a in-browser limit of outgoing
 connections - usually [browsers don't allow opening more than two
 outgoing connections to a single domain](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser). Single SockJS session
-requires those two connections - one for downloading data, other for
-sending messages.  Opening second SockJS session at the same time
+requires those two connections - one for downloading data, the other for
+sending messages.  Opening a second SockJS session at the same time
 would most probably block and can result in both sessions timing out.
 
 Opening more than one SockJS connection at a time is generally a
 bad practice. If you absolutely must do it, you can use
-mutliple subdomains, using different subdomain for every
+multiple subdomains, using different subdomain for every
 SockJS connection.
 
 Supported transports, by browser (html served from http:// or https://)
@@ -173,9 +173,9 @@ Konqueror       | no               | no          | jsonp-polling
 
 
  * **&dagger;**: IE 8+ supports [XDomainRequest][^9], which is
-    esentially a modified AJAX/XHR that can do requests across
+    essentially a modified AJAX/XHR that can do requests across
     domains. But unfortunately it doesn't send any cookies, which
-    makes it inaproppriate for deployments when the load balancer uses
+    makes it inappropriate for deployments when the load balancer uses
     JSESSIONID cookie to do sticky sessions.
 
  * **&Dagger;**: Firefox 4.0 and Opera 11.00 and shipped with disabled
@@ -304,8 +304,8 @@ server for that. To run it (by default it will be listening on port 8081):
     make test_server
 
 At this point you're ready to run a SockJS-client server that will
-server your freshly compiled JavaScript and various static http and
-javscript files (by default it will run on port 8080).
+serve your freshly compiled JavaScript and various static http and
+javascript files (by default it will run on port 8080).
 
     cd sockjs-client
     make test
@@ -321,7 +321,7 @@ If you look at your browser console you will see warnings like that:
 
 This is due to a fact that SockJS-node test server is using compiled
 javascript from CDN, rather than your freshly compiled version. To fix
-that you must amend `sockjs_url` that is used by SockJS-node test
+that you must amend `sockjs_url` which is used by SockJS-node test
 server. Edit the [`config.js`](https://github.com/sockjs/sockjs-node/blob/master/examples/test_server/config.js) file:
 
     vim sockjs-node/examples/test_server/config.js
@@ -335,7 +335,7 @@ to a freshly compiled sockjs, for example:
     sockjs_url: 'http://localhost:8080/lib/sockjs.js',
 
 
-Also, if you want to run tests agains SockJS server not running on
+Also, if you want to run tests against a SockJS server not running on
 `localhost:8081` you may want to edit the
 [`tests/config.js`](https://github.com/sockjs/sockjs-client/blob/master/tests/config.js)
 file.
@@ -367,7 +367,7 @@ There are various browser quirks which we don't intend to address:
  * From SockJS point of view there is nothing special about
    SSL/HTTPS. Connecting between unencrypted and encrypted sites
    should work just fine.
- * Although SockJS does best to support both prefix and cookie based
+ * Although SockJS does its best to support both prefix and cookie based
    sticky sessions, the latter may not work well cross-domain with
    browsers that don't accept third-party cookies by default (Safari).
    In order to get around this make sure you're connecting to sockjs
@@ -376,11 +376,11 @@ There are various browser quirks which we don't intend to address:
    'www.a.com' or 'a.com'.
  * Trying to connect from secure "https://" to insecure "http://" is
    not good idea. The other way around should be fine.
- * Long polling is known to cause problems on Heroku, but
+ * Long polling is known to cause problems on Heroku, but a
    [workaround for SockJS is available](https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187).
  * Don't use "javascript:" links on a page that uses SockJS. For
-   some reason clickling on this type of link breaks XDR/XHR requests
+   some reason clicking on this type of link breaks XDR/XHR requests
    on IE (see [#90](https://github.com/sockjs/sockjs-client/issues/90)).
  * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
-   you're a serious SockJS user consider using SSL
+   you're a serious SockJS user then consider using SSL
    ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
