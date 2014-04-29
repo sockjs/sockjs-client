@@ -10,18 +10,18 @@ newIframe = (path = '/iframe.html') ->
     hook.iobj = u.createIframe(path + '?a=' + Math.random() + '#' + hook.id, err)
     return hook
 
-newSockJS = (path, protocol) ->
+newSockJS = (path, transport) ->
     url = if /^http/.test(path) then path else client_opts.url + path
     options = jQuery.extend({}, client_opts.sockjs_opts)
-    if protocol
-        options.protocols_whitelist = [protocol]
+    if transport
+        options.transports_whitelist = [transport]
     return new SockJS(url, null, options)
 
-echo_factory_factory = (protocol, messages) ->
+echo_factory_factory = (transport, messages) ->
     return ->
         expect(2 + messages.length)
         a = messages.slice(0)
-        r = newSockJS('/echo', protocol)
+        r = newSockJS('/echo', transport)
         r.onopen = (e) ->
             #u.log('onopen ' + e)
             ok(true)
@@ -49,22 +49,22 @@ echo_factory_factory = (protocol, messages) ->
                 ok(true)
             start()
 
-factor_echo_basic = (protocol) ->
+factor_echo_basic = (transport) ->
     messages = [ 'data' ]
-    return echo_factory_factory(protocol, messages)
+    return echo_factory_factory(transport, messages)
 
-factor_echo_rich = (protocol) ->
+factor_echo_rich = (transport) ->
     messages = [ [1,2,3,'data'], null, false, "data", 1, 12.0, {a:1, b:2} ]
-    return echo_factory_factory(protocol, messages)
+    return echo_factory_factory(transport, messages)
 
-factor_echo_from_child = (protocol) ->
+factor_echo_from_child = (transport) ->
   return ->
     timeout = undefined
     hookReady = false
     sockJSReady = false
     expect 4
     hook = newIframe("sockjs-in-parent.html")
-    r = newSockJS("/echo", protocol)
+    r = newSockJS("/echo", transport)
     code = "hook.r.send('a'); hook.onsend();"
     hook.open = ->
       hook.iobj.loaded()
@@ -98,7 +98,7 @@ factor_echo_from_child = (protocol) ->
     r.onclose = ->
       start()
 
-factor_echo_unicode = (protocol) ->
+factor_echo_unicode = (transport) ->
     messages = [
         "Τη γλώσσα μου έδωσαν ελληνική το σπίτι φτωχικό στις αμμουδιές του ",
         "ღმერთსი შემვედრე, ნუთუ კვლა დამხსნას სოფლისა შრომასა, ცეცხლს, წყალს",
@@ -135,9 +135,9 @@ factor_echo_unicode = (protocol) ->
 9 сентября 2007 года Спирс исполнила «Gimme More» на церемонии вручения наград MTV Video Music Awards. Выступление оказалось неудачным; Спирс выглядела непрофессионально — не всегда попадала в фонограмму и в танце отставала от группы хореографической поддержки.[6]
 Несмотря на это, в начале октября 2007 года сингл «Gimme More» достиг 3-го места в чарте Billboard Hot 100, став таким образом одним из самых успешных синглов Спирс.[7]""",
     ]
-    return echo_factory_factory(protocol, messages)
+    return echo_factory_factory(transport, messages)
 
-factor_echo_special_chars = (protocol) ->
+factor_echo_special_chars = (transport) ->
     messages = [
         " ",
         "\u0000",
@@ -169,10 +169,10 @@ factor_echo_special_chars = (protocol) ->
         "message\ufffd",
         "\ufffdmessage",
     ]
-    return echo_factory_factory(protocol, messages)
+    return echo_factory_factory(transport, messages)
 
 
-factor_echo_large_message = (protocol) ->
+factor_echo_large_message = (transport) ->
     # Should be larger than 128k - the limit for a single request in
     # some streaming transports.
     messages = [
@@ -183,13 +183,13 @@ factor_echo_large_message = (protocol) ->
         Array(Math.pow(2,13)).join('x'),
         Array(Math.pow(2,13)).join('x'),
     ]
-    return echo_factory_factory(protocol, messages)
+    return echo_factory_factory(transport, messages)
 
 
-batch_factory_factory = (protocol, messages) ->
+batch_factory_factory = (transport, messages) ->
     return ->
         expect(3 + messages.length)
-        r = newSockJS('/echo', protocol)
+        r = newSockJS('/echo', transport)
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -208,7 +208,7 @@ batch_factory_factory = (protocol, messages) ->
                 ok(true)
             start()
 
-factor_batch_large = (protocol) ->
+factor_batch_large = (transport) ->
     messages = [
         Array(Math.pow(2,1)).join('x'),
         Array(Math.pow(2,2)).join('x'),
@@ -217,13 +217,13 @@ factor_batch_large = (protocol) ->
         Array(Math.pow(2,13)).join('x'),
         Array(Math.pow(2,13)).join('x'),
     ]
-    return batch_factory_factory(protocol, messages)
+    return batch_factory_factory(transport, messages)
 
 
-batch_factory_factory_amp = (protocol, messages) ->
+batch_factory_factory_amp = (transport, messages) ->
     return ->
         expect(3 + messages.length)
-        r = newSockJS('/amplify', protocol)
+        r = newSockJS('/amplify', transport)
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -242,7 +242,7 @@ batch_factory_factory_amp = (protocol, messages) ->
                 ok(true)
             start()
 
-factor_batch_large_amp = (protocol) ->
+factor_batch_large_amp = (transport) ->
     messages = [
         1,
         2,
@@ -252,7 +252,7 @@ factor_batch_large_amp = (protocol) ->
         15,
         15,
     ]
-    return batch_factory_factory_amp(protocol, messages)
+    return batch_factory_factory_amp(transport, messages)
 
 
 
@@ -268,21 +268,21 @@ generate_killer_string = (escapable) ->
             return ''
     return s.join('')
 
-factor_echo_utf_encoding_simple = (protocol) ->
+factor_echo_utf_encoding_simple = (transport) ->
     message = for i in [0..256]
                   String.fromCharCode(i)
-    return echo_factory_factory(protocol, [message.join('')])
+    return echo_factory_factory(transport, [message.join('')])
 
-factor_echo_utf_encoding = (protocol) ->
+factor_echo_utf_encoding = (transport) ->
         message = generate_killer_string(escapable)
-        return echo_factory_factory(protocol, [message])
+        return echo_factory_factory(transport, [message])
 
 
 
-factor_user_close = (protocol) ->
+factor_user_close = (transport) ->
     return ->
         expect(5)
-        r = newSockJS('/echo', protocol)
+        r = newSockJS('/echo', transport)
         ok(r)
         counter = 0
         r.onopen = (e) ->
@@ -300,10 +300,10 @@ factor_user_close = (protocol) ->
             ok(counter is 2)
             start()
 
-factor_server_close = (protocol) ->
+factor_server_close = (transport) ->
     return ->
         expect(5)
-        r = newSockJS('/close', protocol)
+        r = newSockJS('/close', transport)
         ok(r)
         r.onopen = (e) ->
             ok(true)
@@ -322,29 +322,29 @@ arrIndexOf = (arr, obj) ->
             return i
      return -1
 
-test_protocol_messages = (protocol) ->
-    QUnit.module(protocol)
-    if not SockJS[protocol] or not SockJS[protocol].enabled()
+test_transport_messages = (transport) ->
+    QUnit.module(transport)
+    if not SockJS[transport] or not SockJS[transport].enabled()
         test "[unsupported by client]", ->
-                ok(true, 'Unsupported protocol (by client): "' + protocol + '"')
+                ok(true, 'Unsupported transport (by client): "' + transport + '"')
     else if client_opts.disabled_transports and
-          arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
+          arrIndexOf(client_opts.disabled_transports, transport) isnt -1
         test "[disabled by config]", ->
-                ok(true, 'Disabled by config: "' + protocol + '"')
+                ok(true, 'Disabled by config: "' + transport + '"')
     else
-        asyncTest("echo1", factor_echo_basic(protocol))
-        asyncTest("echo2", factor_echo_rich(protocol))
-        asyncTest("echo from child", factor_echo_from_child(protocol))
-        asyncTest("unicode", factor_echo_unicode(protocol))
+        asyncTest("echo1", factor_echo_basic(transport))
+        asyncTest("echo2", factor_echo_rich(transport))
+        asyncTest("echo from child", factor_echo_from_child(transport))
+        asyncTest("unicode", factor_echo_unicode(transport))
         asyncTest("utf encoding 0x00-0xFF",
-            factor_echo_utf_encoding_simple(protocol))
+            factor_echo_utf_encoding_simple(transport))
         asyncTest("utf encoding killer message",
-            factor_echo_utf_encoding(protocol))
-        asyncTest("special_chars", factor_echo_special_chars(protocol))
+            factor_echo_utf_encoding(transport))
+        asyncTest("special_chars", factor_echo_special_chars(transport))
         asyncTest("large message (ping-pong)",
-            factor_echo_large_message(protocol))
-        asyncTest("large message (batch)", factor_batch_large(protocol))
-        asyncTest("large download", factor_batch_large_amp(protocol))
+            factor_echo_large_message(transport))
+        asyncTest("large message (batch)", factor_batch_large(transport))
+        asyncTest("large download", factor_batch_large_amp(transport))
 
-        asyncTest("user close", factor_user_close(protocol))
-        asyncTest("server close", factor_server_close(protocol))
+        asyncTest("user close", factor_user_close(transport))
+        asyncTest("server close", factor_server_close(transport))

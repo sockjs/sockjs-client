@@ -1,4 +1,4 @@
-protocols = ['websocket',
+transports = ['websocket',
         'xdr-streaming',
         'xhr-streaming',
         'iframe-eventsource',
@@ -8,5 +8,5 @@ protocols = ['websocket',
         'iframe-xhr-polling',
         'jsonp-polling']
 
-for protocol in protocols
-    test_protocol_messages(protocol)
+for transport in transports
+    test_protocol_messages(transport)
