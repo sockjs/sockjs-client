@@ -22,8 +22,7 @@ Work in progress:
   * [SockJS-go](https://github.com/igm/sockjs-go/)
 
 
-SockJS-client
-=============
+# SockJS-client [![Build Status][travis-image]][travis-url]
 
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
@@ -388,3 +387,6 @@ There are various browser quirks which we don't intend to address:
  * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
    you're a serious SockJS user then consider using SSL
    ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
+
+[travis-url]: https://travis-ci.org/sockjs/sockjs-client
+[travis-image]: http://img.shields.io/travis/sockjs/sockjs-client.svg

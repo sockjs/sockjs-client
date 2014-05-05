@@ -14,5 +14,8 @@
         "optimist"      : "0.3.5",
         "node-static"   : "0.5.9"
     },
+    "scripts": {
+        "test": ""
+    },
     "private": true
 }
