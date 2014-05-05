@@ -388,5 +388,5 @@ There are various browser quirks which we don't intend to address:
    you're a serious SockJS user then consider using SSL
    ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
 
-[travis-url]: https://travis-ci.org/sockjs/sockjs-client
-[travis-image]: http://img.shields.io/travis/sockjs/sockjs-client.svg
+[travis-url]: https://travis-ci.org/sockjs/sockjs-client?branch=master
+[travis-image]: http://img.shields.io/travis/sockjs/sockjs-client/master.svg
