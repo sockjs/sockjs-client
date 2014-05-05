@@ -55,6 +55,46 @@ factor_echo_rich = (protocol) ->
     messages = [ [1,2,3,'data'], null, false, "data", 1, 12.0, {a:1, b:2} ]
     return echo_factory_factory(protocol, messages)
 
+factor_echo_from_child = (protocol) ->
+  return ->
+    timeout = undefined
+    hookReady = false
+    sockJSReady = false
+    expect 4
+    hook = newIframe("sockjs-in-parent.html")
+    r = newSockJS("/echo", protocol)
+    code = "hook.r.send('a'); hook.onsend();"
+    hook.open = ->
+      hook.iobj.loaded()
+      ok true, "iframe open"
+      hookReady = true
+      hook.r = r
+      sockJSReady and hook.callback(code)
+
+    r.onopen = (e) ->
+      hook.iobj.loaded()
+      ok true, "sockjs open"
+      sockJSReady = true
+      hookReady and hook.callback(code)
+
+    r.onmessage = (e) ->
+      clearTimeout timeout
+      equal e.data, "a"
+      ok true, "onmessage"
+      hook.iobj.cleanup()
+      hook.del()
+      r.close()
+
+    hook.onsend = (e) ->
+      timeout = setTimeout(->
+        ok false
+        r.close()
+        return
+      , 300)
+      return
+
+    r.onclose = ->
+      start()
 
 factor_echo_unicode = (protocol) ->
     messages = [
@@ -292,6 +332,7 @@ test_protocol_messages = (protocol) ->
     else
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
+        asyncTest("echo from child", factor_echo_from_child(protocol))
         asyncTest("unicode", factor_echo_unicode(protocol))
         asyncTest("utf encoding 0x00-0xFF",
             factor_echo_utf_encoding_simple(protocol))
