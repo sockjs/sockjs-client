@@ -19,6 +19,7 @@ sockjs.pretty.js: lib/*js version
 	$(COFFEE) bin/render.coffee --set-version "$(VER)" --minify --pretty lib/all.js > $@
 
 tests/html/lib/sockjs.js: sockjs.js
+	mkdir -p tests/html/lib
 	cp $< $@
 
 tests/html/lib/%.js: tests/html/src/%.coffee
