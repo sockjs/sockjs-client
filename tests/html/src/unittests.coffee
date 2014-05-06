@@ -1,4 +1,4 @@
-module('Utils')
+QUnit.module('Utils')
 
 u = SockJS.getUtils()
 

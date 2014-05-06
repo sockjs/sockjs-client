@@ -1,12 +1,14 @@
-protocols = ['websocket',
-        'xdr-streaming',
-        'xhr-streaming',
-        'iframe-eventsource',
-        'iframe-htmlfile',
-        'xdr-polling',
-        'xhr-polling',
-        'iframe-xhr-polling',
-        'jsonp-polling']
+u = SockJS.getUtils()
+
+newIframe = (path = '/iframe.html') ->
+    # Requires to put:
+    #     document.domain = document.domain
+    # in HEAD, for IE7
+    hook = u.createHook()
+    err = ->
+        u.log('iframe error. bad.')
+    hook.iobj = u.createIframe(path + '?a=' + Math.random() + '#' + hook.id, err)
+    return hook
 
 newSockJS = (path, protocol) ->
     url = if /^http/.test(path) then path else client_opts.url + path
@@ -21,18 +23,18 @@ echo_factory_factory = (protocol, messages) ->
         a = messages.slice(0)
         r = newSockJS('/echo', protocol)
         r.onopen = (e) ->
-            #log('onopen ' + e)
+            #u.log('onopen ' + e)
             ok(true)
             r.send(a[0])
         r.onmessage = (e) ->
-            #log('onmessage ' + e);
+            #u.log('onmessage ' + e);
             x = ''+a[0]
             if e.data != x
                 for i in [0...e.data.length]
                     if e.data.charCodeAt(i) != x.charCodeAt(i)
                         xx1 = ('0000' + x.charCodeAt(i).toString(16)).slice(-4)
                         xx2 = ('0000' + e.data.charCodeAt(i).toString(16)).slice(-4)
-                        log('source: \\u' + xx1 + ' differs from: \\u' + xx2)
+                        u.log('source: \\u' + xx1 + ' differs from: \\u' + xx2)
                         break
             equal(e.data, '' + a[0])
             a.shift()
@@ -195,7 +197,7 @@ batch_factory_factory = (protocol, messages) ->
             for msg in messages
                 r.send(msg)
         r.onmessage = (e) ->
-            equals(e.data, messages[counter])
+            equal(e.data, messages[counter])
             counter += 1
             if counter is messages.length
                 r.close()
@@ -229,7 +231,7 @@ batch_factory_factory_amp = (protocol, messages) ->
             for msg in messages
                 r.send(''+msg)
         r.onmessage = (e) ->
-            equals(e.data.length, Math.pow(2, messages[counter]), e.data)
+            equal(e.data.length, Math.pow(2, messages[counter]), e.data)
             counter += 1
             if counter is messages.length
                 r.close()
@@ -293,8 +295,8 @@ factor_user_close = (protocol) ->
             counter += 1
         r.onclose = (e) ->
             counter += 1
-            log('user_close ' + e.code + ' ' + e.reason)
-            equals(e.wasClean, true)
+            u.log('user_close ' + e.code + ' ' + e.reason)
+            equal(e.wasClean, true)
             ok(counter is 2)
             start()
 
@@ -308,9 +310,9 @@ factor_server_close = (protocol) ->
         r.onmessage = (e) ->
             ok(false)
         r.onclose = (e) ->
-            equals(e.code, 3000)
-            equals(e.reason, "Go away!")
-            equals(e.wasClean, true)
+            equal(e.code, 3000)
+            equal(e.reason, "Go away!")
+            equal(e.wasClean, true)
             start()
 
 # IE doesn't do array.indexOf...
@@ -321,14 +323,14 @@ arrIndexOf = (arr, obj) ->
      return -1
 
 test_protocol_messages = (protocol) ->
-    module(protocol)
+    QUnit.module(protocol)
     if not SockJS[protocol] or not SockJS[protocol].enabled()
         test "[unsupported by client]", ->
-                log('Unsupported protocol (by client): "' + protocol + '"')
+                ok(true, 'Unsupported protocol (by client): "' + protocol + '"')
     else if client_opts.disabled_transports and
           arrIndexOf(client_opts.disabled_transports, protocol) isnt -1
         test "[disabled by config]", ->
-                log('Disabled by config: "' + protocol + '"')
+                ok(true, 'Disabled by config: "' + protocol + '"')
     else
         asyncTest("echo1", factor_echo_basic(protocol))
         asyncTest("echo2", factor_echo_rich(protocol))
@@ -346,7 +348,3 @@ test_protocol_messages = (protocol) ->
 
         asyncTest("user close", factor_user_close(protocol))
         asyncTest("server close", factor_server_close(protocol))
-
-
-for protocol in protocols
-    test_protocol_messages(protocol)

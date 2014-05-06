@@ -1,10 +1,12 @@
-module('End to End')
+u = SockJS.getUtils()
+
+QUnit.module('End to End')
 
 factory_body_check = (protocol) ->
     if not SockJS[protocol] or not SockJS[protocol].enabled(client_opts.sockjs_opts)
         n = " " + protocol + " [unsupported by client]"
         test n, ->
-            log('Unsupported protocol (by client): "' + protocol + '"')
+            u.log('Unsupported protocol (by client): "' + protocol + '"')
     else
         asyncTest protocol, ->
             expect(5)
@@ -41,7 +43,7 @@ factory_body_check = (protocol) ->
                 hook.del()
                 start()
 
-# module('sockjs in head')
+# QUnit.module('sockjs in head')
 # body_protocols = ['iframe-eventsource',
 #             'iframe-htmlfile',
 #             'iframe-xhr-polling',
@@ -50,7 +52,7 @@ factory_body_check = (protocol) ->
 #     factory_body_check(protocol)
 
 
-module('connection errors')
+QUnit.module('connection errors')
 asyncTest "invalid url 404", ->
     expect(4)
     r = newSockJS('/invalid_url', 'jsonp-polling')
@@ -61,13 +63,13 @@ asyncTest "invalid url 404", ->
         ok(false)
     r.onclose = (e) ->
         if u.isXHRCorsCapable() < 4
-            equals(e.code, 1002)
-            equals(e.reason, 'Can\'t connect to server')
+            equal(e.code, 1002)
+            equal(e.reason, 'Can\'t connect to server')
         else
             # IE 7 doesn't look at /info, unfortunately
-            equals(e.code, 2000)
-            equals(e.reason, 'All transports failed')
-        equals(e.wasClean, false)
+            equal(e.code, 2000)
+            equal(e.reason, 'All transports failed')
+        equal(e.wasClean, false)
         start()
 
 asyncTest "invalid url port", ->
@@ -79,13 +81,13 @@ asyncTest "invalid url port", ->
         ok(false)
     r.onclose = (e) ->
         if u.isXHRCorsCapable() < 4
-            equals(e.code, 1002)
-            equals(e.reason, 'Can\'t connect to server')
+            equal(e.code, 1002)
+            equal(e.reason, 'Can\'t connect to server')
         else
             # IE 7 doesn't look at /info, unfortunately
-            equals(e.code, 2000)
-            equals(e.reason, 'All transports failed')
-        equals(e.wasClean, false)
+            equal(e.code, 2000)
+            equal(e.reason, 'All transports failed')
+        equal(e.wasClean, false)
         start()
 
 asyncTest "disabled websocket test", ->
@@ -96,9 +98,9 @@ asyncTest "disabled websocket test", ->
         r.onmessage = (e) ->
             ok(false)
         r.onclose = (e) ->
-            equals(e.code, 2000)
-            equals(e.reason, "All transports failed")
-            equals(e.wasClean, false)
+            equal(e.code, 2000)
+            equal(e.reason, "All transports failed")
+            equal(e.wasClean, false)
             start()
 
 asyncTest "close on close", ->
@@ -109,9 +111,9 @@ asyncTest "close on close", ->
     r.onmessage = (e) ->
         ok(false)
     r.onclose = (e) ->
-        equals(e.code, 3000)
-        equals(e.reason, "Go away!")
-        equals(e.wasClean, true)
+        equal(e.code, 3000)
+        equal(e.reason, "Go away!")
+        equal(e.wasClean, true)
         r.onclose = ->
             ok(false)
         r.close()

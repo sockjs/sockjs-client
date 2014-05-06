@@ -1,0 +1,23 @@
+ui: qunit
+scripts:
+  - "http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+  - "config.js"
+  - "domain.js"
+  - "lib/sockjs.js"
+  - "lib/tests.js"
+server: ./tests/sockjs_server.js
+browsers:
+  - name: chrome
+    version: latest
+  - name: firefox
+    version: latest
+  - name: opera
+    version: 11..latest
+  - name: safari
+    version: 5..latest
+  - name: ie
+    version: 6..latest
+  - name: iphone
+    version: 4..latest
+  - name: android
+    version: 4.0..latest

@@ -1,22 +1,39 @@
 {
-	"name"        : "sockjs-client",
-	"author"      : "Marek Majkowski",
-    "version"     : "0.0.0-unreleasable",
-    "license"     : "MIT",
-    "description" : "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
-    "keywords"    : ["websockets", "websocket"],
-    "homepage"    : "http://sockjs.org",
-
-    "repository": {"type" : "git",
-                   "url" : "https://github.com/sockjs/sockjs-client.git"},
-    "devDependencies": {
-        "uglify-js"     : "1.2.5",
-        "coffee-script" : "1.2.x",
-        "optimist"      : "0.3.5",
-        "node-static"   : "0.5.9"
-    },
-    "scripts": {
-        "test": ""
-    },
-    "private": true
+  "name": "sockjs-client",
+  "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
+  "version": "0.3.4",
+  "author": "Marek Majkowski",
+  "bugs": {
+    "url": "https://github.com/sockjs/sockjs-client/issues"
+  },
+  "contributors": [
+    {
+      "name": "Bryce Kahle",
+      "email": "bkahle@gmail.com"
+    }
+  ],
+  "devDependencies": {
+    "coffee-script": "1.2.x",
+    "node-static": "0.5.9",
+    "optimist": "0.3.5",
+    "sockjs": "^0.3.8",
+    "uglify-js": "1.2.5",
+    "mocha": "^1.18.2",
+    "zuul": "^1.6.4"
+  },
+  "homepage": "http://sockjs.org",
+  "keywords": [
+    "websockets",
+    "websocket"
+  ],
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sockjs/sockjs-client.git"
+  },
+  "scripts": {
+    "test": "./node_modules/zuul/bin/zuul -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/protocols.js",
+    "test_local": "./node_modules/zuul/bin/zuul --local 9090 --ui qunit -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/protocols.js"
+  }
 }

@@ -1,3 +1,10 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
+before_script:
+- "make build_tests"
+- "node tests/sockjs_server.js"
+env:
+  global:
+  - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
+  - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
