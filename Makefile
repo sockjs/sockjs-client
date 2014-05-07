@@ -29,7 +29,7 @@ tests/html/lib/%.js: tests/html/src/%.coffee
 
 build_tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
 		tests/html/lib/unittests.js tests/html/lib/domtests.js \
-		tests/html/lib/endtoendtests.js tests/html/lib/protocols.js
+		tests/html/lib/endtoendtests.js tests/html/lib/transports.js
 
 test: tests
 tests: build_tests
