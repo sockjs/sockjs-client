@@ -45,17 +45,17 @@
 
     var sjs;
     function onopen() {
-            log('connected ' + sjs.protocol);
+            log('connected ' + sjs.transport);
             send();
-    };
+    }
     function onclose(e) {
             log('disconnected ' + e);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
-    };
+    }
     function send() {
         sjs.send(JSON.stringify({t: (new Date()).getTime()}));
-    };
+    }
     var i = 0;
     function xonmessage(e) {
             var msg = JSON.parse(e.data);
@@ -63,18 +63,18 @@
             $('#latency').text(''+i +'  ' + td + ' ms');
             i += 1;
             send();
-    };
+    }
 
     $('#connect').click(function() {
         $('#connect').attr('disabled', true);
         $('#disconnect').each(function(_,e){e.disabled='';});
-        var protocol = $('#transport').val() || undefined;
-        log('[connecting] ' + protocol);
-        options = jQuery.extend({}, client_opts.sockjs_opts)
-        options.protocols_whitelist = typeof protocol === 'string' ?
-                                                        [protocol] : protocol;
+        var transport = $('#transport').val() || undefined;
+        log('[connecting] ' + transport);
+        options = jQuery.extend({}, client_opts.sockjs_opts);
+        options.transports_whitelist = typeof transport === 'string' ?
+                                                        [transport] : transport;
         sjs = new SockJS(client_opts.url + '/echo', null, options);
-        sjs.onopen = onopen
+        sjs.onopen = onopen;
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;
     });

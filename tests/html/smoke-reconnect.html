@@ -46,34 +46,34 @@
     var started = false;
     var sjs;
     var i = 0;
-    var protocol;
+    var transport;
     var t0;
     function onopen() {
        var td = (new Date()).getTime() - t0;
        i += 1;
        $('#out').text(''+i +'  ' + td + ' ms');
        sjs.close();
-    };
+    }
     function onclose(e) {
         if (started && e.code === 1000) {
             t0 = (new Date()).getTime();
-            options = jQuery.extend({}, client_opts.sockjs_opts)
-            options.protocols_whitelist = typeof protocol === 'string' ?
-                                                            [protocol] : protocol;
+            options = jQuery.extend({}, client_opts.sockjs_opts);
+            options.transports_whitelist = typeof transport === 'string' ?
+                                                            [transport] : transport;
             sjs = new SockJS(client_opts.url + '/echo', null, options);
-            sjs.onopen = onopen
+            sjs.onopen = onopen;
             sjs.onclose = onclose;
         } else {
             log('[stopped] ' + e);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
         }
-    };
+    }
 
     $('#connect').click(function() {
         started = true;
-        protocol = $('#transport').val() || undefined;
-        log('[starting] ' + protocol);
+        transport = $('#transport').val() || undefined;
+        log('[starting] ' + transport);
         onclose({code:1000});
         $('#connect').attr('disabled', true);
         $('#disconnect').each(function(_,e){e.disabled='';});

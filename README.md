@@ -30,7 +30,7 @@ which creates a low latency, full duplex, cross-domain communication
 channel between the browser and the web server.
 
 Under the hood SockJS tries to use native WebSockets first. If that
-fails it can use a variety of browser-specific transport protocols and
+fails it can use a variety of browser-specific transports and
 presents them through WebSocket-like abstractions.
 
 SockJS is intended to work for all modern browsers and in environments
@@ -51,7 +51,7 @@ Philosophy:
  * All the transports must support cross domain connections out of the
    box. It's possible and recommended to host SockJS server on
    different server than your main web site.
- * There is a support for at least one streaming protocol for every
+ * There is a support for at least one streaming transport for every
    major browser.
  * Streaming transports should work cross-domain and
    should support cookies (for cookie-based sticky sessions).
@@ -127,11 +127,11 @@ Where `options` is a hash which can contain:
     Development mode. Currently setting it disables caching of the
     'iframe.html'.
 
- *  **protocols_whitelist (list of strings)**
+ *  **transports_whitelist (list of strings)**
 
-    Sometimes it is useful to disable some fallback protocols. This
-    option allows you to supply a list protocols that may be used by
-    SockJS. By default all available protocols will be used, which is
+    Sometimes it is useful to disable some fallback transports. This
+    option allows you to supply a list transports that may be used by
+    SockJS. By default all available transports will be used, which is
     equivalent to supplying: "['websocket', 'xdr-streaming', 'xhr-streaming',
     'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling',
     'iframe-xhr-polling', 'jsonp-polling']"
@@ -188,7 +188,7 @@ Sometimes you may want to serve your html from "file://" address - for
 development or if you're using PhoneGap or similar technologies. But
 due to the Cross Origin Policy files served from "file://" have no
 Origin, and that means some of SockJS transports won't work. For this
-reason the SockJS protocol table is different than usually, major
+reason the SockJS transport table is different than usually, major
 differences are:
 
 _Browser_       | _Websockets_  | _Streaming_        | _Polling_
@@ -248,7 +248,7 @@ Deployment
 
 In order to utilize best performance you should use the SockJS-client
 releases hosted on SockJS CDN. You should use a version of sockjs-client
-that supports the protocol used by your server. For example:
+that supports the transport used by your server. For example:
 
 ```html
 <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>

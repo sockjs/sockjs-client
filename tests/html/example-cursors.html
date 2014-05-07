@@ -57,13 +57,13 @@
       }
 
     var sjs = null;
-    var protocol;
+    var transport;
     $('#connect').click(function() {
         $('#connect').attr('disabled', true);
         $('#disconnect').each(function(_,e){e.disabled='';});
-        var protocol = $('#transport').val() || undefined;
-        if (protocol === 'not-websocket') {
-            protocol = ['xdr-streaming',
+        var transport = $('#transport').val() || undefined;
+        if (transport === 'not-websocket') {
+            transport = ['xdr-streaming',
                       'xhr-streaming',
                       'iframe-eventsource',
                       'iframe-htmlfile',
@@ -72,12 +72,12 @@
                       'iframe-xhr-polling',
                       'jsonp-polling'];
         }
-        log('[connecting] ' + protocol);
-        options = jQuery.extend({}, client_opts.sockjs_opts)
-        options.protocols_whitelist = typeof protocol === 'string' ?
-                                                        [protocol] : protocol;
+        log('[connecting] ' + transport);
+        options = jQuery.extend({}, client_opts.sockjs_opts);
+        options.transports_whitelist = typeof transport === 'string' ?
+                                                        [transport] : transport;
         sjs = new SockJS(client_opts.url + '/broadcast', null, options);
-        sjs.onopen = onopen
+        sjs.onopen = onopen;
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;
     });
@@ -88,7 +88,7 @@
     });
 
     var onopen = function() {
-        log('connected ' + sjs.protocol);
+        log('connected ' + sjs.transport);
     };
     var onclose = function(e) {
         log('disconnected ' + e);

@@ -126,7 +126,7 @@ test 'quote', ->
     all_chars = c.join('')
     ok(JSON.parse(u.quote(all_chars)) is all_chars, "Quote/unquote all 64K chars.")
 
-test 'detectProtocols', ->
+test 'detectTransports', ->
     chrome_probed = {
         'websocket': true
         'xdr-streaming': false
@@ -139,9 +139,9 @@ test 'detectProtocols', ->
         'jsonp-polling': true
     }
     # Chrome
-    deepEqual(u.detectProtocols(chrome_probed, null, {}),
+    deepEqual(u.detectTransports(chrome_probed, null, {}),
             ['websocket', 'xhr-streaming', 'xhr-polling'])
-    deepEqual(u.detectProtocols(chrome_probed, null, {websocket:false}),
+    deepEqual(u.detectTransports(chrome_probed, null, {websocket:false}),
             ['xhr-streaming', 'xhr-polling'])
     # Opera
     opera_probed = {
@@ -155,7 +155,7 @@ test 'detectProtocols', ->
         'iframe-xhr-polling': true
         'jsonp-polling': true
     }
-    deepEqual(u.detectProtocols(opera_probed, null, {}),
+    deepEqual(u.detectTransports(opera_probed, null, {}),
             ['iframe-eventsource', 'iframe-xhr-polling'])
     # IE 6, IE 7
     ie6_probed = {
@@ -169,7 +169,7 @@ test 'detectProtocols', ->
         'iframe-xhr-polling': false
         'jsonp-polling': true
     }
-    deepEqual(u.detectProtocols(ie6_probed, null, {}),
+    deepEqual(u.detectTransports(ie6_probed, null, {}),
             ['jsonp-polling'])
     # IE 8, IE 9
     ie8_probed = {
@@ -183,9 +183,9 @@ test 'detectProtocols', ->
         'iframe-xhr-polling': true
         'jsonp-polling': true
     }
-    deepEqual(u.detectProtocols(ie8_probed, null, {}),
+    deepEqual(u.detectTransports(ie8_probed, null, {}),
             ['xdr-streaming', 'xdr-polling'])
-    deepEqual(u.detectProtocols(ie8_probed, null, {cookie_needed:true}),
+    deepEqual(u.detectTransports(ie8_probed, null, {cookie_needed:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
     # IE 10
     ie10_probed = {
@@ -199,32 +199,32 @@ test 'detectProtocols', ->
         'iframe-xhr-polling': true
         'jsonp-polling': true
     }
-    deepEqual(u.detectProtocols(ie10_probed, null, {}),
+    deepEqual(u.detectTransports(ie10_probed, null, {}),
             ['websocket', 'xhr-streaming', 'xhr-polling'])
-    deepEqual(u.detectProtocols(ie10_probed, null, {cookie_needed:true}),
+    deepEqual(u.detectTransports(ie10_probed, null, {cookie_needed:true}),
             ['websocket', 'xhr-streaming', 'xhr-polling'])
 
-    # Check if protocols are picked up correctly when served from file://
-    deepEqual(u.detectProtocols(chrome_probed, null, {null_origin:true}),
+    # Check if transports are picked up correctly when served from file://
+    deepEqual(u.detectTransports(chrome_probed, null, {null_origin:true}),
             ['websocket', 'iframe-eventsource', 'iframe-xhr-polling'])
-    deepEqual(u.detectProtocols(chrome_probed, null,
+    deepEqual(u.detectTransports(chrome_probed, null,
                                 {websocket:false, null_origin:true}),
             ['iframe-eventsource', 'iframe-xhr-polling'])
 
-    deepEqual(u.detectProtocols(opera_probed, null, {null_origin:true}),
+    deepEqual(u.detectTransports(opera_probed, null, {null_origin:true}),
             ['iframe-eventsource', 'iframe-xhr-polling'])
 
-    deepEqual(u.detectProtocols(ie6_probed, null, {null_origin:true}),
+    deepEqual(u.detectTransports(ie6_probed, null, {null_origin:true}),
             ['jsonp-polling'])
-    deepEqual(u.detectProtocols(ie8_probed, null, {null_origin:true}),
+    deepEqual(u.detectTransports(ie8_probed, null, {null_origin:true}),
             ['iframe-htmlfile', 'iframe-xhr-polling'])
-    deepEqual(u.detectProtocols(ie10_probed, null, {null_origin:true}),
+    deepEqual(u.detectTransports(ie10_probed, null, {null_origin:true}),
             ['websocket', 'iframe-htmlfile', 'iframe-xhr-polling'])
 
 test "EventEmitter", ->
     expect(4)
     r = new SockJS('//1.2.3.4/wrongurl', null,
-                   {protocols_whitelist: []})
+                   {transports_whitelist: []})
     r.addEventListener 'message', -> ok(true)
     r.onmessage = -> ok(false)
     bluff = -> ok(false)
@@ -248,9 +248,9 @@ test "EventEmitter", ->
 
 test "NoConstructor", ->
     expect(2)
-    r = new SockJS('//1.2.3.4/blah', null, {protocols_whitelist: []})
+    r = new SockJS('//1.2.3.4/blah', null, {transports_whitelist: []})
     ok(r instanceof SockJS)
     r.close()
-    r = SockJS('//1.2.3.4/blah', null, {protocols_whitelist: []})
+    r = SockJS('//1.2.3.4/blah', null, {transports_whitelist: []})
     ok(r instanceof SockJS)
     r.close()
