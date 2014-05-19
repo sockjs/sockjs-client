@@ -6,7 +6,6 @@ test 'random_string', ->
     notEqual(u.random_string(8), u.random_string(8))
     for i in [1,2,3,128]
         equal(u.random_string(i).length, i)
-    equal(u.random_string(4, 1), 'aaaa')
 
 test 'random_number_string', ->
     for i in [0..10]
