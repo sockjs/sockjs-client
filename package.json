@@ -12,13 +12,19 @@
       "email": "bkahle@gmail.com"
     }
   ],
+  "dependencies": {
+    "json3": "^3.3.1"
+  },
   "devDependencies": {
+    "browserify": "^4.1.5",
     "coffee-script": "1.2.x",
+    "gulp": "^3.6.2",
+    "mocha": "^1.18.2",
     "node-static": "0.5.9",
     "optimist": "0.3.5",
     "sockjs": "^0.3.8",
     "uglify-js": "1.2.5",
-    "mocha": "^1.18.2",
+    "vinyl-source-stream": "^0.1.1",
     "zuul": "^1.6.4"
   },
   "homepage": "http://sockjs.org",
