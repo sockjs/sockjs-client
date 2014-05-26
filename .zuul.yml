@@ -1,10 +1,9 @@
 ui: qunit
 scripts:
-  - "http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+  - "static/jquery.min.js"
   - "config.js"
   - "domain.js"
   - "lib/sockjs.js"
-  - "lib/tests.js"
 server: ./tests/sockjs_server.js
 browsers:
   - name: chrome

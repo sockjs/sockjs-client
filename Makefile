@@ -1,62 +1,6 @@
 .PHONY: all build tests test serve clean
 
-COFFEE:=./node_modules/.bin/coffee
-
-all: sockjs.js
-
-build: sockjs.js sockjs.min.js
-
-sockjs.js: lib/*js version
-	@$(COFFEE) -v > /dev/null
-	$(COFFEE) bin/render.coffee --set-version "$(VER)" lib/all.js > $@
-
-sockjs.min.js: lib/*js version
-	@$(COFFEE) -v > /dev/null
-	$(COFFEE) bin/render.coffee --set-version "$(VER)" --minify lib/all.js > $@
-
-sockjs.pretty.js: lib/*js version
-	@$(COFFEE) -v > /dev/null
-	$(COFFEE) bin/render.coffee --set-version "$(VER)" --minify --pretty lib/all.js > $@
-
-tests/html/lib/sockjs.js: sockjs.js
-	mkdir -p tests/html/lib
-	cp $< $@
-
-tests/html/lib/%.js: tests/html/src/%.coffee
-	@$(COFFEE) -v > /dev/null
-	mkdir -p tests/html/lib
-	$(COFFEE) -o tests/html/lib/ -c --bare $<
-
-build_tests: tests/html/lib/sockjs.js tests/html/lib/tests.js \
-		tests/html/lib/unittests.js tests/html/lib/domtests.js \
-		tests/html/lib/endtoendtests.js tests/html/lib/protocols.js
-
-test: tests
-tests: build_tests
-	node tests/server.js
-
-
-serve:
-	@if [ -e .pidfile.pid ]; then			\
-		kill `cat .pidfile.pid`;		\
-		rm .pidfile.pid;			\
-	fi
-
-	@while [ 1 ]; do					\
-		make build_tests;				\
-		echo " [*] Running http server";		\
-		make test &					\
-		SRVPID=$$!;					\
-		echo $$SRVPID > .pidfile.pid;			\
-		echo " [*] Server pid: $$SRVPID";		\
-		inotifywait -r -q -e modify . ../sockjs-node;	\
-		kill `cat .pidfile.pid`;			\
-		rm -f .pidfile.pid;				\
-		sleep 0.1;					\
-	done
-
-clean:
-	rm -f sockjs*.js tests/html/lib/*.js
+test: node tests/server.js
 
 # To release:
 #   0) 'make prepare-release'

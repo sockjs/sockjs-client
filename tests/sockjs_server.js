@@ -1,3 +1,4 @@
+'use strict';
 var http = require('http');
 var node_static = require('node-static');
 var sockjs_app = require('./sockjs_app');
@@ -29,7 +30,7 @@ server.addListener('request', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     res.writeHead(200);
-    res.write(Array(2049).join('a') + '\n');
+    res.write(new Array(2049).join('a') + '\n');
     setTimeout(function() {
         res.end('b\n');
     }, 250);
@@ -37,7 +38,7 @@ server.addListener('request', function(req, res) {
     res.setHeader('content-type', 'text/plain');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.writeHead(200);
-    res.end(Array(2049).join('a') + '\nb\n');
+    res.end(new Array(2049).join('a') + '\nb\n');
   } else if (req.url === '/config.js') {
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
