@@ -11,11 +11,11 @@ factory_body_check = function(protocol) {
   var n;
   if (!SockJS[protocol] || !SockJS[protocol].enabled(client_opts.sockjs_opts)) {
     n = " " + protocol + " [unsupported by client]";
-    return test(n, function() {
-      return u.log('Unsupported protocol (by client): "' + protocol + '"');
+    test(n, function() {
+      u.log('Unsupported protocol (by client): "' + protocol + '"');
     });
   } else {
-    return asyncTest(protocol, function() {
+    asyncTest(protocol, function() {
       var code, hook, url;
       expect(5);
       url = client_opts.url + '/echo';
@@ -24,21 +24,21 @@ factory_body_check = function(protocol) {
       hook.open = function() {
         hook.iobj.loaded();
         ok(true, 'open');
-        return hook.callback(code);
+        hook.callback(code);
       };
       hook.test_body = function(is_body, type) {
-        return equal(is_body, false, 'body not yet loaded ' + type);
+        equal(is_body, false, 'body not yet loaded ' + type);
       };
       hook.onopen = function() {
         ok(true, 'onopen');
         return 'a';
       };
-      return hook.onmessage = function(m) {
+      hook.onmessage = function(m) {
         equal(m, 'a');
         ok(true, 'onmessage');
         hook.iobj.cleanup();
         hook.del();
-        return start();
+        start();
       };
     });
   }
@@ -52,12 +52,12 @@ asyncTest("invalid url 404", function() {
   r = testutils.newSockJS('/invalid_url', 'jsonp-polling');
   ok(r);
   r.onopen = function(e) {
-    return ok(false);
+    ok(false);
   };
   r.onmessage = function(e) {
-    return ok(false);
+    ok(false);
   };
-  return r.onclose = function(e) {
+  r.onclose = function(e) {
     if (u.isXHRCorsCapable() < 4) {
       equal(e.code, 1002);
       equal(e.reason, 'Can\'t connect to server');
@@ -66,7 +66,7 @@ asyncTest("invalid url 404", function() {
       equal(e.reason, 'All transports failed');
     }
     equal(e.wasClean, false);
-    return start();
+    start();
   };
 });
 
@@ -77,9 +77,9 @@ asyncTest("invalid url port", function() {
   r = testutils.newSockJS(dl.protocol + '//' + dl.hostname + ':1079', 'jsonp-polling');
   ok(r);
   r.onopen = function(e) {
-    return ok(false);
+    ok(false);
   };
-  return r.onclose = function(e) {
+  r.onclose = function(e) {
     if (u.isXHRCorsCapable() < 4) {
       equal(e.code, 1002);
       equal(e.reason, 'Can\'t connect to server');
@@ -88,7 +88,7 @@ asyncTest("invalid url port", function() {
       equal(e.reason, 'All transports failed');
     }
     equal(e.wasClean, false);
-    return start();
+    start();
   };
 });
 
@@ -97,16 +97,16 @@ asyncTest("disabled websocket test", function() {
   expect(3);
   r = testutils.newSockJS('/disabled_websocket_echo', 'websocket');
   r.onopen = function(e) {
-    return ok(false);
+    ok(false);
   };
   r.onmessage = function(e) {
-    return ok(false);
+    ok(false);
   };
-  return r.onclose = function(e) {
+  r.onclose = function(e) {
     equal(e.code, 2000);
     equal(e.reason, "All transports failed");
     equal(e.wasClean, false);
-    return start();
+    start();
   };
 });
 
@@ -115,21 +115,21 @@ asyncTest("close on close", function() {
   expect(4);
   r = testutils.newSockJS('/close', 'jsonp-polling');
   r.onopen = function(e) {
-    return ok(true);
+    ok(true);
   };
   r.onmessage = function(e) {
-    return ok(false);
+    ok(false);
   };
-  return r.onclose = function(e) {
+  r.onclose = function(e) {
     equal(e.code, 3000);
     equal(e.reason, "Go away!");
     equal(e.wasClean, true);
     r.onclose = function() {
-      return ok(false);
+      ok(false);
     };
     r.close();
-    return u.delay(10, function() {
-      return start();
+    u.delay(10, function() {
+      start();
     });
   };
 });
@@ -142,12 +142,12 @@ asyncTest("EventEmitter exception handling", function() {
   window.onerror = function(e) {
     ok(/onopen error/.test('' + e));
     window.onerror = prev_onerror;
-    return r.close();
+    r.close();
   };
   r.onopen = function(e) {
     throw "onopen error";
   };
-  return r.onclose = function() {
-    return start();
+  r.onclose = function() {
+    start();
   };
 });

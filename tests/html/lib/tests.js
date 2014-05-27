@@ -13,7 +13,7 @@ echo_factory_factory = function(protocol, messages) {
     r = testutils.newSockJS('/echo', protocol);
     r.onopen = function(e) {
       ok(true);
-      return r.send(a[0]);
+      r.send(a[0]);
     };
     r.onmessage = function(e) {
       var i, x, xx1, xx2, _ref;
@@ -31,18 +31,18 @@ echo_factory_factory = function(protocol, messages) {
       equal(e.data, '' + a[0]);
       a.shift();
       if (typeof a[0] === 'undefined') {
-        return r.close();
+        r.close();
       } else {
-        return r.send(a[0]);
+        r.send(a[0]);
       }
     };
-    return r.onclose = function(e) {
+    r.onclose = function(e) {
       if (a.length) {
         ok(false, "Transport closed prematurely. " + e);
       } else {
         ok(true);
       }
-      return start();
+      start();
     };
   };
 };
@@ -79,13 +79,13 @@ factor_echo_from_child = function(protocol) {
       ok(true, "iframe open");
       hookReady = true;
       hook.r = r;
-      return sockJSReady && hook.callback(code);
+      sockJSReady && hook.callback(code);
     };
     r.onopen = function(e) {
       hook.iobj.loaded();
       ok(true, "sockjs open");
       sockJSReady = true;
-      return hookReady && hook.callback(code);
+      hookReady && hook.callback(code);
     };
     r.onmessage = function(e) {
       clearTimeout(timeout);
@@ -93,7 +93,7 @@ factor_echo_from_child = function(protocol) {
       ok(true, "onmessage");
       hook.iobj.cleanup();
       hook.del();
-      return r.close();
+      r.close();
     };
     hook.onsend = function(e) {
       timeout = setTimeout(function() {
@@ -101,8 +101,8 @@ factor_echo_from_child = function(protocol) {
         r.close();
       }, 300);
     };
-    return r.onclose = function() {
-      return start();
+    r.onclose = function() {
+      start();
     };
   };
 };
@@ -133,27 +133,25 @@ batch_factory_factory = function(protocol, messages) {
     ok(r);
     counter = 0;
     r.onopen = function(e) {
-      var msg, _i, _len, _results;
+      var msg, _i, _len;
       ok(true);
-      _results = [];
       for (_i = 0, _len = messages.length; _i < _len; _i++) {
         msg = messages[_i];
-        _results.push(r.send(msg));
+        r.send(msg);
       }
-      return _results;
     };
     r.onmessage = function(e) {
       equal(e.data, messages[counter]);
       counter += 1;
-      if (counter === messages.length) return r.close();
+      if (counter === messages.length) r.close();
     };
-    return r.onclose = function(e) {
+    r.onclose = function(e) {
       if (counter !== messages.length) {
         ok(false, "Transport closed prematurely. " + e);
       } else {
         ok(true);
       }
-      return start();
+      start();
     };
   };
 };
@@ -172,27 +170,25 @@ batch_factory_factory_amp = function(protocol, messages) {
     ok(r);
     counter = 0;
     r.onopen = function(e) {
-      var msg, _i, _len, _results;
+      var msg, _i, _len;
       ok(true);
-      _results = [];
       for (_i = 0, _len = messages.length; _i < _len; _i++) {
         msg = messages[_i];
-        _results.push(r.send('' + msg));
+        r.send('' + msg);
       }
-      return _results;
     };
     r.onmessage = function(e) {
       equal(e.data.length, Math.pow(2, messages[counter]), e.data);
       counter += 1;
-      if (counter === messages.length) return r.close();
+      if (counter === messages.length) r.close();
     };
-    return r.onclose = function(e) {
+    r.onclose = function(e) {
       if (counter !== messages.length) {
         ok(false, "Transport closed prematurely. " + e);
       } else {
         ok(true);
       }
-      return start();
+      start();
     };
   };
 };
@@ -254,18 +250,18 @@ factor_user_close = function(protocol) {
       counter += 1;
       ok(counter === 1);
       r.close(3000, "User message");
-      return ok(counter === 1);
+      ok(counter === 1);
     };
     r.onmessage = function() {
       ok(false);
-      return counter += 1;
+      counter += 1;
     };
-    return r.onclose = function(e) {
+    r.onclose = function(e) {
       counter += 1;
       u.log('user_close ' + e.code + ' ' + e.reason);
       equal(e.wasClean, true);
       ok(counter === 2);
-      return start();
+      start();
     };
   };
 };
@@ -277,16 +273,16 @@ factor_server_close = function(protocol) {
     r = testutils.newSockJS('/close', protocol);
     ok(r);
     r.onopen = function(e) {
-      return ok(true);
+      ok(true);
     };
     r.onmessage = function(e) {
-      return ok(false);
+      ok(false);
     };
-    return r.onclose = function(e) {
+    r.onclose = function(e) {
       equal(e.code, 3000);
       equal(e.reason, "Go away!");
       equal(e.wasClean, true);
-      return start();
+      start();
     };
   };
 };
@@ -302,12 +298,12 @@ arrIndexOf = function(arr, obj) {
 test_protocol_messages = function(protocol) {
   QUnit.module(protocol);
   if (!SockJS[protocol] || !SockJS[protocol].enabled()) {
-    return test("[unsupported by client]", function() {
-      return ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
+    test("[unsupported by client]", function() {
+      ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
     });
   } else if (client_opts.disabled_transports && arrIndexOf(client_opts.disabled_transports, protocol) !== -1) {
-    return test("[disabled by config]", function() {
-      return ok(true, 'Disabled by config: "' + protocol + '"');
+    test("[disabled by config]", function() {
+      ok(true, 'Disabled by config: "' + protocol + '"');
     });
   } else {
     asyncTest("echo1", factor_echo_basic(protocol));
@@ -321,7 +317,7 @@ test_protocol_messages = function(protocol) {
     asyncTest("large message (batch)", factor_batch_large(protocol));
     asyncTest("large download", factor_batch_large_amp(protocol));
     asyncTest("user close", factor_user_close(protocol));
-    return asyncTest("server close", factor_server_close(protocol));
+    asyncTest("server close", factor_server_close(protocol));
   }
 };
 

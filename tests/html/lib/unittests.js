@@ -6,34 +6,29 @@ QUnit.module('Utils');
 var u = require('../../../lib/utils');
 
 test('random_string', function() {
-  var i, _i, _len, _ref, _results;
+  var i, _i, _len, _ref;
   notEqual(u.random_string(8), u.random_string(8));
   _ref = [1, 2, 3, 128];
-  _results = [];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     i = _ref[_i];
-    _results.push(equal(u.random_string(i).length, i));
+    equal(u.random_string(i).length, i);
   }
-  return _results;
 });
 
 test('random_number_string', function() {
-  var i, _results;
-  _results = [];
-  for (i = 0; i <= 10; i++) {
+  for (var i = 0; i <= 10; i++) {
     equal(u.random_number_string(10).length, 1);
     equal(u.random_number_string(100).length, 2);
     equal(u.random_number_string(1000).length, 3);
     equal(u.random_number_string(10000).length, 4);
-    _results.push(equal(u.random_number_string(100000).length, 5));
+    equal(u.random_number_string(100000).length, 5);
   }
-  return _results;
 });
 
 test('getOrigin', function() {
   equal(u.getOrigin('http://a.b/'), 'http://a.b');
   equal(u.getOrigin('http://a.b/c'), 'http://a.b');
-  return equal(u.getOrigin('http://a.b:123/c'), 'http://a.b:123');
+  equal(u.getOrigin('http://a.b:123/c'), 'http://a.b:123');
 });
 
 test('isSameOriginUrl', function() {
@@ -52,11 +47,11 @@ test('isSameOriginUrl', function() {
   ok(u.isSameOriginUrl('http://127.0.0.1:99', 'http://127.0.0.1:9999') === false);
   ok(u.isSameOriginUrl('http://127.0.0.1:999', 'http://127.0.0.1:9999') === false);
   ok(u.isSameOriginUrl('http://127.0.0.1:9999', 'http://127.0.0.1:9999'));
-  return ok(u.isSameOriginUrl('http://127.0.0.1:99999', 'http://127.0.0.1:9999') === false);
+  ok(u.isSameOriginUrl('http://127.0.0.1:99999', 'http://127.0.0.1:9999') === false);
 });
 
 test("getParentDomain", function() {
-  var domains, k, _results;
+  var domains, k;
   domains = {
     'localhost': 'localhost',
     '127.0.0.1': '127.0.0.1',
@@ -66,11 +61,9 @@ test("getParentDomain", function() {
     'a.org': 'org',
     'a2.a3.org': 'a3.org'
   };
-  _results = [];
   for (k in domains) {
-    _results.push(equal(u.getParentDomain(k), domains[k]));
+    equal(u.getParentDomain(k), domains[k]);
   }
-  return _results;
 });
 
 test('objectExtend', function() {
@@ -97,7 +90,7 @@ test('objectExtend', function() {
     a: 1,
     b: 2
   });
-  return deepEqual(b, {
+  deepEqual(b, {
     b: 2
   });
 });
@@ -110,7 +103,7 @@ test('bind', function() {
   };
   deepEqual(fun(), window);
   bound_fun = u.bind(fun, o);
-  return deepEqual(bound_fun(), o);
+  deepEqual(bound_fun(), o);
 });
 
 test('amendUrl', function() {
@@ -141,7 +134,7 @@ test('amendUrl', function() {
   equal(u.amendUrl('http://a:80/abc'), 'http://a/abc');
   equal(u.amendUrl('https://a:443/abc'), 'https://a/abc');
   equal(u.amendUrl('https://a:80/abc'), 'https://a:80/abc');
-  return equal(u.amendUrl('http://a:443/abc'), 'http://a:443/abc');
+  equal(u.amendUrl('http://a:443/abc'), 'http://a:443/abc');
 });
 
 test('arrIndexOf', function() {
@@ -150,7 +143,7 @@ test('arrIndexOf', function() {
   equal(u.arrIndexOf(a, 1), 0);
   equal(u.arrIndexOf(a, 5), 4);
   equal(u.arrIndexOf(a, null), -1);
-  return equal(u.arrIndexOf(a, 6), -1);
+  equal(u.arrIndexOf(a, 6), -1);
 });
 
 test('arrSkip', function() {
@@ -160,7 +153,7 @@ test('arrSkip', function() {
   deepEqual(u.arrSkip(a, 2), [1, 3, 4, 5]);
   deepEqual(u.arrSkip(a, 11), [1, 2, 3, 4, 5]);
   deepEqual(u.arrSkip(a, 'a'), [1, 2, 3, 4, 5]);
-  return deepEqual(u.arrSkip(a, '1'), [1, 2, 3, 4, 5]);
+  deepEqual(u.arrSkip(a, '1'), [1, 2, 3, 4, 5]);
 });
 
 test('quote', function() {
@@ -181,7 +174,7 @@ test('quote', function() {
     return _results;
   })();
   all_chars = c.join('');
-  return ok(JSON.parse(u.quote(all_chars)) === all_chars, "Quote/unquote all 64K chars.");
+  ok(JSON.parse(u.quote(all_chars)) === all_chars, "Quote/unquote all 64K chars.");
 });
 
 test('detectProtocols', function() {
@@ -271,7 +264,7 @@ test('detectProtocols', function() {
   deepEqual(u.detectProtocols(ie8_probed, null, {
     null_origin: true
   }), ['iframe-htmlfile', 'iframe-xhr-polling']);
-  return deepEqual(u.detectProtocols(ie10_probed, null, {
+  deepEqual(u.detectProtocols(ie10_probed, null, {
     null_origin: true
   }), ['websocket', 'iframe-htmlfile', 'iframe-xhr-polling']);
 });
@@ -356,7 +349,7 @@ test("EventEmitter", function() {
   r.dispatchEvent({
     type: 'close'
   });
-  return r.close();
+  r.close();
 });
 
 test("NoConstructor", function() {
@@ -371,5 +364,5 @@ test("NoConstructor", function() {
     protocols_whitelist: []
   });
   ok(r instanceof SockJS);
-  return r.close();
+  r.close();
 });
