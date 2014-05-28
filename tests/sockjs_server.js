@@ -2,6 +2,7 @@
 var http = require('http');
 var node_static = require('node-static');
 var sockjs_app = require('./sockjs_app');
+var url = require('url');
 
 var port = process.env.ZUUL_PORT || 8081;
 var client_opts = {
@@ -40,6 +41,8 @@ server.addListener('request', function(req, res) {
     res.writeHead(200);
     res.end(new Array(2049).join('a') + '\nb\n');
   } else if (req.url === '/config.js') {
+    var parsedOrigin = url.parse(req.headers.referer || 'http://localhost');
+    client_opts.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':' + port;
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
     res.end('var client_opts = ' +
