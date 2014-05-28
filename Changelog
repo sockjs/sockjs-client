@@ -1,10 +1,20 @@
 1.0.0 (unreleased)
 =====
 
- * Upgrade to JSON3 from JSON2
+ * Upgrade to JSON3 from JSON2 - #123
  * Package library with browserify supporting the UMD pattern
  * Move tests to JavaScript
  * Add Gulp.js build script
+ * Fix getOrigin for file:/// urls and standard ports - #173
+ * Add onerror event handlers to Websockets - #169
+ * Increase RTO lower bound to prevent spurious timeouts on IE8/9 - #161
+ * Use window.crypto for random values when available - #128
+ * Fix handling of listeners added and removed mid-dispatch - #127
+ * Fix XHR Streaming for IE8 - #83
+ * Remove explicit AMD name - #107
+ * Check for an empty response from /info request - #143
+ * Add Content-Type to XHR requests to fix issue over HTTPS on Galaxy S4 - #164
+ * Fix iframe fallback when message is sent from a popup in IE7/8 - #166
 
 
 0.3.4
