@@ -7,6 +7,8 @@ var gulp = require('gulp')
   , source = require('vinyl-source-stream')
   , path = require('path')
   , jsRoot = path.join(__dirname, 'lib')
+  , pkg = require('./package.json')
+  , libName = 'sockjs-' + pkg.version
   ;
 
 function debugBuild() {
@@ -43,14 +45,14 @@ gulp.task('browserify', debugBuild);
 gulp.task('browserify:min', function () {
   return browserify('./lib/sockjs.js')
     .plugin('minifyify', {
-      map: 'sockjs.min.js.map'
+      map: libName + '.min.js.map'
     , compressPath: jsRoot
-    , output: './build/sockjs.min.js.map'
+    , output: './build/'+ libName + '.min.js.map'
     })
     .bundle({
       standalone: 'SockJS'
     })
-    .pipe(source('sockjs.min.js'))
+    .pipe(source(libName + '.min.js'))
     .pipe(gulp.dest('./build/'))
     ;
 });
