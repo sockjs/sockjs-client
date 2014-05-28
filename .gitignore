@@ -6,3 +6,4 @@ sockjs.min.js
 .testling_env.sh
 testling.js
 build/
+tests/html/lib/alltestsbundle.js

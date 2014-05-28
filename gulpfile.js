@@ -27,7 +27,13 @@ gulp.task('default', function() {
 });
 
 gulp.task('test', function() {
-  return debugBuild()
+  debugBuild()
+    .pipe(gulp.dest('./tests/html/lib/'))
+    ;
+
+  browserify('./tests/html/lib/alltests.js')
+    .bundle()
+    .pipe(source('alltestsbundle.js'))
     .pipe(gulp.dest('./tests/html/lib/'))
     ;
 });

@@ -26,9 +26,11 @@ test('random_number_string', function() {
 });
 
 test('getOrigin', function() {
-  equal(u.getOrigin('http://a.b/'), 'http://a.b');
-  equal(u.getOrigin('http://a.b/c'), 'http://a.b');
+  equal(u.getOrigin('http://a.b/'), 'http://a.b:80');
+  equal(u.getOrigin('http://a.b/c'), 'http://a.b:80');
   equal(u.getOrigin('http://a.b:123/c'), 'http://a.b:123');
+  equal(u.getOrigin('https://a.b/'), 'https://a.b:443');
+  equal(u.getOrigin('file://a.b/'), null);
 });
 
 test('isSameOriginUrl', function() {
@@ -41,8 +43,8 @@ test('isSameOriginUrl', function() {
   ok(u.isSameOriginUrl('http://localhost:8080', 'http://localhost:8080/'));
   ok(u.isSameOriginUrl('http://127.0.0.1:80/', 'http://127.0.0.1:80/a'));
   ok(u.isSameOriginUrl('http://127.0.0.1:80', 'http://127.0.0.1:80/a'));
-  ok(u.isSameOriginUrl('http://localhost', 'http://localhost:80') === false);
-  ok(u.isSameOriginUrl('http://127.0.0.1/', 'http://127.0.0.1:80/a') === false);
+  ok(u.isSameOriginUrl('http://localhost', 'http://localhost:80'));
+  ok(u.isSameOriginUrl('http://127.0.0.1/', 'http://127.0.0.1:80/a'));
   ok(u.isSameOriginUrl('http://127.0.0.1:9', 'http://127.0.0.1:9999') === false);
   ok(u.isSameOriginUrl('http://127.0.0.1:99', 'http://127.0.0.1:9999') === false);
   ok(u.isSameOriginUrl('http://127.0.0.1:999', 'http://127.0.0.1:9999') === false);
@@ -101,7 +103,7 @@ test('bind', function() {
   fun = function() {
     return this;
   };
-  deepEqual(fun(), window);
+  deepEqual(fun(), undefined);
   bound_fun = u.bind(fun, o);
   deepEqual(bound_fun(), o);
 });
