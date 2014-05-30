@@ -60,7 +60,7 @@ server.addListener('upgrade', function(req, res){
 });
 
 sockjs_app.install({
-  sockjs_url: 'http://localhost:'+port+'/lib/sockjs.js',
+  sockjs_url: '/lib/sockjs.js',
   websocket: true
 }, server);
 
