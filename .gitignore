@@ -7,3 +7,4 @@ sockjs.min.js
 testling.js
 build/
 tests/html/lib/alltestsbundle.js
+tests/html/lib/sockjs.js.map

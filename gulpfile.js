@@ -8,6 +8,7 @@ var gulp = require('gulp')
   , path = require('path')
   , jsRoot = path.join(__dirname, 'lib')
   , pkg = require('./package.json')
+  , fs = require('fs')
   , libName = 'sockjs-' + pkg.version
   ;
 
@@ -38,6 +39,8 @@ gulp.task('test', function() {
     .pipe(source('alltestsbundle.js'))
     .pipe(gulp.dest('./tests/html/lib/'))
     ;
+
+  fs.createReadStream(path.join(__dirname, 'build/sockjs.js.map')).pipe(fs.createWriteStream('./tests/html/lib/sockjs.js.map'));
 });
 
 gulp.task('browserify', debugBuild);
