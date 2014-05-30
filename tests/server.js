@@ -2,6 +2,7 @@
 
 var http = require('http');
 var node_static = require('node-static');
+var url = require('url');
 
 var config = require('./config').config;
 
@@ -30,6 +31,8 @@ server.addListener('request', function(req, res) {
         res.writeHead(200);
         res.end(new Array(2049).join('a') + '\nb\n');
     } else if (req.url === '/config.js') {
+        var parsedOrigin = url.parse(req.headers.referer || 'http://localhost');
+        config.client_opts.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':8081';
         res.setHeader('content-type', 'application/javascript');
         res.writeHead(200);
         res.end('var client_opts = ' +
