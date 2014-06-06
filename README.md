@@ -127,6 +127,10 @@ Where `options` is a hash which can contain:
     Development mode. Currently setting it disables caching of the
     'iframe.html'.
 
+ *  **server (string)**
+
+    String to append to url for actual data connection. Defaults to random 4 digit number.
+
  *  **protocols_whitelist (list of strings)**
 
     Sometimes it is useful to disable some fallback protocols. This

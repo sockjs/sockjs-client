@@ -1,6 +1,7 @@
 1.0.0 (unreleased)
 =====
 
+ * Relax requirements when using same origin XHR - #80
  * Upgrade to JSON3 from JSON2 - #123
  * Package library with browserify supporting the UMD pattern
  * Move tests to JavaScript
