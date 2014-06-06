@@ -1,0 +1,15 @@
+{
+  "undef": true
+, "unused": "vars"
+, "newcap": true
+, "laxcomma": true
+, "laxbreak": true
+, "strict": true
+, "node": true
+, "browser": true
+, "predef": [
+    "ActiveXObject"
+  , "XDomainRequest"
+  , "EventSource"
+  ]
+}

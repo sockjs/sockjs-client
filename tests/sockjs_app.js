@@ -1,3 +1,4 @@
+'use strict';
 var sockjs = require('sockjs');
 
 exports.install = function(opts, server) {
@@ -67,7 +68,7 @@ exports.install = function(opts, server) {
       var n = Math.floor(Number(m));
       n = (n > 0 && n < 19) ? n : 1;
       console.log('    [ ] amp message: 2^' + n);
-      conn.write(Array(Math.pow(2, n)+1).join('x'));
+      conn.write(new Array(Math.pow(2, n)+1).join('x'));
     });
   });
 

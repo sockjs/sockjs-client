@@ -1,6 +1,8 @@
+'use strict';
 var http = require('http');
 var node_static = require('node-static');
 var sockjs_app = require('./sockjs_app');
+var url = require('url');
 
 var port = process.env.ZUUL_PORT || 8081;
 var client_opts = {
@@ -29,7 +31,7 @@ server.addListener('request', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     res.writeHead(200);
-    res.write(Array(2049).join('a') + '\n');
+    res.write(new Array(2049).join('a') + '\n');
     setTimeout(function() {
         res.end('b\n');
     }, 250);
@@ -37,8 +39,10 @@ server.addListener('request', function(req, res) {
     res.setHeader('content-type', 'text/plain');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.writeHead(200);
-    res.end(Array(2049).join('a') + '\nb\n');
+    res.end(new Array(2049).join('a') + '\nb\n');
   } else if (req.url === '/config.js') {
+    var parsedOrigin = url.parse(req.headers.referer || 'http://localhost');
+    client_opts.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':' + port;
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
     res.end('var client_opts = ' +
@@ -56,7 +60,7 @@ server.addListener('upgrade', function(req, res){
 });
 
 sockjs_app.install({
-  sockjs_url: 'http://localhost:'+port+'/lib/sockjs.js',
+  sockjs_url: '/lib/sockjs.js',
   websocket: true
 }, server);
 
