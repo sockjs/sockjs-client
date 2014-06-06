@@ -1,48 +1,10 @@
 'use strict';
-/* global expect, ok, QUnit, start, test, asyncTest, SockJS, equal, client_opts */
-var factory_body_check;
+/* global expect, ok, QUnit, start, asyncTest, equal */
 
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
 
 QUnit.module('End to End');
-
-factory_body_check = function(protocol) {
-  var n;
-  if (!SockJS[protocol] || !SockJS[protocol].enabled(client_opts.sockjs_opts)) {
-    n = " " + protocol + " [unsupported by client]";
-    test(n, function() {
-      u.log('Unsupported protocol (by client): "' + protocol + '"');
-    });
-  } else {
-    asyncTest(protocol, function() {
-      var code, hook, url;
-      expect(5);
-      url = client_opts.url + '/echo';
-      code = "hook.test_body(!!document.body, typeof document.body);\n\nvar sock = new SockJS('" + url + "', null,\n{protocols_whitelist:['" + protocol + "']});\nsock.onopen = function() {\n    var m = hook.onopen();\n    sock.send(m);\n};\nsock.onmessage = function(e) {\n    hook.onmessage(e.data);\n    sock.close();\n};";
-      hook = testutils.newIframe('sockjs-in-head.html');
-      hook.open = function() {
-        hook.iobj.loaded();
-        ok(true, 'open');
-        hook.callback(code);
-      };
-      hook.test_body = function(is_body, type) {
-        equal(is_body, false, 'body not yet loaded ' + type);
-      };
-      hook.onopen = function() {
-        ok(true, 'onopen');
-        return 'a';
-      };
-      hook.onmessage = function(m) {
-        equal(m, 'a');
-        ok(true, 'onmessage');
-        hook.iobj.cleanup();
-        hook.del();
-        start();
-      };
-    });
-  }
-};
 
 QUnit.module('connection errors');
 

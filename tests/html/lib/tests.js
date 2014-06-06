@@ -297,7 +297,7 @@ arrIndexOf = function(arr, obj) {
 
 test_protocol_messages = function(protocol) {
   QUnit.module(protocol);
-  if (!SockJS[protocol] || !SockJS[protocol].enabled()) {
+  if (!SockJS[protocol] || !SockJS[protocol].enabled(client_opts.url)) {
     test("[unsupported by client]", function() {
       ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
     });
