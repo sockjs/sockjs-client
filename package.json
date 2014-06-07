@@ -23,7 +23,7 @@
     "minifyify": "^3.0.6",
     "mocha": "^1.18.2",
     "mold-source-map": "^0.3.0",
-    "node-static": "0.5.9",
+    "node-static": "^0.5.9",
     "sockjs": "^0.3.8",
     "vinyl-source-stream": "^0.1.1",
     "zuul": "^1.6.4"
