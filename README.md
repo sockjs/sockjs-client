@@ -8,7 +8,7 @@ SockJS family:
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
   * [Spring Framework](http://projects.spring.io/spring-framework) Java server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
-  * [Xitrum](http://ngocdaothanh.github.io/xitrum/) Scala server
+  * [Xitrum](http://xitrum-framework.github.io/) Scala server
 
 Work in progress:
 
