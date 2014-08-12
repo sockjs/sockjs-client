@@ -1,74 +1,81 @@
 'use strict';
-/* global expect, ok, QUnit, start, test, asyncTest, SockJS, equal */
+/* global suite, test */
 var ajax_simple_factory, ajax_streaming_factory, ajax_wrong_port_factory, onunload_test_factory, test_wrong_url;
 
-QUnit.module('Dom');
+suite('DOM');
 
+var assert = require('assert');
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
 
-onunload_test_factory = function(code) {
-  return function() {
-    var hook;
-    expect(3);
-    hook = testutils.newIframe();
-    hook.open = function() {
-      ok(true, 'open hook called by an iframe');
-      return hook.callback(code);
+onunload_test_factory = function(code, done) {
+  var hook;
+  //expect(3);
+  hook = testutils.newIframe();
+  hook.open = function() {
+    assert.ok(true, 'open hook called by an iframe');
+    return hook.callback(code);
+  };
+  hook.load = function() {
+    var f;
+    assert.ok(true, 'onload hook called by an iframe');
+    f = function() {
+      return hook.iobj.cleanup();
     };
-    hook.load = function() {
-      var f;
-      ok(true, 'onload hook called by an iframe');
-      f = function() {
-        return hook.iobj.cleanup();
-      };
-      return setTimeout(f, 1);
-    };
-    hook.unload = function() {
-      ok(true, 'onunload hook called by an iframe');
-      hook.del();
-      start();
-    };
+    return setTimeout(f, 1);
+  };
+  hook.unload = function() {
+    assert.ok(true, 'onunload hook called by an iframe');
+    hook.del();
+    done();
   };
 };
 
 if (navigator.userAgent.indexOf('Konqueror') !== -1 || navigator.userAgent.indexOf('Opera') !== -1) {
   test("onunload [unsupported by client]", function() {
-    ok(true);
+    assert.ok(true);
   });
 } else {
-  asyncTest('onunload', onunload_test_factory("var u = SockJS.getUtils();\nu.attachEvent('load', function(){\n    hook.load();\n});\nvar w = 0;\nvar run = function(){\n    if(w === 0) {\n        w = 1;\n        hook.unload();\n    }\n};\nu.attachEvent('beforeunload', run);\nu.attachEvent('unload', run);"));
+  test('onunload', function (done) {
+    this.timeout(5000);
+    this.runnable().globals(['_sockjs_global']);
+    onunload_test_factory("var u = SockJS.getUtils();\nu.attachEvent('load', function(){\n    hook.load();\n});\nvar w = 0;\nvar run = function(){\n    if(w === 0) {\n        w = 1;\n        hook.unload();\n    }\n};\nu.attachEvent('beforeunload', run);\nu.attachEvent('unload', run);", done);
+  });
 }
 
 if (!require('../../../lib/trans-iframe').enabled()) {
   test("onmessage [unsupported by client]", function() {
-    ok(true);
+    assert.ok(true);
   });
 } else {
-  asyncTest('onmessage', function() {
+  test('onmessage', function(done) {
+    this.runnable().globals(['_sockjs_global']);
     var hook;
-    expect(3);
+    //expect(3);
     hook = testutils.newIframe();
     hook.open = function() {
-      ok(true, 'open hook called by an iframe');
+      assert.ok(true, 'open hook called by an iframe');
       hook.callback("var u = SockJS.getUtils();\nu.attachMessage(function(e) {\n    var b = e.data;\n    parent.postMessage(window_id + ' ' + 'e', '*');\n});\nparent.postMessage(window_id + ' ' + 's', '*');");
     };
     u.attachMessage(function(e) {
-      var data, origin, window_id, _ref;
-      _ref = e.data.split(' '), window_id = _ref[0], data = _ref[1];
+      var _ref = e.data.split(' ')
+        , window_id = _ref[0]
+        , data = _ref[1]
+        , origin
+        ;
       if (window_id === hook.id) {
         switch (data) {
           case 's':
             hook.iobj.loaded();
-            ok(true, 'start frame send');
+            assert.ok(true, 'start frame send');
             origin = u.getOrigin(u.amendUrl('/'));
             hook.iobj.post(hook.id + ' ' + 's', origin);
             break;
           case 'e':
-            ok(true, 'done hook called by an iframe');
+            assert.ok(true, 'done hook called by an iframe');
             hook.iobj.cleanup();
             hook.del();
-            start();
+            done();
             break;
         }
       }
@@ -77,50 +84,52 @@ if (!require('../../../lib/trans-iframe').enabled()) {
 }
 
 ajax_simple_factory = function(name, Obj) {
-  asyncTest(name + ' simple', function() {
+  test(name + ' simple', function(done) {
+    this.runnable().globals(['_sockjs_global']);
     var x;
-    expect(2);
+    //expect(2);
     x = new Obj('GET', '/simple.txt', null);
     x.onfinish = function(status, text) {
-      equal(text.length, 2051);
-      equal(text.slice(-2), 'b\n');
-      start();
+      assert.equal(text.length, 2051);
+      assert.equal(text.slice(-2), 'b\n');
+      done();
     };
   });
 };
 
 ajax_streaming_factory = function(name, Obj) {
-  asyncTest(name + ' streaming', function() {
+  test(name + ' streaming', function(done) {
+    this.runnable().globals(['_sockjs_global']);
     var x;
-    expect(4);
+    //expect(4);
     x = new Obj('GET', '/streaming.txt', null);
     x.onchunk = function(status, text) {
-      equal(status, 200);
-      ok(text.length <= 2049, 'Most likely you\'re behind a transparent Proxy that can\'t do streaming. QUnit tests won\'t work properly. Sorry!');
+      assert.equal(status, 200);
+      assert.ok(text.length <= 2049, 'Most likely you\'re behind a transparent Proxy that can\'t do streaming. QUnit tests won\'t work properly. Sorry!');
       delete x.onchunk;
     };
-    return x.onfinish = function(status, text) {
-      equal(status, 200);
-      equal(text.slice(-4), 'a\nb\n');
-      start();
+    x.onfinish = function(status, text) {
+      assert.equal(status, 200);
+      assert.equal(text.slice(-4), 'a\nb\n');
+      done();
     };
   });
 };
 
-test_wrong_url = function(name, Obj, url, statuses) {
+test_wrong_url = function(name, Obj, url, statuses, done) {
   var x;
   if (window.console && console.log) {
     console.log(' [*] Connecting to wrong url ' + url);
   }
-  expect(2);
+  //expect(2);
   x = new Obj('GET', url, null);
   x.onchunk = function() {
-    ok(false, "chunk shall not be received");
+    assert.ok(false, "chunk shall not be received");
   };
   x.onfinish = function(status, text) {
-    ok(u.arrIndexOf(statuses, status) !== -1);
-    equal(text, '');
-    start();
+    assert.ok(u.arrIndexOf(statuses, status) !== -1);
+    assert.equal(text, '');
+    done();
   };
 };
 
@@ -129,8 +138,9 @@ ajax_wrong_port_factory = function(name, Obj) {
   _ref = [25, 8999, 65300];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     port = _ref[_i];
-    asyncTest(name + ' wrong port ' + port, function() {
-      test_wrong_url(name, Obj, 'http://localhost:' + port + '/wrong_url_indeed.txt', [0]);
+    test(name + ' wrong port ' + port, function(done) {
+      this.runnable().globals(['_sockjs_global']);
+      test_wrong_url(name, Obj, 'http://localhost:' + port + '/wrong_url_indeed.txt', [0], done);
     });
   }
 };
@@ -150,12 +160,14 @@ ajax_wrong_port_factory('XHRLocalObject', XHRLocalObject);
 
 if (window.XDomainRequest) ajax_wrong_port_factory('XDRObject', XDRObject);
 
-asyncTest('XHRLocalObject wrong url', function() {
-  test_wrong_url('XHRLocalObject', XHRLocalObject, '/wrong_url_indeed.txt', [0, 404]);
+test('XHRLocalObject wrong url', function(done) {
+  this.runnable().globals(['_sockjs_global']);
+  test_wrong_url('XHRLocalObject', XHRLocalObject, '/wrong_url_indeed.txt', [0, 404], done);
 });
 
 if (window.XDomainRequest) {
-  asyncTest('XDRObject wrong url', function() {
-    test_wrong_url('XDRObject', XDRObject, '/wrong_url_indeed.txt', [0]);
+  test('XDRObject wrong url', function(done) {
+    this.runnable().globals(['_sockjs_global']);
+    test_wrong_url('XDRObject', XDRObject, '/wrong_url_indeed.txt', [0], done);
   });
 }

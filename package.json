@@ -13,20 +13,19 @@
     }
   ],
   "dependencies": {
-    "json3": "^3.3.1"
+    "json3": "^3.3.2"
   },
   "devDependencies": {
-    "browserify": "^4.1.5",
+    "browserify": "^4.2.3",
     "exorcist": "^0.1.6",
-    "gulp": "^3.6.2",
-    "gulp-util": "^2.2.14",
-    "minifyify": "^3.0.6",
-    "mocha": "^1.18.2",
+    "gulp": "^3.8.7",
+    "minifyify": "^3.0.12",
+    "mocha": "^1.21.4",
     "mold-source-map": "^0.3.0",
-    "node-static": "0.5.9",
-    "sockjs": "^0.3.8",
+    "node-static": "^0.5.9",
+    "sockjs": "^0.3.9",
     "vinyl-source-stream": "^0.1.1",
-    "zuul": "^1.6.4"
+    "zuul": "^1.10.1"
   },
   "homepage": "http://sockjs.org",
   "keywords": [
@@ -41,6 +40,6 @@
   },
   "scripts": {
     "test": "./node_modules/zuul/bin/zuul -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js",
-    "test_local": "./node_modules/zuul/bin/zuul --local 9090 --ui qunit -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js"
+    "test_local": "./node_modules/zuul/bin/zuul --local 9090 -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js"
   }
 }

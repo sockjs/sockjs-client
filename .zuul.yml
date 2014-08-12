@@ -1,4 +1,4 @@
-ui: qunit
+ui: mocha-qunit
 scripts:
   - "static/jquery.min.js"
   - "config.js"

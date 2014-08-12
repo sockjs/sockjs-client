@@ -1,18 +1,23 @@
 'use strict';
-/* global expect, ok, QUnit, start, test, asyncTest, SockJS, equal, client_opts */
+/* global suite, test, SockJS, client_opts */
 var arrIndexOf, batch_factory_factory, batch_factory_factory_amp, echo_factory_factory, escapable, factor_batch_large, factor_batch_large_amp, factor_echo_basic, factor_echo_from_child, factor_echo_large_message, factor_echo_rich, factor_echo_special_chars, factor_echo_unicode, factor_echo_utf_encoding, factor_echo_utf_encoding_simple, factor_server_close, factor_user_close, generate_killer_string, test_protocol_messages;
 
+var assert = require('assert');
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
 
+var TIMEOUT_MS = 10000;
+
 echo_factory_factory = function(protocol, messages) {
-  return function() {
+  return function(done) {
+    this.timeout(TIMEOUT_MS);
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var a, r;
-    expect(2 + messages.length);
+    //expect(2 + messages.length);
     a = messages.slice(0);
     r = testutils.newSockJS('/echo', protocol);
     r.onopen = function(e) {
-      ok(true);
+      assert.ok(true);
       r.send(a[0]);
     };
     r.onmessage = function(e) {
@@ -28,7 +33,7 @@ echo_factory_factory = function(protocol, messages) {
           }
         }
       }
-      equal(e.data, '' + a[0]);
+      assert.equal(e.data, '' + a[0]);
       a.shift();
       if (typeof a[0] === 'undefined') {
         r.close();
@@ -38,11 +43,11 @@ echo_factory_factory = function(protocol, messages) {
     };
     r.onclose = function(e) {
       if (a.length) {
-        ok(false, "Transport closed prematurely. " + e);
+        assert.ok(false, "Transport closed prematurely. " + e);
       } else {
-        ok(true);
+        assert.ok(true);
       }
-      start();
+      done();
     };
   };
 };
@@ -65,44 +70,46 @@ factor_echo_rich = function(protocol) {
 };
 
 factor_echo_from_child = function(protocol) {
-  return function() {
+  return function(done) {
+    this.timeout(TIMEOUT_MS);
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var code, hook, hookReady, r, sockJSReady, timeout;
     timeout = void 0;
     hookReady = false;
     sockJSReady = false;
-    expect(4);
+    //expect(4);
     hook = testutils.newIframe("sockjs-in-parent.html");
     r = testutils.newSockJS("/echo", protocol);
     code = "hook.r.send('a'); hook.onsend();";
     hook.open = function() {
       hook.iobj.loaded();
-      ok(true, "iframe open");
+      assert.ok(true, "iframe open");
       hookReady = true;
       hook.r = r;
       sockJSReady && hook.callback(code);
     };
     r.onopen = function(e) {
       hook.iobj.loaded();
-      ok(true, "sockjs open");
+      assert.ok(true, "sockjs open");
       sockJSReady = true;
       hookReady && hook.callback(code);
     };
     r.onmessage = function(e) {
       clearTimeout(timeout);
-      equal(e.data, "a");
-      ok(true, "onmessage");
+      assert.equal(e.data, "a");
+      assert.ok(true, "onmessage");
       hook.iobj.cleanup();
       hook.del();
       r.close();
     };
     hook.onsend = function(e) {
       timeout = setTimeout(function() {
-        ok(false);
+        assert.ok(false);
         r.close();
       }, 300);
     };
     r.onclose = function() {
-      start();
+      done();
     };
   };
 };
@@ -121,74 +128,78 @@ factor_echo_special_chars = function(protocol) {
 
 factor_echo_large_message = function(protocol) {
   var messages;
-  messages = [Array(Math.pow(2, 1)).join('x'), Array(Math.pow(2, 2)).join('x'), Array(Math.pow(2, 4)).join('x'), Array(Math.pow(2, 8)).join('x'), Array(Math.pow(2, 13)).join('x'), Array(Math.pow(2, 13)).join('x')];
+  messages = [new Array(Math.pow(2, 1)).join('x'), new Array(Math.pow(2, 2)).join('x'), new Array(Math.pow(2, 4)).join('x'), new Array(Math.pow(2, 8)).join('x'), new Array(Math.pow(2, 13)).join('x'), new Array(Math.pow(2, 13)).join('x')];
   return echo_factory_factory(protocol, messages);
 };
 
 batch_factory_factory = function(protocol, messages) {
-  return function() {
+  return function(done) {
+    this.timeout(TIMEOUT_MS);
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var counter, r;
-    expect(3 + messages.length);
+    //expect(3 + messages.length);
     r = testutils.newSockJS('/echo', protocol);
-    ok(r);
+    assert.ok(r);
     counter = 0;
     r.onopen = function(e) {
       var msg, _i, _len;
-      ok(true);
+      assert.ok(true);
       for (_i = 0, _len = messages.length; _i < _len; _i++) {
         msg = messages[_i];
         r.send(msg);
       }
     };
     r.onmessage = function(e) {
-      equal(e.data, messages[counter]);
+      assert.equal(e.data, messages[counter]);
       counter += 1;
       if (counter === messages.length) r.close();
     };
     r.onclose = function(e) {
       if (counter !== messages.length) {
-        ok(false, "Transport closed prematurely. " + e);
+        assert.ok(false, "Transport closed prematurely. " + e);
       } else {
-        ok(true);
+        assert.ok(true);
       }
-      start();
+      done();
     };
   };
 };
 
 factor_batch_large = function(protocol) {
   var messages;
-  messages = [Array(Math.pow(2, 1)).join('x'), Array(Math.pow(2, 2)).join('x'), Array(Math.pow(2, 4)).join('x'), Array(Math.pow(2, 8)).join('x'), Array(Math.pow(2, 13)).join('x'), Array(Math.pow(2, 13)).join('x')];
+  messages = [new Array(Math.pow(2, 1)).join('x'), new Array(Math.pow(2, 2)).join('x'), new Array(Math.pow(2, 4)).join('x'), new Array(Math.pow(2, 8)).join('x'), new Array(Math.pow(2, 13)).join('x'), new Array(Math.pow(2, 13)).join('x')];
   return batch_factory_factory(protocol, messages);
 };
 
 batch_factory_factory_amp = function(protocol, messages) {
-  return function() {
+  return function(done) {
+    this.timeout(TIMEOUT_MS);
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var counter, r;
-    expect(3 + messages.length);
+    //expect(3 + messages.length);
     r = testutils.newSockJS('/amplify', protocol);
-    ok(r);
+    assert.ok(r);
     counter = 0;
     r.onopen = function(e) {
       var msg, _i, _len;
-      ok(true);
+      assert.ok(true);
       for (_i = 0, _len = messages.length; _i < _len; _i++) {
         msg = messages[_i];
         r.send('' + msg);
       }
     };
     r.onmessage = function(e) {
-      equal(e.data.length, Math.pow(2, messages[counter]), e.data);
+      assert.equal(e.data.length, Math.pow(2, messages[counter]), e.data);
       counter += 1;
       if (counter === messages.length) r.close();
     };
     r.onclose = function(e) {
       if (counter !== messages.length) {
-        ok(false, "Transport closed prematurely. " + e);
+        assert.ok(false, "Transport closed prematurely. " + e);
       } else {
-        ok(true);
+        assert.ok(true);
       }
-      start();
+      done();
     };
   };
 };
@@ -240,49 +251,51 @@ factor_echo_utf_encoding = function(protocol) {
 };
 
 factor_user_close = function(protocol) {
-  return function() {
+  return function(done) {
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var counter, r;
-    expect(5);
+    //expect(5);
     r = testutils.newSockJS('/echo', protocol);
-    ok(r);
+    assert.ok(r);
     counter = 0;
     r.onopen = function(e) {
       counter += 1;
-      ok(counter === 1);
+      assert.ok(counter === 1);
       r.close(3000, "User message");
-      ok(counter === 1);
+      assert.ok(counter === 1);
     };
     r.onmessage = function() {
-      ok(false);
+      assert.ok(false);
       counter += 1;
     };
     r.onclose = function(e) {
       counter += 1;
       u.log('user_close ' + e.code + ' ' + e.reason);
-      equal(e.wasClean, true);
-      ok(counter === 2);
-      start();
+      assert.equal(e.wasClean, true);
+      assert.ok(counter === 2);
+      done();
     };
   };
 };
 
 factor_server_close = function(protocol) {
-  return function() {
+  return function(done) {
+    this.runnable().globals(['_sockjs_global', '_jp', '_send_form', '_send_area']);
     var r;
-    expect(5);
+    //expect(5);
     r = testutils.newSockJS('/close', protocol);
-    ok(r);
+    assert.ok(r);
     r.onopen = function(e) {
-      ok(true);
+      assert.ok(true);
     };
     r.onmessage = function(e) {
-      ok(false);
+      assert.ok(false);
     };
     r.onclose = function(e) {
-      equal(e.code, 3000);
-      equal(e.reason, "Go away!");
-      equal(e.wasClean, true);
-      start();
+      assert.equal(e.code, 3000);
+      assert.equal(e.reason, "Go away!");
+      assert.equal(e.wasClean, true);
+      done();
     };
   };
 };
@@ -296,28 +309,28 @@ arrIndexOf = function(arr, obj) {
 };
 
 test_protocol_messages = function(protocol) {
-  QUnit.module(protocol);
+  suite(protocol);
   if (!SockJS[protocol] || !SockJS[protocol].enabled(client_opts.url)) {
     test("[unsupported by client]", function() {
-      ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
+      assert.ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
     });
   } else if (client_opts.disabled_transports && arrIndexOf(client_opts.disabled_transports, protocol) !== -1) {
     test("[disabled by config]", function() {
-      ok(true, 'Disabled by config: "' + protocol + '"');
+      assert.ok(true, 'Disabled by config: "' + protocol + '"');
     });
   } else {
-    asyncTest("echo1", factor_echo_basic(protocol));
-    asyncTest("echo2", factor_echo_rich(protocol));
-    asyncTest("echo from child", factor_echo_from_child(protocol));
-    asyncTest("unicode", factor_echo_unicode(protocol));
-    asyncTest("utf encoding 0x00-0xFF", factor_echo_utf_encoding_simple(protocol));
-    asyncTest("utf encoding killer message", factor_echo_utf_encoding(protocol));
-    asyncTest("special_chars", factor_echo_special_chars(protocol));
-    asyncTest("large message (ping-pong)", factor_echo_large_message(protocol));
-    asyncTest("large message (batch)", factor_batch_large(protocol));
-    asyncTest("large download", factor_batch_large_amp(protocol));
-    asyncTest("user close", factor_user_close(protocol));
-    asyncTest("server close", factor_server_close(protocol));
+    test("echo1", factor_echo_basic(protocol));
+    test("echo2", factor_echo_rich(protocol));
+    test("echo from child", factor_echo_from_child(protocol));
+    test("unicode", factor_echo_unicode(protocol));
+    test("utf encoding 0x00-0xFF", factor_echo_utf_encoding_simple(protocol));
+    test("utf encoding killer message", factor_echo_utf_encoding(protocol));
+    test("special_chars", factor_echo_special_chars(protocol));
+    test("large message (ping-pong)", factor_echo_large_message(protocol));
+    test("large message (batch)", factor_batch_large(protocol));
+    test("large download", factor_batch_large_amp(protocol));
+    test("user close", factor_user_close(protocol));
+    test("server close", factor_server_close(protocol));
   }
 };
 
