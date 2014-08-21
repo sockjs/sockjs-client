@@ -89,11 +89,11 @@ ajax_simple_factory = function(name, Obj) {
     var x;
     //expect(2);
     x = new Obj('GET', '/simple.txt', null);
-    x.onfinish = function(status, text) {
+    x.on('finish', function(status, text) {
       assert.equal(text.length, 2051);
       assert.equal(text.slice(-2), 'b\n');
       done();
-    };
+    });
   });
 };
 
@@ -103,16 +103,16 @@ ajax_streaming_factory = function(name, Obj) {
     var x;
     //expect(4);
     x = new Obj('GET', '/streaming.txt', null);
-    x.onchunk = function(status, text) {
+    x.on('chunk', function(status, text) {
       assert.equal(status, 200);
       assert.ok(text.length <= 2049, 'Most likely you\'re behind a transparent Proxy that can\'t do streaming. QUnit tests won\'t work properly. Sorry!');
-      delete x.onchunk;
-    };
-    x.onfinish = function(status, text) {
+      x.removeAllListeners('chunk');
+    });
+    x.on('finish', function(status, text) {
       assert.equal(status, 200);
       assert.equal(text.slice(-4), 'a\nb\n');
       done();
-    };
+    });
   });
 };
 
@@ -123,14 +123,14 @@ test_wrong_url = function(name, Obj, url, statuses, done) {
   }
   //expect(2);
   x = new Obj('GET', url, null);
-  x.onchunk = function() {
+  x.on('chunk', function() {
     assert.ok(false, "chunk shall not be received");
-  };
-  x.onfinish = function(status, text) {
+  });
+  x.on('finish', function(status, text) {
     assert.ok(u.arrIndexOf(statuses, status) !== -1);
     assert.equal(text, '');
     done();
-  };
+  });
 };
 
 ajax_wrong_port_factory = function(name, Obj) {

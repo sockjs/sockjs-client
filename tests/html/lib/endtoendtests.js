@@ -100,22 +100,3 @@ test("close on close", function(done) {
     });
   };
 });
-
-test("EventEmitter exception handling", function(done) {
-  this.runnable().globals(['_sockjs_global', '_jp']);
-  var prev_onerror, r;
-  //expect(1);
-  r = testutils.newSockJS('/echo', 'xhr-streaming');
-  prev_onerror = window.onerror;
-  window.onerror = function(e) {
-    assert.ok(/onopen error/.test('' + e));
-    window.onerror = prev_onerror;
-    r.close();
-  };
-  r.onopen = function(e) {
-    throw "onopen error";
-  };
-  r.onclose = function() {
-    done();
-  };
-});
