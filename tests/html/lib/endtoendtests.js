@@ -5,11 +5,14 @@ var assert = require('assert');
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
 
+var TIMEOUT_MS = 10000;
+
 suite('End to End');
 
 suite('Connection Errors');
 
 test("invalid url 404", function(done) {
+  this.timeout(TIMEOUT_MS);
   this.runnable().globals(['_sockjs_global']);
   var r;
   //expect(4);
@@ -35,6 +38,7 @@ test("invalid url 404", function(done) {
 });
 
 test("invalid url port", function(done) {
+  this.timeout(TIMEOUT_MS);
   this.runnable().globals(['_sockjs_global']);
   var dl, r;
   //expect(4);
@@ -58,6 +62,7 @@ test("invalid url port", function(done) {
 });
 
 test("disabled websocket test", function(done) {
+  this.timeout(TIMEOUT_MS);
   this.runnable().globals(['_sockjs_global']);
   var r;
   //expect(3);
@@ -77,6 +82,7 @@ test("disabled websocket test", function(done) {
 });
 
 test("close on close", function(done) {
+  this.timeout(TIMEOUT_MS);
   this.runnable().globals(['_sockjs_global', '_jp']);
   var r;
   //expect(4);

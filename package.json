@@ -39,7 +39,8 @@
     "url": "https://github.com/sockjs/sockjs-client.git"
   },
   "scripts": {
-    "test": "./node_modules/zuul/bin/zuul -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js",
+    "test": "./node_modules/zuul/bin/zuul --sauce-connect -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js",
+    "test_ws": "./node_modules/zuul/bin/zuul --sauce-connect -- tests/html/lib/ws_test.js",
     "test_local": "./node_modules/zuul/bin/zuul --local 9090 -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js"
   }
 }
