@@ -1,11 +1,11 @@
 'use strict';
-/* global suite, test, SockJS, client_opts */
+/* global suite, test, client_opts */
 var arrIndexOf, batch_factory_factory, batch_factory_factory_amp, echo_factory_factory, escapable, factor_batch_large, factor_batch_large_amp, factor_echo_basic, factor_echo_from_child, factor_echo_large_message, factor_echo_rich, factor_echo_special_chars, factor_echo_unicode, factor_echo_utf_encoding, factor_echo_utf_encoding_simple, factor_server_close, factor_user_close, generate_killer_string, test_protocol_messages;
 
 var assert = require('assert');
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
-var protocols = require('../../../lib/protocols')
+var protocols = require('../../../lib/protocols');
 
 var TIMEOUT_MS = 10000;
 

@@ -101,8 +101,8 @@ test("close on close", function(done) {
       assert.ok(false);
     };
     r.close();
-    u.delay(10, function() {
+    setTimeout(function() {
       done();
-    });
+    }, 10);
   };
 });

@@ -85,7 +85,7 @@ if (!require('../../../lib/trans-iframe').enabled()) {
                 window.attachEvent('on' + event, listener);\n\
             }\n\
         }\n\
-        attachMessage(function(e) {\n\
+        attachEvent('message', function(e) {\n\
             var b = e.data;\n\
             parent.postMessage(window_id + ' ' + 'e', '*');\n\
         });\n\
