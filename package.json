@@ -33,6 +33,7 @@
     "websocket"
   ],
   "license": "MIT",
+  "main": "./lib/sockjs.js",
   "private": true,
   "repository": {
     "type": "git",

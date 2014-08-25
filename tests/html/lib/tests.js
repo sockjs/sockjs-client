@@ -5,6 +5,7 @@ var arrIndexOf, batch_factory_factory, batch_factory_factory_amp, echo_factory_f
 var assert = require('assert');
 var u = require('../../../lib/utils');
 var testutils = require('./testutils');
+var protocols = require('../../../lib/protocols')
 
 var TIMEOUT_MS = 10000;
 
@@ -310,11 +311,7 @@ arrIndexOf = function(arr, obj) {
 
 test_protocol_messages = function(protocol) {
   suite(protocol);
-  if (!SockJS[protocol] || !SockJS[protocol].enabled(client_opts.url)) {
-    test("[unsupported by client]", function() {
-      assert.ok(true, 'Unsupported protocol (by client): "' + protocol + '"');
-    });
-  } else if (client_opts.disabled_transports && arrIndexOf(client_opts.disabled_transports, protocol) !== -1) {
+  if (client_opts.disabled_transports && arrIndexOf(client_opts.disabled_transports, protocol) !== -1) {
     test("[disabled by config]", function() {
       assert.ok(true, 'Disabled by config: "' + protocol + '"');
     });
@@ -334,9 +331,8 @@ test_protocol_messages = function(protocol) {
   }
 };
 
-var protocols = ['websocket', 'xdr-streaming', 'xhr-streaming', 'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling', 'iframe-xhr-polling', 'jsonp-polling'];
-
-for (var _i = 0, _len = 0, _len = protocols.length; _i < _len; _i++) {
-  var protocol = protocols[_i];
-  test_protocol_messages(protocol);
+var validProtocols = protocols(client_opts.url, [], { cookie_needed: false, null_origin: false });
+for (var i = 0; i < validProtocols.length; i++) {
+  var Protocol = validProtocols[i];
+  test_protocol_messages(Protocol.transportName);
 }

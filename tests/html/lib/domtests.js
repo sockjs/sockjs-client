@@ -1,5 +1,6 @@
 'use strict';
 /* global suite, test */
+/* jshint multistr: true */
 var ajax_simple_factory, ajax_streaming_factory, ajax_wrong_port_factory, onunload_test_factory, test_wrong_url;
 
 suite('DOM');
@@ -39,7 +40,27 @@ if (navigator.userAgent.indexOf('Konqueror') !== -1 || navigator.userAgent.index
   test('onunload', function (done) {
     this.timeout(5000);
     this.runnable().globals(['_sockjs_global']);
-    onunload_test_factory("var u = SockJS.getUtils();\nu.attachEvent('load', function(){\n    hook.load();\n});\nvar w = 0;\nvar run = function(){\n    if(w === 0) {\n        w = 1;\n        hook.unload();\n    }\n};\nu.attachEvent('beforeunload', run);\nu.attachEvent('unload', run);", done);
+    onunload_test_factory("\
+      function attachEvent(event, listener) {\n\
+          if (typeof window.addEventListener !== 'undefined') {\n\
+              window.addEventListener(event, listener, false);\n\
+          } else {\n\
+              document.attachEvent('on' + event, listener);\n\
+              window.attachEvent('on' + event, listener);\n\
+          }\n\
+      }\n\
+      attachEvent('load', function(){\n\
+          hook.load();\n\
+      });\n\
+      var w = 0;\n\
+      var run = function(){\n\
+          if(w === 0) {\n\
+              w = 1;\n\
+              hook.unload();\n\
+          }\n\
+      };\n\
+      attachEvent('beforeunload', run);\n\
+      attachEvent('unload', run);", done);
   });
 }
 
@@ -55,7 +76,20 @@ if (!require('../../../lib/trans-iframe').enabled()) {
     hook = testutils.newIframe();
     hook.open = function() {
       assert.ok(true, 'open hook called by an iframe');
-      hook.callback("var u = SockJS.getUtils();\nu.attachMessage(function(e) {\n    var b = e.data;\n    parent.postMessage(window_id + ' ' + 'e', '*');\n});\nparent.postMessage(window_id + ' ' + 's', '*');");
+      hook.callback("\
+        function attachEvent(event, listener) {\n\
+            if (typeof window.addEventListener !== 'undefined') {\n\
+                window.addEventListener(event, listener, false);\n\
+            } else {\n\
+                document.attachEvent('on' + event, listener);\n\
+                window.attachEvent('on' + event, listener);\n\
+            }\n\
+        }\n\
+        attachMessage(function(e) {\n\
+            var b = e.data;\n\
+            parent.postMessage(window_id + ' ' + 'e', '*');\n\
+        });\n\
+        parent.postMessage(window_id + ' ' + 's', '*');");
     };
     u.attachMessage(function(e) {
       var _ref = e.data.split(' ')
