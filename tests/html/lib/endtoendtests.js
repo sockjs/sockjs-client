@@ -42,7 +42,7 @@ test("invalid url port", function(done) {
   this.runnable().globals(['_sockjs_global']);
   var dl, r;
   //expect(4);
-  dl = document.location;
+  dl = window.location;
   r = testutils.newSockJS(dl.protocol + '//' + dl.hostname + ':1079', 'jsonp-polling');
   assert.ok(r);
   r.onopen = function(e) {

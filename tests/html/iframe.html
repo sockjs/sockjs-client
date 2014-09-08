@@ -12,7 +12,7 @@
   <h2>Don't panic!</h2>
   <script>
     c = parent._sockjs_global;
-    window_id = document.location.hash.slice(1);
+    window_id = window.location.hash.slice(1);
     hook = c(window_id);
     hook.callback = function(code) {eval(code);};
     hook.open();

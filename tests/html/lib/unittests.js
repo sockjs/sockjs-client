@@ -110,7 +110,7 @@ test('bind', function() {
 
 test('amendUrl', function() {
   var dl, t;
-  dl = document.location;
+  dl = window.location;
   assert.equal(u.amendUrl('//blah:1/abc'), dl.protocol + '//blah:1/abc');
   assert.equal(u.amendUrl('/abc'), dl.protocol + '//' + dl.host + '/abc');
   assert.equal(u.amendUrl('/'), dl.protocol + '//' + dl.host);
