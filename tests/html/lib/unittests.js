@@ -3,25 +3,25 @@
 
 var assert = require('assert');
 var u = require('../../../lib/utils');
-var protocols = require('../../../lib/protocols')
+var protocols = require('../../../lib/protocols');
 
-test('random_string', function() {
+test('randomString', function() {
   var i, _i, _len, _ref;
-  assert.notEqual(u.random_string(8), u.random_string(8));
+  assert.notEqual(u.randomString(8), u.randomString(8));
   _ref = [1, 2, 3, 128];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     i = _ref[_i];
-    assert.equal(u.random_string(i).length, i);
+    assert.equal(u.randomString(i).length, i);
   }
 });
 
-test('random_number_string', function() {
+test('randomNumberString', function() {
   for (var i = 0; i <= 10; i++) {
-    assert.equal(u.random_number_string(10).length, 1);
-    assert.equal(u.random_number_string(100).length, 2);
-    assert.equal(u.random_number_string(1000).length, 3);
-    assert.equal(u.random_number_string(10000).length, 4);
-    assert.equal(u.random_number_string(100000).length, 5);
+    assert.equal(u.randomNumberString(10).length, 1);
+    assert.equal(u.randomNumberString(100).length, 2);
+    assert.equal(u.randomNumberString(1000).length, 3);
+    assert.equal(u.randomNumberString(10000).length, 4);
+    assert.equal(u.randomNumberString(100000).length, 5);
   }
 });
 
