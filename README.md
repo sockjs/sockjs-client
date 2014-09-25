@@ -85,7 +85,7 @@ First, you need to load the SockJS JavaScript library. For example, you can
 put that in your HTML head:
 
 ```html
-<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
 ```
 
 After the script is loaded you can establish a connection with the
@@ -249,21 +249,13 @@ want to do so).
 Deployment
 ----------
 
-In order to utilize best performance you should use the SockJS-client
-releases hosted on SockJS CDN. You should use a version of sockjs-client
+You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
 ```html
-<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
 ```
 
-A list of files hosted on a CDN is available here: http://sockjs.github.com/sockjs-client/ .
-
-You can also use our CDN via https (using Cloud Front domain name):
-
-```html
-<script src="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.js"></script>
-```
 
 For server-side deployment tricks, especially about load balancing and
 session stickiness, take a look at the
@@ -334,7 +326,7 @@ server. Edit the [`config.js`](https://github.com/sockjs/sockjs-node/blob/master
 
 And replace the `sockjs_url` setting, which by default points to a CDN:
 
-    sockjs_url: 'http://cdn.sockjs.org/sockjs-0.3.min.js',
+    sockjs_url: 'http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js',
 
 to a freshly compiled SockJS, for example:
 
