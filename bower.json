@@ -1,0 +1,13 @@
+{
+  "name": "sockjs-client",
+  "version": "0.3.4",
+  "authors": [
+    "Bryce Kahle <bkahle@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "bin",
+    "tests"
+  ]
+}
