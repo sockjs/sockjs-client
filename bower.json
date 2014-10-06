@@ -4,6 +4,7 @@
   "authors": [
     "Bryce Kahle <bkahle@gmail.com>"
   ],
+  "main": "lib/sockjs.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
