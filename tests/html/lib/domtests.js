@@ -64,7 +64,7 @@ if (navigator.userAgent.indexOf('Konqueror') !== -1 || navigator.userAgent.index
   });
 }
 
-if (!require('../../../lib/trans-iframe').enabled()) {
+if (!require('../../../lib/transport/lib/iframe').enabled()) {
   test("onmessage [unsupported by client]", function() {
     assert.ok(true);
   });

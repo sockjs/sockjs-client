@@ -13,7 +13,12 @@ files.forEach(function (file) {
   if (file[0] === '.') {
     return;
   }
-  transportFiles.push(path.resolve(dir, file));
+  var fileName = path.resolve(dir, file);
+  var stat = fs.statSync(fileName);
+  if (stat && stat.isDirectory()) {
+    return;
+  }
+  transportFiles.push(fileName);
 });
 
 describe('Transports', function () {
@@ -31,7 +36,15 @@ describe('Transports', function () {
         expect(Trans).to.have.property('enabled');
         expect(Trans.enabled).to.be.a('function');
 
-        //expect(new Trans('http://localhost')).to.be.an(EventTarget);
+        //var t = new Trans('http://localhost');
+
+        expect(Trans.prototype).to.have.property('send');
+        expect(Trans.prototype.send).to.be.a('function');
+
+        expect(Trans.prototype).to.have.property('close');
+        expect(Trans.prototype.close).to.be.a('function');
+
+        //expect().to.be.an(EventTarget);
         // TODO tests for event emitting
       });
     });
