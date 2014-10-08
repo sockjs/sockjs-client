@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - '0.10'
 before_script:
-  - "gulp test"
+  - "gulp testbundle"
 script:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || false'
 addons:

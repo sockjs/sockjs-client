@@ -2,8 +2,8 @@
 
 var expect = require('expect.js')
   , proxyquire = require('proxyquire')
-  , SecurityError = require('../lib/securityerror')
-  , SockJS = require('../lib/main')
+  , SecurityError = require('../lib/error/securityerror')
+  , SockJS = require('../lib/entry')
   ;
 
 describe('SockJS', function() {
@@ -15,7 +15,7 @@ describe('SockJS', function() {
 
     it('create a valid WebSocket object', function () {
       var s = new SockJS('http://sockjs.org');
-      expect(s).to.have.property('url', 'http://sockjs.org/');
+      expect(s).to.have.property('url', 'http://sockjs.org');
       expect(s).to.have.property('readyState', SockJS.CONNECTING);
       expect(s).to.have.property('extensions', '');
       expect(s).to.have.property('protocol', '');
@@ -24,13 +24,13 @@ describe('SockJS', function() {
     describe('WebSocket specification step #1', function () {
       it('should throw SyntaxError for an invalid url', function () {
         expect(function () {
-          SockJS('//sockjs.org')
+          SockJS('//sockjs.org');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
 
         expect(function () {
-          SockJS('http://')
+          SockJS('http://');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
@@ -38,13 +38,13 @@ describe('SockJS', function() {
 
       it('should throw SyntaxError when the url contains a querystring or fragment', function () {
         expect(function () {
-          SockJS('http://sockjs.org/?test')
+          SockJS('http://sockjs.org/?test');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
 
          expect(function () {
-          SockJS('http://sockjs.org/#test')
+          SockJS('http://sockjs.org/#test');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
@@ -52,7 +52,7 @@ describe('SockJS', function() {
 
       it('should throw SyntaxError for an invalid protocol', function () {
         expect(function () {
-          SockJS('ftp://sockjs.org')
+          SockJS('ftp://sockjs.org');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
@@ -61,11 +61,12 @@ describe('SockJS', function() {
 
     describe('WebSocket specification step #2', function () {
       it('should throw SecurityError for an insecure url from a secure page', function () {
-        var sjs = proxyquire('../lib/main', { './location': {
+        var main = proxyquire('../lib/main', { './polyfills/location': {
           protocol: 'https'
         }});
+        var sjs = proxyquire('../lib/entry', { './main': main });
         expect(function () {
-          sjs('http://sockjs.org')
+          sjs('http://sockjs.org');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SecurityError);
         });
@@ -75,7 +76,7 @@ describe('SockJS', function() {
     describe('WebSocket specification step #5', function () {
       it('should throw SyntaxError for duplicated protocols', function () {
         expect(function () {
-          SockJS('http://sockjs.org', ['test', 'test'])
+          SockJS('http://sockjs.org', ['test', 'test']);
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });

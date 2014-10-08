@@ -1,0 +1,18 @@
+{
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "consistent-this": [2, "self"],
+    "quotes": [1, "single", "avoid-escape"],
+    "no-space-before-semi": [0],
+    "no-underscore-dangle": [0]
+  },
+  "globals": {
+    "XDomainRequest": true,
+    "XMLHttpRequest": true,
+    "EventSource": true,
+    "ActiveXObject": true
+  }
+}

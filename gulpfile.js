@@ -6,12 +6,31 @@ var gulp = require('gulp')
   , mold = require('mold-source-map')
   , source = require('vinyl-source-stream')
   , path = require('path')
-  , jsRoot = path.join(__dirname, 'lib')
+  , mocha = require('gulp-mocha')
+  , eslint = require('gulp-eslint')
   , pkg = require('./package.json')
+  ;
+
+var jsRoot = path.join(__dirname, 'lib')
   , libName = 'sockjs-' + pkg.version
   ;
 
-gulp.task('test', function() {
+gulp.task('test', function () {
+  gulp.src('tests/main.js', {read: false})
+    .pipe(mocha());
+});
+
+gulp.task('eslint', function () {
+  gulp.src(['lib/**/*.js', '!lib/sockjs.js'])
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
+
+gulp.task('watch', function () {
+  gulp.watch('tests/*.js', ['test']);
+});
+
+gulp.task('testbundle', function() {
   browserify('./lib/sockjs.js')
     .bundle({
       standalone: 'SockJS'
@@ -48,7 +67,7 @@ gulp.task('browserify:min', function () {
     .plugin('minifyify', {
       map: libName + '.min.js.map'
     , compressPath: jsRoot
-    , output: './build/'+ libName + '.min.js.map'
+    , output: './build/' + libName + '.min.js.map'
     })
     .bundle({
       standalone: 'SockJS'
