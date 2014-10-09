@@ -3,6 +3,9 @@
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
   "version": "1.0.0-alpha1",
   "author": "Marek Majkowski",
+  "browser": {
+    "./lib/transport/driver/websocket": "./lib/transport/browser/websocket"
+  },
   "bugs": {
     "url": "https://github.com/sockjs/sockjs-client/issues"
   },
@@ -13,24 +16,24 @@
     }
   ],
   "dependencies": {
-    "json3": "^3.3.2",
-    "faye-websocket": "~0.7.3"
+    "faye-websocket": "~0.7.3",
+    "json3": "^3.3.2"
   },
   "devDependencies": {
     "browserify": "^4.2.3",
     "exorcist": "^0.1.6",
+    "expect.js": "~0.3.1",
     "gulp": "^3.8.7",
+    "gulp-eslint": "~0.1.8",
+    "gulp-mocha": "~1.1.0",
     "minifyify": "^3.0.12",
     "mocha": "^1.21.4",
     "mold-source-map": "^0.3.0",
     "node-static": "^0.5.9",
+    "proxyquire": "~1.0.1",
     "sockjs": "^0.3.9",
     "vinyl-source-stream": "^0.1.1",
-    "zuul": "^1.10.1",
-    "expect.js": "~0.3.1",
-    "proxyquire": "~1.0.1",
-    "gulp-mocha": "~1.1.0",
-    "gulp-eslint": "~0.1.8"
+    "zuul": "^1.10.1"
   },
   "homepage": "http://sockjs.org",
   "keywords": [
