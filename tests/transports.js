@@ -1,30 +1,13 @@
 'use strict';
 
 var expect = require('expect.js')
-  , fs = require('fs')
-  , path = require('path')
+  , transportList = require('../lib/transport-list')
   ;
 
-var transportFiles = [];
-var dir = path.resolve(__dirname, '../lib/transport');
-var files = fs.readdirSync(dir);
-files.forEach(function (file) {
-  if (file[0] === '.') {
-    return;
-  }
-  var fileName = path.resolve(dir, file);
-  var stat = fs.statSync(fileName);
-  if (stat && stat.isDirectory()) {
-    return;
-  }
-  transportFiles.push(fileName);
-});
-
 describe('Transports', function () {
-  transportFiles.forEach(function (tf) {
-    describe(path.basename(tf, '.js'), function () {
+  transportList.forEach(function (Trans) {
+    describe(Trans.transportName, function () {
       it('has a valid interface', function () {
-        var Trans = require(tf);
         expect(Trans).to.be.ok();
         expect(Trans).to.have.property('transportName');
         expect(Trans.transportName.length).to.be.greaterThan(0);
