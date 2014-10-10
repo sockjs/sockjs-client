@@ -9,7 +9,7 @@ var transportFiles = [];
 var dir = path.resolve(__dirname, '../lib/transport');
 var files = fs.readdirSync(dir);
 files.forEach(function (file) {
-  if (file[0] === '.' || file === 'iframe-wrap.js') {
+  if (file[0] === '.') {
     return;
   }
   var fileName = path.resolve(dir, file);
