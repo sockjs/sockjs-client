@@ -3,14 +3,13 @@
 var expect = require('expect.js')
   , fs = require('fs')
   , path = require('path')
-  , EventTarget = require('../lib/polyfills/eventtarget')
   ;
 
 var transportFiles = [];
 var dir = path.resolve(__dirname, '../lib/transport');
 var files = fs.readdirSync(dir);
 files.forEach(function (file) {
-  if (file[0] === '.') {
+  if (file[0] === '.' || file === 'iframe-wrap.js') {
     return;
   }
   var fileName = path.resolve(dir, file);
