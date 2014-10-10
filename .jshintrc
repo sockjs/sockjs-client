@@ -11,5 +11,8 @@
     "ActiveXObject"
   , "XDomainRequest"
   , "EventSource"
+  , "describe"
+  , "it"
+  , "before"
   ]
 }
