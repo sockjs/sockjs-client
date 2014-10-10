@@ -2,6 +2,8 @@
 
 var expect = require('expect.js')
   , JsonpReceiver = require('../lib/transport/receiver/jsonp')
+  , XhrReceiver = require('../lib/transport/receiver/xhr')
+  , XhrFake = require('../lib/transport/sender/xhr-fake')
   , utils = require('../lib/utils/iframe')
   ;
 
@@ -48,7 +50,7 @@ describe('Receivers', function () {
       };
     });
 
-    it('will abort without sending a message', function (done) {
+    it('aborts without sending a message', function (done) {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
@@ -112,8 +114,55 @@ describe('Receivers', function () {
 
       // simulate script error
       setTimeout(function () {
-        jpr._scriptError();  
+        jpr._scriptError();
       }, 150);
+    });
+  });
+
+  describe('xhr', function () {
+    before(function () {
+      XhrFake.timeout = 100;
+    });
+
+    it('emits multiple messages for multi-line response', function (done) {
+      var xhr = new XhrReceiver('test', XhrFake);
+      var i = 0, responses = ['test', 'multiple', 'lines', '{}'];
+      xhr.onmessage = function (e) {
+        expect(e.data).to.be.eql(responses[i]);
+        i++;
+      };
+      xhr.onclose = function (e) {
+        expect(e.reason).to.be.eql('network');
+        done();
+      };
+      xhr._chunkHandler(200, 'test\nmultiple\nlines');
+    });
+
+    it('emits no messages for an empty string response', function (done) {
+      var xhr = new XhrReceiver('test', XhrFake);
+      var i = 0, responses = ['{}'];
+      xhr.onmessage = function (e) {
+        expect(i).to.be.lessThan(responses.length);
+        expect(e.data).to.be.eql(responses[i]);
+        i++;
+      };
+      xhr.onclose = function (e) {
+        expect(e.reason).to.be.eql('network');
+        done();
+      };
+      xhr._chunkHandler(200, '');
+    });
+
+    it('aborts without sending a message', function (done) {
+      var xhr = new XhrReceiver('test', XhrFake);
+      xhr.onmessage = function () {
+        expect().fail();
+      };
+      xhr.onclose = function (e) {
+        expect(e.reason).to.be.eql('user');
+        done();
+      };
+      xhr.abort();
     });
   });
 });

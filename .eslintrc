@@ -13,6 +13,9 @@
     "XDomainRequest": true,
     "XMLHttpRequest": true,
     "EventSource": true,
-    "ActiveXObject": true
+    "ActiveXObject": true,
+    "describe": true,
+    "before": true,
+    "it": true
   }
 }
