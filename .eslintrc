@@ -10,10 +10,6 @@
     "no-underscore-dangle": [0]
   },
   "globals": {
-    "XDomainRequest": true,
-    "XMLHttpRequest": true,
-    "EventSource": true,
-    "ActiveXObject": true,
     "describe": true,
     "before": true,
     "it": true
