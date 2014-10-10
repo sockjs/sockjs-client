@@ -26,7 +26,7 @@ describe('Transports', function () {
         expect(Trans.prototype).to.have.property('close');
         expect(Trans.prototype.close).to.be.a('function');
 
-        //expect().to.be.an(EventTarget);
+        //expect().to.be.an(EventEmitter);
         // TODO tests for event emitting
       });
     });

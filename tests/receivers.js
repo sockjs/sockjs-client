@@ -22,13 +22,13 @@ describe('Receivers', function () {
         }, 5);
       };
       var jpr = new JsonpReceiver('test');
-      jpr.onclose = function (e) {
-        expect(e.reason).to.eql('network');
+      jpr.on('close', function (code, reason) {
+        expect(reason).to.eql('network');
         done();
-      };
-      jpr.onmessage = function (e) {
-        expect(e.data).to.eql('datadata');
-      };
+      });
+      jpr.on('message', function (msg) {
+        expect(msg).to.eql('datadata');
+      });
     });
 
     it('will timeout', function (done) {
@@ -41,13 +41,13 @@ describe('Receivers', function () {
       };
 
       var jpr = new JsonpReceiver('test');
-      jpr.onclose = function (e) {
-        expect(e.reason).to.contain('timeout');
+      jpr.on('close', function (code, reason) {
+        expect(reason).to.contain('timeout');
         done();
-      };
-      jpr.onmessage = function () {
+      });
+      jpr.on('message', function () {
         expect().fail('No message should be sent');
-      };
+      });
     });
 
     it('aborts without sending a message', function (done) {
@@ -58,13 +58,13 @@ describe('Receivers', function () {
         }, 200);
       };
       var jpr = new JsonpReceiver('test');
-      jpr.onclose = function (e) {
-        expect(e.reason).to.contain('aborted');
+      jpr.on('close', function (code, reason) {
+        expect(reason).to.contain('aborted');
         done();
-      };
-      jpr.onmessage = function () {
+      });
+      jpr.on('message', function () {
         expect().fail('No message should be sent');
-      };
+      });
       jpr.abort();
     });
 
@@ -80,13 +80,13 @@ describe('Receivers', function () {
       };
 
       var jpr = new JsonpReceiver('test');
-      jpr.onclose = function (e) {
-        expect(e.reason).to.eql('network');
+      jpr.on('close', function (code, reason) {
+        expect(reason).to.eql('network');
         done();
-      };
-      jpr.onmessage = function (e) {
-        expect(e.data).to.eql('datadata');
-      };
+      });
+      jpr.on('message', function (msg) {
+        expect(msg).to.eql('datadata');
+      });
 
       // simulate script error
       jpr._scriptError();
@@ -104,13 +104,13 @@ describe('Receivers', function () {
       };
 
       var jpr = new JsonpReceiver('test');
-      jpr.onclose = function (e) {
-        expect(e.reason).to.eql('network');
+      jpr.on('close', function (code, reason) {
+        expect(reason).to.eql('network');
         done();
-      };
-      jpr.onmessage = function (e) {
-        expect(e.data).to.eql('datadata');
-      };
+      });
+      jpr.on('message', function (msg) {
+        expect(msg).to.eql('datadata');
+      });
 
       // simulate script error
       setTimeout(function () {
@@ -127,41 +127,41 @@ describe('Receivers', function () {
     it('emits multiple messages for multi-line response', function (done) {
       var xhr = new XhrReceiver('test', XhrFake);
       var i = 0, responses = ['test', 'multiple', 'lines', '{}'];
-      xhr.onmessage = function (e) {
-        expect(e.data).to.be.eql(responses[i]);
+      xhr.on('message', function (msg) {
+        expect(msg).to.be.eql(responses[i]);
         i++;
-      };
-      xhr.onclose = function (e) {
-        expect(e.reason).to.be.eql('network');
+      });
+      xhr.on('close', function (code, reason) {
+        expect(reason).to.be.eql('network');
         done();
-      };
+      });
       xhr._chunkHandler(200, 'test\nmultiple\nlines');
     });
 
     it('emits no messages for an empty string response', function (done) {
       var xhr = new XhrReceiver('test', XhrFake);
       var i = 0, responses = ['{}'];
-      xhr.onmessage = function (e) {
+      xhr.on('message', function (msg) {
         expect(i).to.be.lessThan(responses.length);
-        expect(e.data).to.be.eql(responses[i]);
+        expect(msg).to.be.eql(responses[i]);
         i++;
-      };
-      xhr.onclose = function (e) {
-        expect(e.reason).to.be.eql('network');
+      });
+      xhr.on('close', function (code, reason) {
+        expect(reason).to.be.eql('network');
         done();
-      };
+      });
       xhr._chunkHandler(200, '');
     });
 
     it('aborts without sending a message', function (done) {
       var xhr = new XhrReceiver('test', XhrFake);
-      xhr.onmessage = function () {
+      xhr.on('message', function () {
         expect().fail();
-      };
-      xhr.onclose = function (e) {
-        expect(e.reason).to.be.eql('user');
+      });
+      xhr.on('close', function (code, reason) {
+        expect(reason).to.be.eql('user');
         done();
-      };
+      });
       xhr.abort();
     });
   });
