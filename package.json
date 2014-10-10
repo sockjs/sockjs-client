@@ -4,8 +4,9 @@
   "version": "1.0.0-alpha1",
   "author": "Bryce Kahle",
   "browser": {
-    "./lib/transport/driver/websocket": "./lib/transport/browser/websocket",
-    "./lib/transport/driver/xhr": "./lib/transport/browser/abstract-xhr"
+    "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
+    "./lib/transport/driver/xhr.js": "./lib/transport/browser/abstract-xhr.js",
+    "crypto": "./lib/utils/browser-crypto.js"
   },
   "bugs": {
     "url": "https://github.com/sockjs/sockjs-client/issues"
