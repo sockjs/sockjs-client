@@ -31,7 +31,8 @@ gulp.task('watch', function () {
 });
 
 gulp.task('testbundle', function() {
-  browserify('./lib/sockjs.js')
+  browserify('./lib/entry.js')
+    .ignore('querystring')
     .bundle({
       standalone: 'SockJS'
     , debug: true
@@ -50,7 +51,8 @@ gulp.task('testbundle', function() {
 });
 
 gulp.task('browserify', function () {
-  return browserify('./lib/sockjs.js')
+  return browserify('./lib/entry.js', { fullPaths: true })
+    .ignore('querystring')
     .bundle({
       standalone: 'SockJS'
     , debug: true
@@ -63,7 +65,8 @@ gulp.task('browserify', function () {
 });
 
 gulp.task('browserify:min', function () {
-  return browserify('./lib/sockjs.js')
+  return browserify('./lib/entry.js', { fullPaths: true })
+    .ignore('querystring')
     .plugin('minifyify', {
       map: libName + '.min.js.map'
     , compressPath: jsRoot
