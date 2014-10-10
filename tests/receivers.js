@@ -2,7 +2,7 @@
 
 var expect = require('expect.js')
   , JsonpReceiver = require('../lib/transport/receiver/jsonp')
-  , utils = require('../lib/utils')
+  , utils = require('../lib/utils/iframe')
   ;
 
 describe('Receivers', function () {
