@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 'use strict';
 var sockjs = require('sockjs');
 
@@ -11,7 +12,7 @@ exports.install = function(opts, server) {
     conn.on('data', function(m) {
       var d  = JSON.stringify(m);
       console.log('    [ ] echo message ' + conn,
-                  d.slice(0,64)+
+                  d.slice(0,64) +
                   ((d.length > 64) ? '...' : ''));
       conn.write(m);
     });
@@ -20,7 +21,7 @@ exports.install = function(opts, server) {
   var sjs_close = sockjs.createServer(opts);
   sjs_close.on('connection', function(conn) {
     console.log('    [+] clos open    ' + conn);
-    conn.close(3000, "Go away!");
+    conn.close(3000, 'Go away!');
     conn.on('close', function() {
       console.log('    [-] clos close   ' + conn);
     });
@@ -68,7 +69,7 @@ exports.install = function(opts, server) {
       var n = Math.floor(Number(m));
       n = (n > 0 && n < 19) ? n : 1;
       console.log('    [ ] amp message: 2^' + n);
-      conn.write(new Array(Math.pow(2, n)+1).join('x'));
+      conn.write(new Array(Math.pow(2, n) + 1).join('x'));
     });
   });
 

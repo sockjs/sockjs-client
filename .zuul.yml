@@ -1,10 +1,10 @@
-ui: mocha-qunit
+ui: mocha-bdd
 scripts:
   - "static/jquery.min.js"
   - "config.js"
   - "domain.js"
   - "lib/sockjs.js"
-server: ./tests/sockjs_server.js
+server: ./tests/support/sockjs_server.js
 browsers:
   - name: chrome
     version: latest

@@ -1,13 +1,16 @@
+/* eslint camelcase: 0 */
 'use strict';
+
 var http = require('http');
-var node_static = require('node-static');
-var sockjs_app = require('./sockjs_app');
+var nodeStatic = require('node-static');
+var sockjs = require('./sockjs_app');
 var url = require('url');
+var path = require('path');
 
 var port = process.env.ZUUL_PORT || 8081;
-var client_opts = {
+var clientOptions = {
   // Address of a sockjs test server.
-  url: 'http://localhost:'+port,
+  url: 'http://localhost:' + port,
   sockjs_opts: {
       devel: true,
       debug: true,
@@ -16,7 +19,7 @@ var client_opts = {
   }
 };
 
-var static_directory = new node_static.Server(__dirname + '/html');
+var staticDir = new nodeStatic.Server(path.join(__dirname, '../html'));
 
 var server = http.createServer();
 server.addListener('request', function(req, res) {
@@ -43,28 +46,28 @@ server.addListener('request', function(req, res) {
   } else if (req.url === '/config.js') {
     if (req.headers.referer) {
       var parsedOrigin = url.parse(req.headers.referer);
-      client_opts.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':' + port;
+      clientOptions.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':' + port;
     }
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
     res.end('var client_opts = ' +
-            JSON.stringify(client_opts) + ';');
+            JSON.stringify(clientOptions) + ';');
   } else if (req.url === '/domain.js') {
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
     res.end('document.domain = document.domain;');
   } else {
-    static_directory.serve(req, res);
+    staticDir.serve(req, res);
   }
 });
 server.addListener('upgrade', function(req, res){
   res.end();
 });
 
-sockjs_app.install({
+sockjs.install({
   sockjs_url: '/lib/sockjs.js',
   websocket: true
 }, server);
 
-console.log(" [*] Listening on", port);
+console.log(' [*] Listening on', port);
 server.listen(port);

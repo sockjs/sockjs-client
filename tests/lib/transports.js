@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('expect.js')
-  , transportList = require('../lib/transport-list')
+  , transportList = require('../../lib/transport-list')
   ;
 
 describe('Transports', function () {

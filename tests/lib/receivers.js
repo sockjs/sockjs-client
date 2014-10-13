@@ -1,10 +1,10 @@
 'use strict';
 
 var expect = require('expect.js')
-  , JsonpReceiver = require('../lib/transport/receiver/jsonp')
-  , XhrReceiver = require('../lib/transport/receiver/xhr')
-  , XhrFake = require('../lib/transport/sender/xhr-fake')
-  , utils = require('../lib/utils/iframe')
+  , JsonpReceiver = require('../../lib/transport/receiver/jsonp')
+  , XhrReceiver = require('../../lib/transport/receiver/xhr')
+  , XhrFake = require('../../lib/transport/sender/xhr-fake')
+  , utils = require('../../lib/utils/iframe')
   ;
 
 describe('Receivers', function () {
