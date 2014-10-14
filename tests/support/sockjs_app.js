@@ -20,10 +20,10 @@ exports.install = function(opts, server) {
 
   var sjs_close = sockjs.createServer(opts);
   sjs_close.on('connection', function(conn) {
-    console.log('    [+] clos open    ' + conn);
+    console.log('    [+] close open    ' + conn);
     conn.close(3000, 'Go away!');
     conn.on('close', function() {
-      console.log('    [-] clos close   ' + conn);
+      console.log('    [-] close close   ' + conn);
     });
   });
 

@@ -7,7 +7,8 @@
     "consistent-this": [2, "self"],
     "quotes": [1, "single", "avoid-escape"],
     "no-space-before-semi": [0],
-    "no-underscore-dangle": [0]
+    "no-underscore-dangle": [0],
+    "no-mixed-requires": [0]
   },
   "globals": {
     "describe": true,
