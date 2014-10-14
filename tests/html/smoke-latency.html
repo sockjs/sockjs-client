@@ -18,7 +18,9 @@
   <option value="websocket">websocket</option>
   <option value="xdr-streaming">xdr-streaming</option>
   <option value="xhr-streaming">xhr-streaming</option>
+  <option value="eventsource">eventsource</option>
   <option value="iframe-eventsource">iframe-eventsource</option>
+  <option value="htmlfile">htmlfile</option>
   <option value="iframe-htmlfile">iframe-htmlfile</option>
   <option value="xdr-polling">xdr-polling</option>
   <option value="xhr-polling">xhr-polling</option>
@@ -49,7 +51,7 @@
             send();
     };
     function onclose(e) {
-            log('disconnected ' + e);
+            log('disconnected ' + e.code + ', ' + e.reason);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
     };
@@ -73,7 +75,7 @@
         options = jQuery.extend({}, client_opts.sockjs_opts)
         options.protocols_whitelist = typeof protocol === 'string' ?
                                                         [protocol] : protocol;
-        sjs = new SockJS(client_opts.url + '/echo', null, options);
+        sjs = new SockJS(client_opts.url + '/echo', null, protocol);
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;

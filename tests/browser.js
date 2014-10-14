@@ -1,5 +1,7 @@
 'use strict';
 
+require('../lib/shims');
+
 // prevent global leak warnings on this
 global._jp = {};
 

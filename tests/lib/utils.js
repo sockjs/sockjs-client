@@ -89,7 +89,7 @@ describe('utils', function () {
         expect(escape.quote('\u2000\u2001\u0300\u0301')).to.equal('"\\u2000\\u2001\\u0300\\u0301"');
       });
 
-      it('handles all 64K characters round-trip', function () {
+      it.skip('handles all 64K characters round-trip', function () {
         var c = [];
         for (var i = 0; i <= 65536; i++) {
           c.push(String.fromCharCode(i));

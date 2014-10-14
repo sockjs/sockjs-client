@@ -31,7 +31,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('testbundle', function() {
-  browserify('./lib/entry.js')
+  return browserify('./lib/entry.js')
     .ignore('querystring')
     .bundle({
       standalone: 'SockJS'
@@ -43,11 +43,11 @@ gulp.task('testbundle', function() {
     .pipe(gulp.dest('./tests/html/lib/'))
     ;
 
-  return browserify('./tests/html/lib/alltests.js')
-    .bundle()
-    .pipe(source('alltestsbundle.js'))
-    .pipe(gulp.dest('./tests/html/lib/'))
-    ;
+  // return browserify('./tests/html/lib/alltests.js')
+  //   .bundle()
+  //   .pipe(source('alltestsbundle.js'))
+  //   .pipe(gulp.dest('./tests/html/lib/'))
+  //   ;
 });
 
 gulp.task('browserify', function () {

@@ -23,11 +23,11 @@ describe('Receivers', function () {
       };
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.eql('network');
+        expect(reason).to.equal('network');
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.eql('datadata');
+        expect(msg).to.equal('datadata');
       });
     });
 
@@ -81,11 +81,11 @@ describe('Receivers', function () {
 
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.eql('network');
+        expect(reason).to.equal('network');
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.eql('datadata');
+        expect(msg).to.equal('datadata');
       });
 
       // simulate script error
@@ -105,17 +105,17 @@ describe('Receivers', function () {
 
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.eql('network');
+        expect(reason).to.equal('network');
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.eql('datadata');
+        expect(msg).to.equal('datadata');
       });
 
       // simulate script error
       setTimeout(function () {
         jpr._scriptError();
-      }, 150);
+      }, 100);
     });
   });
 
@@ -128,11 +128,11 @@ describe('Receivers', function () {
       var xhr = new XhrReceiver('test', XhrFake);
       var i = 0, responses = ['test', 'multiple', 'lines', '{}'];
       xhr.on('message', function (msg) {
-        expect(msg).to.be.eql(responses[i]);
+        expect(msg).to.equal(responses[i]);
         i++;
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.be.eql('network');
+        expect(reason).to.equal('network');
         done();
       });
       xhr._chunkHandler(200, 'test\nmultiple\nlines');
@@ -143,11 +143,11 @@ describe('Receivers', function () {
       var i = 0, responses = ['{}'];
       xhr.on('message', function (msg) {
         expect(i).to.be.lessThan(responses.length);
-        expect(msg).to.be.eql(responses[i]);
+        expect(msg).to.equal(responses[i]);
         i++;
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.be.eql('network');
+        expect(reason).to.equal('network');
         done();
       });
       xhr._chunkHandler(200, '');
@@ -159,7 +159,7 @@ describe('Receivers', function () {
         expect().fail();
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.be.eql('user');
+        expect(reason).to.equal('user');
         done();
       });
       xhr.abort();
