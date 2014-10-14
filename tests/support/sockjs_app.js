@@ -10,6 +10,7 @@ exports.install = function(opts, server) {
       console.log('    [-] echo close   ' + conn);
     });
     conn.on('data', function(m) {
+      console.log(m);
       var d  = JSON.stringify(m);
       console.log('    [ ] echo message ' + conn,
                   d.slice(0,64) +

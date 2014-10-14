@@ -1,6 +1,11 @@
 'use strict';
 
-require('./lib/main.js');
-require('./lib/main-node.js');
-require('./lib/utils.js');
-require('./lib/receivers.js');
+require('./support/sockjs_server');
+
+require('./lib/main');
+require('./lib/main-node');
+require('./lib/utils');
+require('./lib/receivers');
+require('./lib/senders');
+require('./lib/end-to-end');
+require('./lib/transports');
