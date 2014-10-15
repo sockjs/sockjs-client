@@ -16,7 +16,7 @@ var jsRoot = path.join(__dirname, 'lib')
   ;
 
 gulp.task('test', function () {
-  gulp.src('tests/main.js', {read: false})
+  gulp.src('tests/node.js', {read: false})
     .pipe(mocha());
 });
 

@@ -46,7 +46,7 @@
     var started = false;
     var sjs;
     var i = 0;
-    var protocol;
+    var transport;
     var t0;
     function onopen() {
        var td = (new Date()).getTime() - t0;
@@ -57,14 +57,11 @@
     function onclose(e) {
         if (started && e.code === 1000) {
             t0 = (new Date()).getTime();
-            options = jQuery.extend({}, client_opts.sockjs_opts)
-            options.protocols_whitelist = typeof protocol === 'string' ?
-                                                            [protocol] : protocol;
-            sjs = new SockJS(client_opts.url + '/echo', null, options);
+            sjs = new SockJS(clientOptions.url + '/echo', null, transport);
             sjs.onopen = onopen
             sjs.onclose = onclose;
         } else {
-            log('[stopped] ' + e);
+            log('[stopped] ' + e.code + ', ' + e.reason);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
         }
@@ -72,8 +69,8 @@
 
     $('#connect').click(function() {
         started = true;
-        protocol = $('#transport').val() || undefined;
-        log('[starting] ' + protocol);
+        transport = $('#transport').val() || undefined;
+        log('[starting] ' + transport);
         onclose({code:1000});
         $('#connect').attr('disabled', true);
         $('#disconnect').each(function(_,e){e.disabled='';});

@@ -1,9 +1,11 @@
-/* eslint quotes: 0 */
+/* eslint quotes: 0, camelcase: 0 */
 'use strict';
 
 var expect = require('expect.js')
   , eventUtils = require('../../lib/utils/event')
+  , transportList = require('../../lib/transport-list')
   , testUtils = require('./test-utils')
+  , echoTests = require('./echo-tests')
   , IframeTransport = require('../../lib/transport/iframe')
   ;
 
@@ -95,6 +97,19 @@ describe('iframe', function () {
             break;
         }
       }
+    });
+  });
+});
+
+describe('Transports', function () {
+  transportList.forEach(function (Trans) {
+    describe(Trans.transportName, function () {
+      if (!Trans.enabled(testUtils.getUrl('/echo'), { cookie_needed: false, nullOrigin: false })) {
+        return;
+      }
+
+      var transport = Trans.transportName;
+      echoTests.echoFromChild(transport);
     });
   });
 });

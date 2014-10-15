@@ -46,7 +46,6 @@ describe('Transports', function () {
       echoTests.echoLargeMessage(transport);
       echoTests.echoUtfEncodingSimple(transport);
       echoTests.echoUtfEncoding(transport);
-      echoTests.echoFromChild(transport);
 
       batchTests.largeMessage(transport);
       batchTests.largeDownload(transport);
