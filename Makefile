@@ -8,12 +8,12 @@ test-node:
 
 test-zuul:
 	@if [ "x$(BROWSER_PLATFORM)" = "x" ]; then \
-		./node_modules/.bin/zuul \
+		./node_modules/.bin/zuul --sauce-connect \
 		--browser-name $(BROWSER_NAME) \
 		--browser-version $(BROWSER_VERSION) \
 		tests/browser.js; \
 		else \
-		./node_modules/.bin/zuul \
+		./node_modules/.bin/zuul --sauce-connect \
 		--browser-name $(BROWSER_NAME) \
 		--browser-version $(BROWSER_VERSION) \
 		--browser-platform "$(BROWSER_PLATFORM)" \
