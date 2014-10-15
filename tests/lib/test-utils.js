@@ -5,18 +5,18 @@ var SockJS = require('../../lib/entry')
   , random = require('../../lib/utils/random')
   ;
 
-var originUrl;
-if (global.location) {
-  originUrl = global.location.origin;
-} else {
-  originUrl = 'http://localhost:8081';
-}
-
 var MPrefix = '_sockjs_global';
 
 module.exports = {
-  getUrl: function (path) {
-    return /^http/.test(path) ? path : originUrl + path;
+  getOriginUrl: function () {
+    if (global.location) {
+      return global.location.origin;
+    }
+    return 'http://localhost:8081';
+  }
+
+, getUrl: function (path) {
+    return /^http/.test(path) ? path : this.getOriginUrl() + path;
   }
 
 , newSockJs: function (path, transport) {
@@ -25,7 +25,7 @@ module.exports = {
 
 , createHook: function () {
     var windowId = 'a' + random.string(8);
-    if (!(MPrefix in global)) {
+    if (!global[MPrefix]) {
       var map = {};
       global[MPrefix] = function(windowId) {
         if (!(windowId in map)) {

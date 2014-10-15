@@ -9,7 +9,6 @@ var expect = require('expect.js')
 function echoFactory(transport, messages) {
   return function (done) {
     this.timeout(10000);
-    this.runnable().globals(['_sockjs_global']);
     var msgs = messages.slice(0);
 
     var sjs = testUtils.newSockJs('/echo', transport);

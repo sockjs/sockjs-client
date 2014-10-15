@@ -9,9 +9,17 @@ var expect = require('expect.js')
 
 describe('Receivers', function () {
   describe('jsonp', function () {
+    var oldTimeout = JsonpReceiver.timeout;
+    var oldScriptTimeout = JsonpReceiver.scriptErrorTimeout;
+    var scriptFunc = JsonpReceiver.prototype._createScript;
     before(function () {
       JsonpReceiver.prototype._createScript = function () {};
       JsonpReceiver.timeout = 300;
+    });
+    after(function () {
+      JsonpReceiver.timeout = oldTimeout;
+      JsonpReceiver.scriptErrorTimeout = oldScriptTimeout;
+      JsonpReceiver.prototype._createScript = scriptFunc;
     });
 
     it('receives data', function (done) {
@@ -120,8 +128,13 @@ describe('Receivers', function () {
   });
 
   describe('xhr', function () {
+    var oldTimeout;
     before(function () {
+      oldTimeout = XhrFake.timeout;
       XhrFake.timeout = 100;
+    });
+    after(function () {
+      XhrFake.timeout = oldTimeout;
     });
 
     it('emits multiple messages for multi-line response', function (done) {

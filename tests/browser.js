@@ -4,6 +4,7 @@ require('../lib/shims');
 
 // prevent global leak warnings on this
 global._jp = {};
+global._sockjs_global = null;
 
 require('./lib/main');
 require('./lib/utils');

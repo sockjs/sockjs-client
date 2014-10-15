@@ -3,7 +3,6 @@
 var expect = require('expect.js')
   , proxyquire = require('proxyquire')
   , SecurityError = require('../../lib/error/securityerror')
-  , SockJS = require('../../lib/entry')
   ;
 
 describe('SockJS', function() {
@@ -16,7 +15,7 @@ describe('SockJS', function() {
         }});
         var sjs = proxyquire('../../lib/entry', { './main': main });
         expect(function () {
-          sjs('http://sockjs.org');
+          sjs('http://localhost');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SecurityError);
         });

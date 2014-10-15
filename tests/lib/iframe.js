@@ -7,13 +7,6 @@ var expect = require('expect.js')
   , IframeTransport = require('../../lib/transport/iframe')
   ;
 
-var originUrl;
-if (global.location) {
-  originUrl = global.location.origin;
-} else {
-  originUrl = 'http://localhost:8081';
-}
-
 function onunloadTest (code, done) {
   var hook = testUtils.createIframe();
   var i = 0;
@@ -39,7 +32,6 @@ describe('iframe', function () {
   }
 
   it('onunload', function (done) {
-    this.runnable().globals(['_sockjs_global']);
     this.timeout(5000);
     onunloadTest("function attachEvent(event, listener) {" +
       "    if (typeof window.addEventListener !== 'undefined') {" +
@@ -64,7 +56,6 @@ describe('iframe', function () {
   });
 
   it('onmessage', function (done) {
-    this.runnable().globals(['_sockjs_global']);
     var hook = testUtils.createIframe();
     var i = 0;
     hook.open = function () {
@@ -94,7 +85,7 @@ describe('iframe', function () {
           case 's':
             hook.iobj.loaded();
             i++;
-            hook.iobj.post(hook.id + ' ' + 's', originUrl);
+            hook.iobj.post(hook.id + ' ' + 's', testUtils.getOriginUrl());
             break;
           case 'e':
             expect(i).to.equal(2);

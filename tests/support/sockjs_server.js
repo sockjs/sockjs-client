@@ -50,7 +50,7 @@ server.addListener('request', function(req, res) {
     }
     res.setHeader('content-type', 'application/javascript');
     res.writeHead(200);
-    res.end('var client_opts = ' +
+    res.end('var clientOptions = ' +
             JSON.stringify(clientOptions) + ';');
   } else if (req.url === '/domain.js') {
     res.setHeader('content-type', 'application/javascript');
@@ -61,6 +61,7 @@ server.addListener('request', function(req, res) {
   }
 });
 server.addListener('upgrade', function(req, res){
+  console.log('upgrade kill');
   res.end();
 });
 
