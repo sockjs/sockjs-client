@@ -54,9 +54,16 @@ function wrongUrl(Obj, url, statuses) {
 }
 
 function wrongPort (Obj) {
+  var badUrl;
+  if (global.location) {
+    badUrl = global.location.protocol + '//' + global.location.hostname + ':';
+  } else {
+    badUrl = 'http://localhost:';
+  }
+
   var ports = [25, 8999, 65300];
   ports.forEach(function (port) {
-    wrongUrl(Obj, 'http://localhost:' + port + '/wrong_url_indeed.txt', [0]);
+    wrongUrl(Obj, badUrl + port + '/wrong_url_indeed.txt', [0]);
   });
 }
 
