@@ -3,8 +3,6 @@ node_js:
   - '0.10'
 script:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || false'
-addons:
-  sauce_connect: true
 env:
   global:
   - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
