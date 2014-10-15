@@ -4,49 +4,8 @@
 var expect = require('expect.js')
   , transportList = require('../../lib/transport-list')
   , testUtils = require('./test-utils')
+  , echoTests = require('./echo-tests')
   ;
-
-function echoFactory(transport, messages) {
-  return function (done) {
-    this.timeout(10000);
-    var msgs = messages.slice(0);
-
-    var sjs = testUtils.newSockJs('/echo', transport);
-    sjs.onopen = function () {
-      sjs.send(msgs[0]);
-    };
-    sjs.onmessage = function (e) {
-      // TODO don't like having to force the element toString here
-      expect(e.data).to.eql('' + msgs[0]);
-      msgs.shift();
-      if (typeof msgs[0] === 'undefined') {
-        sjs.close();
-      } else {
-        sjs.send(msgs[0]);
-      }
-    };
-    sjs.onclose = function (e) {
-      expect(e.code).to.equal(1000);
-      expect(msgs).to.have.length(0);
-      done();
-    };
-  };
-}
-
-function echoBasic(transport) {
-  var messages = ['data'];
-  it('echo basic', echoFactory(transport, messages));
-}
-
-function echoRich(transport) {
-  var messages = [
-    [1, 2, 3, 'data'], null, false, 'data', 1, 12.0, {
-      a: 1,
-      b: 2
-    }
-  ];
-  it('echo rich', echoFactory(transport, messages));
-}
 
 describe('Transports', function () {
   transportList.forEach(function (Trans) {
@@ -78,8 +37,14 @@ describe('Transports', function () {
         return;
       }
 
-      echoBasic(Trans.transportName);
-      echoRich(Trans.transportName);
+      echoTests.echoBasic(Trans.transportName);
+      echoTests.echoRich(Trans.transportName);
+      echoTests.echoUnicode(Trans.transportName);
+      echoTests.echoSpecialChars(Trans.transportName);
+      echoTests.echoLargeMessage(Trans.transportName);
+      echoTests.echoUtfEncodingSimple(Trans.transportName);
+      echoTests.echoUtfEncoding(Trans.transportName);
+      echoTests.echoFromChild(Trans.transportName);
     });
   });
 });
