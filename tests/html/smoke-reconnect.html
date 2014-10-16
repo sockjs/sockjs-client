@@ -25,6 +25,7 @@
   <option value="iframe-xhr-polling">iframe-xhr-polling</option>
   <option value="jsonp-polling">jsonp-polling</option>
   </select>
+  <input type="checkbox" id="sameOrigin" checked>Same Origin?
   <input type="button" value="Start" id="connect">
   <input type="button" value="Stop" id="disconnect" disabled="yes">
 </form>
@@ -49,6 +50,7 @@
     var transport;
     var t0;
     function onopen() {
+      $('#sameOrigin').attr('disabled', true);
        var td = (new Date()).getTime() - t0;
        i += 1;
        $('#out').text(''+i +'  ' + td + ' ms');
@@ -57,6 +59,16 @@
     function onclose(e) {
         if (started && e.code === 1000) {
             t0 = (new Date()).getTime();
+            var url;
+            if ($('#sameOrigin').prop('checked')) {
+              if (window.location.origin) url = window.location.origin;
+              else {
+                url = window.location.protocol + '//' + window.location.hostname +
+                  (window.location.port ? ':' + window.location.port : '');
+              }
+            } else {
+              url = clientOptions.url;
+            }
             sjs = new SockJS(clientOptions.url + '/echo', null, transport);
             sjs.onopen = onopen
             sjs.onclose = onclose;
@@ -64,6 +76,7 @@
             log('[stopped] ' + e.code + ', ' + e.reason);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
+            $('#sameOrigin').attr('disabled', false);
         }
     };
 

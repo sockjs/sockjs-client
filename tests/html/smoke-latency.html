@@ -27,6 +27,7 @@
   <option value="iframe-xhr-polling">iframe-xhr-polling</option>
   <option value="jsonp-polling">jsonp-polling</option>
   </select>
+  <input type="checkbox" id="sameOrigin" checked>Same Origin?
   <input type="button" value="Connect" id="connect">
   <input type="button" value="Disconnect" id="disconnect" disabled="yes">
 </form>
@@ -48,12 +49,14 @@
     var sjs;
     function onopen() {
             log('connected ' + sjs.transport);
+            $('#sameOrigin').attr('disabled', true);
             send();
     };
     function onclose(e) {
             log('disconnected ' + e.code + ', ' + e.reason);
             $('#connect').each(function(_,e){e.disabled='';});
             $('#disconnect').attr('disabled', true);
+            $('#sameOrigin').attr('disabled', false);
     };
     function send() {
         sjs.send(JSON.stringify({t: (new Date()).getTime()}));
@@ -72,7 +75,17 @@
         $('#disconnect').each(function(_,e){e.disabled='';});
         var transport = $('#transport').val() || undefined;
         log('[connecting] ' + transport);
-        sjs = new SockJS(clientOptions.url + '/echo', null, transport);
+        var url;
+        if ($('#sameOrigin').prop('checked')) {
+          if (window.location.origin) url = window.location.origin;
+          else {
+            url = window.location.protocol + '//' + window.location.hostname +
+              (window.location.port ? ':' + window.location.port : '');
+          }
+        } else {
+          url = clientOptions.url;
+        }
+        sjs = new SockJS(url + '/echo', null, transport);
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;
