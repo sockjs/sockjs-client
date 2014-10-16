@@ -44,7 +44,9 @@ describe('Receivers', function () {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
-          global[utils.WPrefix][self.id]('datadata');
+          if (global[utils.WPrefix][self.id]) {
+            global[utils.WPrefix][self.id]('datadata');
+          }
         }, 400);
       };
 
@@ -62,7 +64,9 @@ describe('Receivers', function () {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
-          global[utils.WPrefix][self.id]('datadata');
+          if (global[utils.WPrefix][self.id]) {
+            global[utils.WPrefix][self.id]('datadata');
+          }
         }, 200);
       };
       var jpr = new JsonpReceiver('test');
@@ -123,7 +127,7 @@ describe('Receivers', function () {
       // simulate script error
       setTimeout(function () {
         jpr._scriptError();
-      }, 100);
+      }, 200);
     });
   });
 
