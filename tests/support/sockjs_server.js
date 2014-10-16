@@ -6,6 +6,7 @@ var nodeStatic = require('node-static');
 var sockjs = require('./sockjs_app');
 var url = require('url');
 var path = require('path');
+var debug = require('debug')('sockjs-client:test-server:main');
 
 var port = process.env.ZUUL_PORT || 8081;
 var clientOptions = {
@@ -67,7 +68,10 @@ server.addListener('upgrade', function(req, res){
 
 sockjs.install({
   sockjs_url: '/lib/sockjs.js',
-  websocket: true
+  websocket: true,
+  log: function (severity, message) {
+    debug('[%s] %s', severity, message);
+  }
 }, server);
 
 console.log(' [*] Listening on', port);

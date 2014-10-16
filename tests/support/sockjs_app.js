@@ -1,18 +1,18 @@
 /* eslint camelcase: 0 */
 'use strict';
 var sockjs = require('sockjs');
+var debug = require('debug')('sockjs-client:test-server:app');
 
 exports.install = function(opts, server) {
   var sjs_echo = sockjs.createServer(opts);
   sjs_echo.on('connection', function(conn) {
-    console.log('    [+] echo open    ' + conn);
+    debug('    [+] echo open    ' + conn);
     conn.on('close', function() {
-      console.log('    [-] echo close   ' + conn);
+      debug('    [-] echo close   ' + conn);
     });
     conn.on('data', function(m) {
-      console.log(m);
       var d  = JSON.stringify(m);
-      console.log('    [ ] echo message ' + conn,
+      debug('    [ ] echo message ' + conn,
                   d.slice(0,64) +
                   ((d.length > 64) ? '...' : ''));
       conn.write(m);
@@ -21,16 +21,16 @@ exports.install = function(opts, server) {
 
   var sjs_close = sockjs.createServer(opts);
   sjs_close.on('connection', function(conn) {
-    console.log('    [+] close open    ' + conn);
+    debug('    [+] close open    ' + conn);
     conn.close(3000, 'Go away!');
     conn.on('close', function() {
-      console.log('    [-] close close   ' + conn);
+      debug('    [-] close close   ' + conn);
     });
   });
 
   var sjs_ticker = sockjs.createServer(opts);
   sjs_ticker.on('connection', function(conn) {
-    console.log('    [+] ticker open   ' + conn);
+    debug('    [+] ticker open   ' + conn);
     var tref;
     var schedule = function() {
       conn.write('tick!');
@@ -39,21 +39,21 @@ exports.install = function(opts, server) {
     tref = setTimeout(schedule, 1000);
     conn.on('close', function() {
       clearTimeout(tref);
-      console.log('    [-] ticker close   ' + conn);
+      debug('    [-] ticker close   ' + conn);
     });
   });
 
   var broadcast = {};
   var sjs_broadcast = sockjs.createServer(opts);
   sjs_broadcast.on('connection', function(conn) {
-    console.log('    [+] broadcast open ' + conn);
+    debug('    [+] broadcast open ' + conn);
     broadcast[conn.id] = conn;
     conn.on('close', function() {
       delete broadcast[conn.id];
-      console.log('    [-] broadcast close' + conn);
+      debug('    [-] broadcast close' + conn);
     });
     conn.on('data', function(m) {
-      console.log('    [-] broadcast message', m);
+      debug('    [-] broadcast message', m);
       for(var id in broadcast) {
           broadcast[id].write(m);
       }
@@ -62,14 +62,14 @@ exports.install = function(opts, server) {
 
   var sjs_amplify = sockjs.createServer(opts);
   sjs_amplify.on('connection', function(conn) {
-    console.log('    [+] amp open    ' + conn);
+    debug('    [+] amp open    ' + conn);
     conn.on('close', function() {
-      console.log('    [-] amp close   ' + conn);
+      debug('    [-] amp close   ' + conn);
     });
     conn.on('data', function(m) {
       var n = Math.floor(Number(m));
       n = (n > 0 && n < 19) ? n : 1;
-      console.log('    [ ] amp message: 2^' + n);
+      debug('    [ ] amp message: 2^' + n);
       conn.write(new Array(Math.pow(2, n) + 1).join('x'));
     });
   });
