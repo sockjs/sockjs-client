@@ -35,6 +35,7 @@ function ajaxStreaming (Obj) {
 
 function wrongUrl(Obj, url, statuses) {
   it('wrong url ' + url, function (done) {
+    this.timeout(10000);
     var x = new Obj('GET', url, null);
     x.on('chunk', function () {
       expect().fail('No chunk should be received');
