@@ -2,6 +2,7 @@
 
 var SockJS = require('../../lib/entry')
   , iframeUtils = require('../../lib/utils/iframe')
+  , origin = require('../../lib/utils/origin')
   , random = require('../../lib/utils/random')
   ;
 
@@ -10,7 +11,7 @@ var MPrefix = '_sockjs_global';
 module.exports = {
   getOriginUrl: function () {
     if (global.location) {
-      return global.location.origin;
+      return origin.getOrigin(global.location.href);
     }
     return 'http://localhost:8081';
   }
