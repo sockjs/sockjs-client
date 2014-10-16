@@ -1,10 +1,13 @@
 'use strict';
 var expect = require('expect.js')
   , testUtils = require('./test-utils')
+  , debug = require('debug')('sockjs-client:tests:echo')
   ;
 
 function echoFactory(transport, messages) {
   return function (done) {
+    var title = this.runnable().fullTitle();
+    debug('start', title);
     this.timeout(10000);
     var msgs = messages.slice(0);
 
@@ -26,6 +29,7 @@ function echoFactory(transport, messages) {
       expect(e.code).to.equal(1000);
       expect(msgs).to.have.length(0);
       done();
+      debug('end', title);
     };
   };
 }
@@ -98,7 +102,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
     };
     hook.onsend = function () {
       timeout = setTimeout(function() {
-        expect().fail();
+        expect().fail('echo timeout');
         sjs.close();
       }, 300);
     };
