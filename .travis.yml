@@ -7,6 +7,7 @@ env:
   global:
   - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
   - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
+  - secure: J5c1GaKj+gQGQ8r+X0f/4lx9qarKLq8v8YdBRGy9yuhkZyZ64QsvNL9FP0x6hWXqHp5EZlMKi1nGQWrRgfOLFrv8q3Fl5Q5W2h2VdHhbWVawgTILZACdvbze7x5bEeLVY++HO45pISTb+ZQkbM+rBt10i7hOL4k13CWHgl/+1bo=
 matrix:
   include:
   - node_js: '0.10'

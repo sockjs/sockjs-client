@@ -42,7 +42,7 @@
     "proxyquire": "~1.0.1",
     "sockjs": "^0.3.9",
     "vinyl-source-stream": "^0.1.1",
-    "zuul": "git://github.com/brycekahle/zuul#fix-ws"
+    "zuul": "git://github.com/brycekahle/zuul#ngrok"
   },
   "homepage": "http://sockjs.org",
   "keywords": [

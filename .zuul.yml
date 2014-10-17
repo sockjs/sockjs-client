@@ -2,6 +2,7 @@ ui: mocha-bdd
 scripts:
   - "domain.js"
 server: ./tests/support/sockjs_server.js
+tunnel_provider: ngrok
 browsers:
   - name: chrome
     version: latest
