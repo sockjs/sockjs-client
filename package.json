@@ -5,7 +5,6 @@
   "author": "Bryce Kahle",
   "browser": {
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
-    "./lib/transport/driver/eventsource.js": "./lib/transport/browser/eventsource.js",
     "eventsource": "./lib/transport/browser/eventsource.js",
     "./lib/transport/driver/xhr.js": "./lib/transport/browser/abstract-xhr.js",
     "crypto": "./lib/utils/browser-crypto.js"
