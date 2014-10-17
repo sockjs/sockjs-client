@@ -2,6 +2,8 @@
 
 var expect = require('expect.js')
   , testUtils = require('./test-utils')
+  , InfoReceiver = require('../../lib/info-receiver')
+  , XHRFake = require('../../lib/transport/sender/xhr-fake')
   ;
 
 describe('End to End', function () {
@@ -29,6 +31,12 @@ describe('End to End', function () {
         badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
       } else {
         badUrl = 'http://localhost:1079';
+      }
+      // TODO this isn't a greay way to disable this test
+      if (InfoReceiver._getReceiver(badUrl) === XHRFake) {
+        // CORS unsupported, won't actually hit info server
+        done();
+        return;
       }
 
       var sjs = testUtils.newSockJs(badUrl, 'jsonp-polling');
