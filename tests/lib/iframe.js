@@ -104,7 +104,7 @@ describe('iframe', function () {
 describe('Transports', function () {
   transportList.forEach(function (Trans) {
     describe(Trans.transportName, function () {
-      if (!Trans.enabled(testUtils.getUrl('/echo'), { cookie_needed: false, nullOrigin: false })) {
+      if (!Trans.enabled({ cookie_needed: false, nullOrigin: false, sameScheme: true, sameOrigin: true })) {
         return;
       }
 

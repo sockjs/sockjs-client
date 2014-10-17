@@ -31,39 +31,39 @@ describe('utils', function () {
     });
   });
 
-  describe('origin', function () {
-    var origin = require('../../lib/utils/origin');
+  describe('url', function () {
+    var urlUtils = require('../../lib/utils/url');
     it('getOrigin', function () {
-      expect(origin.getOrigin('http://a.b/')).to.equal('http://a.b:80');
-      expect(origin.getOrigin('http://a.b/c')).to.equal('http://a.b:80');
-      expect(origin.getOrigin('http://a.b:123/c')).to.equal('http://a.b:123');
-      expect(origin.getOrigin('https://a.b/')).to.equal('https://a.b:443');
-      expect(origin.getOrigin('file://a.b/')).to.equal(null);
+      expect(urlUtils.getOrigin('http://a.b/')).to.equal('http://a.b:80');
+      expect(urlUtils.getOrigin('http://a.b/c')).to.equal('http://a.b:80');
+      expect(urlUtils.getOrigin('http://a.b:123/c')).to.equal('http://a.b:123');
+      expect(urlUtils.getOrigin('https://a.b/')).to.equal('https://a.b:443');
+      expect(urlUtils.getOrigin('file://a.b/')).to.equal(null);
     });
 
-    it('isSameOriginUrl', function () {
-      expect(origin.isSameOriginUrl('http://localhost', 'http://localhost/')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost', 'http://localhost/abc')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost/', 'http://localhost')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost', 'http://localhost')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost', 'http://localhost:8080')).to.not.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost:8080', 'http://localhost')).to.not.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost:8080', 'http://localhost:8080/')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:80/', 'http://127.0.0.1:80/a')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:80', 'http://127.0.0.1:80/a')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://localhost', 'http://localhost:80')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1/', 'http://127.0.0.1:80/a')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:9', 'http://127.0.0.1:9999')).to.not.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:99', 'http://127.0.0.1:9999')).to.not.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:999', 'http://127.0.0.1:9999')).to.not.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:9999', 'http://127.0.0.1:9999')).to.be.ok();
-      expect(origin.isSameOriginUrl('http://127.0.0.1:99999', 'http://127.0.0.1:9999')).to.not.be.ok();
+    it('isOriginEqual', function () {
+      expect(urlUtils.isOriginEqual('http://localhost', 'http://localhost/')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost', 'http://localhost/abc')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost/', 'http://localhost')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost', 'http://localhost')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost', 'http://localhost:8080')).to.not.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost:8080', 'http://localhost')).to.not.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost:8080', 'http://localhost:8080/')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:80/', 'http://127.0.0.1:80/a')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:80', 'http://127.0.0.1:80/a')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://localhost', 'http://localhost:80')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1/', 'http://127.0.0.1:80/a')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:9', 'http://127.0.0.1:9999')).to.not.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:99', 'http://127.0.0.1:9999')).to.not.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:999', 'http://127.0.0.1:9999')).to.not.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:9999', 'http://127.0.0.1:9999')).to.be.ok();
+      expect(urlUtils.isOriginEqual('http://127.0.0.1:99999', 'http://127.0.0.1:9999')).to.not.be.ok();
     });
 
-    it('isSameOriginScheme', function () {
-      expect(origin.isSameOriginScheme('http://localhost', 'http://localhost/')).to.be.ok();
-      expect(origin.isSameOriginScheme('http://localhost', 'https://localhost/')).to.not.be.ok();
-      expect(origin.isSameOriginScheme('http://localhost', 'file://localhost/')).to.not.be.ok();
+    it('isSchemeEqual', function () {
+      expect(urlUtils.isSchemeEqual('http://localhost', 'http://localhost/')).to.be.ok();
+      expect(urlUtils.isSchemeEqual('http://localhost', 'https://localhost/')).to.not.be.ok();
+      expect(urlUtils.isSchemeEqual('http://localhost', 'file://localhost/')).to.not.be.ok();
     });
   });
 

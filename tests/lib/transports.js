@@ -33,7 +33,7 @@ describe('Transports', function () {
         // TODO tests for event emitting
       });
 
-      if (!Trans.enabled(testUtils.getUrl('/echo'), { cookie_needed: false, nullOrigin: false })) {
+      if (!Trans.enabled({ cookie_needed: false, nullOrigin: false, sameScheme: true, sameOrigin: true })) {
         it('[unsupported]', function () { expect(true).to.be.ok(); });
         return;
       }
