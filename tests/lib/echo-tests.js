@@ -88,6 +88,8 @@ module.exports.echoUtfEncoding = function echoUtfEncoding(transport) {
 
 module.exports.echoFromChild = function echoFromChild(transport) {
   it('echo from child', function (done) {
+    var title = this.runnable().fullTitle();
+    debug('start', title);
     var hook = testUtils.createIframe('/sockjs-in-parent.html');
     var sjs = testUtils.newSockJs('/echo', transport);
     var code = 'hook.sjs.send("a"); hook.onsend();';
@@ -104,6 +106,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
       timeout = setTimeout(function() {
         expect().fail('echo timeout');
         sjs.close();
+        debug('end', title);
       }, 300);
     };
 
@@ -123,6 +126,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
     };
     sjs.onclose = function() {
       done();
+      debug('end', title);
     };
   });
 };

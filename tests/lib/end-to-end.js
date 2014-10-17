@@ -5,7 +5,8 @@ var expect = require('expect.js')
   ;
 
 describe('End to End', function () {
-  this.timeout(10000);
+  // selenium needs a long time to timeout
+  this.timeout(20000);
 
   describe('Connection Errors', function () {
     it('invalid url 404', function (done) {
