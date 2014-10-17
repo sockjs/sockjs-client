@@ -2,8 +2,9 @@
 
 var expect = require('expect.js')
   , testUtils = require('./test-utils')
-  , InfoReceiver = require('../../lib/info-receiver')
-  , XHRFake = require('../../lib/transport/sender/xhr-fake')
+  , XDR = require('../../lib/transport/sender/xdr')
+  , XHRCors = require('../../lib/transport/sender/xhr-cors')
+  , InfoIframe = require('../../lib/info-iframe')
   ;
 
 describe('End to End', function () {
@@ -32,8 +33,8 @@ describe('End to End', function () {
       } else {
         badUrl = 'http://localhost:1079';
       }
-      // TODO this isn't a greay way to disable this test
-      if (InfoReceiver._getReceiver(badUrl) === XHRFake) {
+      // TODO this isn't a great way to disable this test
+      if (!XHRCors.enabled && !XDR.enabled && !InfoIframe.enabled()) {
         // CORS unsupported, won't actually hit info server
         done();
         return;
