@@ -22,7 +22,8 @@ function ajaxStreaming (Obj) {
     var x = new Obj('GET', testUtils.getOriginUrl() + '/streaming.txt', null);
     x.on('chunk', function (status, text) {
       expect(status).to.equal(200);
-      expect(text.length).to.be.lessThan(2050);
+      // 2051 because of transparent proxies
+      expect([2049, 2051]).to.contain(text.length);
       x.removeAllListeners('chunk');
     });
     x.on('finish', function (status, text) {
@@ -38,8 +39,8 @@ function wrongUrl(Obj, url, statuses) {
     // Selenium has a long timeout for when it can't connect to the port
     this.timeout(20000);
     var x = new Obj('GET', url, null);
-    x.on('chunk', function () {
-      expect().fail('No chunk should be received');
+    x.on('chunk', function (status, text) {
+      expect().fail('No chunk should be received: ' + status + ', ' + text);
     });
     x.on('finish', function (status, text) {
       expect(statuses).to.contain(status);
