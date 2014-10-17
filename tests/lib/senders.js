@@ -37,7 +37,7 @@ function ajaxStreaming (Obj) {
 function wrongUrl(Obj, url, statuses) {
   it('wrong url ' + url, function (done) {
     // Selenium has a long timeout for when it can't connect to the port
-    this.timeout(20000);
+    this.timeout(30000);
     var x = new Obj('GET', url, null);
     x.on('chunk', function (status, text) {
       expect().fail('No chunk should be received: ' + status + ', ' + text);
