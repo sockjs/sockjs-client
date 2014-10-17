@@ -35,7 +35,8 @@ function ajaxStreaming (Obj) {
 
 function wrongUrl(Obj, url, statuses) {
   it('wrong url ' + url, function (done) {
-    this.timeout(10000);
+    // Selenium has a long timeout for when it can't connect to the port
+    this.timeout(20000);
     var x = new Obj('GET', url, null);
     x.on('chunk', function () {
       expect().fail('No chunk should be received');
@@ -58,7 +59,8 @@ function wrongPort (Obj) {
 
   var ports = [25, 8999, 65300];
   ports.forEach(function (port) {
-    wrongUrl(Obj, badUrl + port + '/wrong_url_indeed.txt', [0]);
+    // Sauce Labs/Selenium returns 400 when it can't connect to the port
+    wrongUrl(Obj, badUrl + port + '/wrong_url_indeed.txt', [0, 400]);
   });
 }
 
@@ -78,6 +80,6 @@ describe('Senders', function () {
     ajaxSimple(Xdr);
     ajaxStreaming(Xdr);
     wrongPort(Xdr);
-    wrongUrl(Xdr, testUtils.getOriginUrl() + '/wrong_url_indeed.txt', [0]);
+    wrongUrl(Xdr, testUtils.getOriginUrl() + '/wrong_url_indeed.txt', [0, 400]);
   });
 });
