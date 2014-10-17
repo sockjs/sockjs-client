@@ -93,6 +93,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
       done();
       return;
     }
+    this.timeout(10000);
 
     var title = this.runnable().fullTitle();
     debug('start', title);
