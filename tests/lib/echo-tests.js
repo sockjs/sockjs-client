@@ -1,5 +1,6 @@
 'use strict';
 var expect = require('expect.js')
+  , iframeUtils = require('../../lib/utils/iframe')
   , testUtils = require('./test-utils')
   , debug = require('debug')('sockjs-client:tests:echo')
   ;
@@ -88,6 +89,11 @@ module.exports.echoUtfEncoding = function echoUtfEncoding(transport) {
 
 module.exports.echoFromChild = function echoFromChild(transport) {
   it('echo from child', function (done) {
+    if (!iframeUtils.iframeEnabled) {
+      done();
+      return;
+    }
+
     var title = this.runnable().fullTitle();
     debug('start', title);
     var hook = testUtils.createIframe('/sockjs-in-parent.html');
