@@ -2,7 +2,7 @@
 
 require('../lib/shims');
 
-if (!process.env.TRAVIS_JOB_NUMBER) {
+if (!process.env.TRAVIS_CI) {
   require('debug').enable('sockjs-client:*');
 }
 
