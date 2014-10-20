@@ -1,0 +1,20 @@
+{
+  "requireCurlyBraces": ["if", "else", "for", "while", "do", "try", "catch"],
+  "requireSpaceAfterKeywords": ["do", "for", "if", "else", "switch", "case", "try", "catch", "void", "while", "with", "return", "typeof"],
+  "requireSpaceBeforeBlockStatements": true,
+  "requireParenthesesAroundIIFE": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireSpacesInFunction": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInFunction": {
+    "beforeOpeningRoundBrace": true
+  },
+  "disallowSpacesInCallExpression": true,
+  "requireBlocksOnNewline": true,
+  "disallowCommaBeforeLineBreak": true,
+  "requireCapitalizedConstructors": true,
+  "validateQuoteMarks": { "escape": true, "mark": "'" },
+  "validateIndentation": 2,
+  "validateParameterSeparator": ", "
+}
