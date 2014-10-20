@@ -21,7 +21,7 @@ gulp.task('test', function () {
 });
 
 gulp.task('eslint', function () {
-  gulp.src(['lib/**/*.js', '!lib/sockjs.js'])
+  gulp.src(['lib/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format());
 });
@@ -45,7 +45,7 @@ gulp.task('testbundle', function() {
 });
 
 gulp.task('browserify', function () {
-  return browserify('./lib/entry.js', { 
+  return browserify('./lib/entry.js', {
       standalone: 'SockJS'
     , debug: true
     })
