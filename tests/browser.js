@@ -2,10 +2,6 @@
 
 require('../lib/shims');
 
-if (!process.env.TRAVIS_CI) {
-  require('debug').enable('sockjs-client:*');
-}
-
 // prevent global leak warnings on this
 global._jp = {};
 global._sockjs_global = null;
