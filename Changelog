@@ -19,6 +19,7 @@
  * Add support for query strings on the url - #74
  * Now works inside of Web Workers - #181
  * Support EventSource / Server Sent Events outside of iframes - #201
+ * Rename protocols to transports - #65
 
 
 0.3.4
