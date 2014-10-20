@@ -36,6 +36,22 @@ describe('SockJS', function() {
         });
       });
 
+      it('should throw SyntaxError for an empty url - #8', function () {
+        expect(function () {
+          new SockJS('');
+        }).to.throwException(function (e) {
+          expect(e).to.be.a(SyntaxError);
+        });
+      });
+
+      it('should throw TypeError for an null url', function () {
+        expect(function () {
+          new SockJS();
+        }).to.throwException(function (e) {
+          expect(e).to.be.a(TypeError);
+        });
+      });
+
       it('should throw SyntaxError when the url contains a querystring or fragment', function () {
         expect(function () {
           new SockJS('http://localhost/?test');
