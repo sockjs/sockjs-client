@@ -9,7 +9,7 @@ function echoFactory(transport, messages, url) {
   return function (done) {
     var title = this.runnable().fullTitle();
     debug('start', title);
-    this.timeout(10000);
+    this.timeout(20000);
     var msgs = messages.slice(0);
 
     var sjs = testUtils.newSockJs(url || '/echo', transport);
