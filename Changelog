@@ -18,6 +18,7 @@
  * Fix iframe fallback when message is sent from a popup in IE7/8 - #166
  * Add support for query strings on the url - #74
  * Now works inside of Web Workers - #181
+ * Support EventSource / Server Sent Events outside of iframes - #201
 
 
 0.3.4
