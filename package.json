@@ -25,6 +25,7 @@
   "dependencies": {
     "eventsource": "^0.1.3",
     "faye-websocket": "~0.7.3",
+    "inherits": "^2.0.1",
     "json3": "^3.3.2"
   },
   "devDependencies": {
