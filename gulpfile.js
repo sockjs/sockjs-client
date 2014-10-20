@@ -1,6 +1,7 @@
 'use strict';
 
-var gulp = require('gulp')
+var util = require('util')
+  , gulp = require('gulp')
   , browserify = require('browserify')
   , uglify = require('gulp-uglify')
   , sourcemaps = require('gulp-sourcemaps')
@@ -14,6 +15,16 @@ var gulp = require('gulp')
   ;
 
 var libName = 'sockjs-' + pkg.version
+  , browserifyOptions = {
+      entries: './lib/entry.js'
+    , standalone: 'SockJS'
+    , fullPaths: true
+    , insertGlobalVars: {
+        process: function () {
+          return '{ env: {} }';
+        }
+      }
+    }
   ;
 
 gulp.task('test', function () {
@@ -38,11 +49,9 @@ gulp.task('testbundle', ['browserify:min'], function() {
 });
 
 gulp.task('browserify', function () {
-  return browserify({
-      entries: './lib/entry.js'
-    , standalone: 'SockJS'
-    , debug: true
-    })
+  return browserify(util._extend({
+      debug: true
+    }, browserifyOptions))
     .ignore('querystring')
     .bundle()
     .pipe(source('sockjs.js'))
@@ -54,10 +63,7 @@ gulp.task('browserify', function () {
 });
 
 gulp.task('browserify:min', function () {
-  return browserify({
-      entries: './lib/entry.js'
-    , standalone: 'SockJS'
-    })
+  return browserify(browserifyOptions)
     .ignore('querystring')
     .exclude('debug')
     .transform(envify({
