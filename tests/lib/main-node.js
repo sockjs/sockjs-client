@@ -17,7 +17,7 @@ describe('SockJS', function() {
           sjs('http://localhost');
         }).to.throwException(function (e) {
           expect(e).to.be.a(Error);
-          expect(e).to.contain('SecurityError');
+          expect(e.message).to.contain('SecurityError');
         });
       });
     });
