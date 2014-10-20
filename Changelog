@@ -16,6 +16,8 @@
  * Check for an empty response from /info request - #143
  * Add Content-Type to XHR requests to fix issue over HTTPS on Galaxy S4 - #164
  * Fix iframe fallback when message is sent from a popup in IE7/8 - #166
+ * Add support for query strings on the url - #74
+ * Now works inside of Web Workers - #181
 
 
 0.3.4

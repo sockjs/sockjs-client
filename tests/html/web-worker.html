@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+
+  <script type="text/javascript" src="lib/sockjs.js"></script>
+  <script type="text/javascript" src="static/jquery.min.js"></script>
+
+  <script type="text/javascript" src="config.js"></script>
+</head>
+<body>
+<form>
+  <select id="transport">
+  <option value="">- any - </option>
+  <option value="websocket">websocket</option>
+  <option value="xdr-streaming">xdr-streaming</option>
+  <option value="xhr-streaming">xhr-streaming</option>
+  <option value="eventsource">eventsource</option>
+  <option value="iframe-eventsource">iframe-eventsource</option>
+  <option value="htmlfile">htmlfile</option>
+  <option value="iframe-htmlfile">iframe-htmlfile</option>
+  <option value="xdr-polling">xdr-polling</option>
+  <option value="xhr-polling">xhr-polling</option>
+  <option value="iframe-xhr-polling">iframe-xhr-polling</option>
+  <option value="jsonp-polling">jsonp-polling</option>
+  </select>
+  <input type="checkbox" id="sameOrigin" checked>Same Origin?
+  <input type="button" value="Connect" id="connect">
+  <input type="button" value="Disconnect" id="disconnect" disabled="yes">
+</form>
+
+  Latency: <code id="latency"></code><br>
+  <code id="logs" style="height:200px; overflow:auto; display: block; border: 1px gray solid;">
+  </code>
+
+<script>
+  /* global $, clientOptions */
+  'use strict';
+  function log(a) {
+    if ('console' in window && 'log' in window.console) {
+        console.log(a);
+    }
+    $('#logs').append($('<code>').text(a));
+    $('#logs').append($('<br>'));
+    $('#logs').scrollTop($('#logs').scrollTop() + 10000);
+  }
+
+  var worker;
+  function send() {
+    worker.postMessage(JSON.stringify({ type: 'message', data: JSON.stringify({ t: (new Date()).getTime()}) }));
+  }
+  function onopen() {
+    log('connected');
+    $('#sameOrigin').attr('disabled', true);
+    send();
+  }
+  function onclose(code, reason) {
+    log('disconnected ' + code + ', ' + reason);
+    $('#connect').each(function(_,e){
+      e.disabled = '';
+    });
+    $('#disconnect').attr('disabled', true);
+    $('#sameOrigin').attr('disabled', false);
+  }
+
+  var i = 0;
+  function xonmessage(e) {
+    var msg = JSON.parse(e);
+    var td = (new Date()).getTime() - msg.t;
+    $('#latency').text('' + i + '  ' + td + ' ms');
+    i += 1;
+    send();
+  }
+
+  $('#connect').click(function() {
+      $('#connect').attr('disabled', true);
+      $('#disconnect').each(function(_,e){
+        e.disabled = '';
+      });
+      var transport = $('#transport').val() || undefined;
+      log('[connecting] ' + transport);
+      var url;
+      if ($('#sameOrigin').prop('checked')) {
+        if (window.location.origin) {
+          url = window.location.origin;
+        } else {
+          url = window.location.protocol + '//' + window.location.hostname +
+            (window.location.port ? ':' + window.location.port : '');
+        }
+      } else {
+        url = clientOptions.url;
+      }
+      worker = new Worker('lib/worker.js');
+      worker.onmessage = function (e) {
+        var msg = JSON.parse(e.data);
+        switch (msg.type) {
+          case 'message':
+            xonmessage(msg.data);
+            break;
+          case 'open':
+            onopen();
+            break;
+          case 'close':
+            onclose(msg.code, msg.reason);
+            break;
+          case 'error':
+            console.error(msg.data);
+            break;
+          default:
+            console.error('unknown type: ' + msg.type);
+        }
+      };
+
+      worker.postMessage(JSON.stringify({ type: 'open', url: url + '/echo', transports: transport }));
+  });
+  $('#disconnect').click(function() {
+    $('#disconnect').attr('disabled', true);
+    log('[disconnecting]');
+    worker.postMessage(JSON.stringify({ type: 'close' }));
+  });
+</script>
+</body>
+</html>
