@@ -20,6 +20,7 @@
  * Now works inside of Web Workers - #181
  * Support EventSource / Server Sent Events outside of iframes - #201
  * Rename protocols to transports - #65
+ * Allow transports which need the body to trigger on 'interactive' readyState - #175
 
 
 0.3.4
