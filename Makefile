@@ -1,5 +1,8 @@
 
-test:
+tests/html/lib/sockjs.js:
+	@./node_modules/.bin/gulp testbundle
+
+test: tests/html/lib/sockjs.js
 	@if [ "x$(BROWSER_NAME)" = "x" ]; then make test-node; else make test-zuul; fi
 
 test-node:
@@ -20,4 +23,4 @@ test-zuul:
 		tests/browser.js; \
 	fi
 
-.PHONY: test
+.PHONY: test test-node test-zuul

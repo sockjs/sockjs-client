@@ -9,6 +9,7 @@ var gulp = require('gulp')
   , envify = require('envify/custom')
   , mocha = require('gulp-mocha')
   , eslint = require('gulp-eslint')
+  , rename = require('gulp-rename')
   , pkg = require('./package.json')
   ;
 
@@ -28,6 +29,12 @@ gulp.task('eslint', function () {
 
 gulp.task('watch', function () {
   gulp.watch('tests/*.js', ['test']);
+});
+
+gulp.task('testbundle', ['browserify:min'], function() {
+  return gulp.src('./build/' + libName + '.min.js')
+    .pipe(rename('sockjs.js'))
+    .pipe(gulp.dest('./tests/html/lib/'));
 });
 
 gulp.task('browserify', function () {
