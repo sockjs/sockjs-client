@@ -2,7 +2,7 @@
 
 var expect = require('expect.js')
   , proxyquire = require('proxyquire')
-  , SecurityError = require('../../lib/error/securityerror')
+  , SecurityError = require('../../lib/error/security')
   ;
 
 describe('SockJS', function() {
