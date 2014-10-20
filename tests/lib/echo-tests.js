@@ -5,14 +5,14 @@ var expect = require('expect.js')
   , debug = require('debug')('sockjs-client:tests:echo')
   ;
 
-function echoFactory(transport, messages) {
+function echoFactory(transport, messages, url) {
   return function (done) {
     var title = this.runnable().fullTitle();
     debug('start', title);
     this.timeout(10000);
     var msgs = messages.slice(0);
 
-    var sjs = testUtils.newSockJs('/echo', transport);
+    var sjs = testUtils.newSockJs(url || '/echo', transport);
     sjs.onopen = function () {
       sjs.send(msgs[0]);
     };
@@ -38,6 +38,11 @@ function echoFactory(transport, messages) {
 module.exports.echoBasic = function echoBasic(transport) {
   var messages = ['data'];
   it('echo basic', echoFactory(transport, messages));
+};
+
+module.exports.echoQueryString = function echoBasic(transport) {
+  var messages = ['data'];
+  it('echo querystring', echoFactory(transport, messages, '/echo?testqs=1'));
 };
 
 module.exports.echoRich = function echoRich(transport) {

@@ -40,6 +40,7 @@ describe('Transports', function () {
 
       var transport = Trans.transportName;
       echoTests.echoBasic(transport);
+      echoTests.echoQueryString(transport);
       echoTests.echoRich(transport);
       echoTests.echoUnicode(transport);
       echoTests.echoSpecialChars(transport);

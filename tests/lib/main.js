@@ -52,13 +52,7 @@ describe('SockJS', function() {
         });
       });
 
-      it('should throw SyntaxError when the url contains a querystring or fragment', function () {
-        expect(function () {
-          new SockJS('http://localhost/?test');
-        }).to.throwException(function (e) {
-          expect(e).to.be.a(SyntaxError);
-        });
-
+      it('should throw SyntaxError when the url contains a fragment', function () {
          expect(function () {
           new SockJS('http://localhost/#test');
         }).to.throwException(function (e) {
