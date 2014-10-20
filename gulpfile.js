@@ -31,32 +31,26 @@ gulp.task('watch', function () {
 });
 
 gulp.task('testbundle', function() {
-  return browserify('./lib/entry.js')
-    .ignore('querystring')
-    .bundle({
+  return browserify('./lib/entry.js', {
       standalone: 'SockJS'
     , debug: true
     })
+    .ignore('querystring')
+    .bundle()
     .pipe(mold.transformSourcesRelativeTo(jsRoot))
     .pipe(exorcist(path.join(__dirname, 'tests/html/lib/sockjs.js.map')))
     .pipe(source('sockjs.js'))
     .pipe(gulp.dest('./tests/html/lib/'))
     ;
-
-  // return browserify('./tests/html/lib/alltests.js')
-  //   .bundle()
-  //   .pipe(source('alltestsbundle.js'))
-  //   .pipe(gulp.dest('./tests/html/lib/'))
-  //   ;
 });
 
 gulp.task('browserify', function () {
-  return browserify('./lib/entry.js', { fullPaths: true })
-    .ignore('querystring')
-    .bundle({
+  return browserify('./lib/entry.js', { 
       standalone: 'SockJS'
     , debug: true
     })
+    .ignore('querystring')
+    .bundle()
     .pipe(mold.transformSourcesRelativeTo(jsRoot))
     .pipe(exorcist(path.join(__dirname, 'build/sockjs.js.map')))
     .pipe(source('sockjs.js'))
@@ -65,16 +59,16 @@ gulp.task('browserify', function () {
 });
 
 gulp.task('browserify:min', function () {
-  return browserify('./lib/entry.js', { fullPaths: true })
+  return browserify('./lib/entry.js', {
+      standalone: 'SockJS'
+    })
     .ignore('querystring')
     .plugin('minifyify', {
       map: libName + '.min.js.map'
     , compressPath: jsRoot
     , output: './build/' + libName + '.min.js.map'
     })
-    .bundle({
-      standalone: 'SockJS'
-    })
+    .bundle()
     .pipe(source(libName + '.min.js'))
     .pipe(gulp.dest('./build/'))
     ;
