@@ -2,17 +2,17 @@
 
 var gulp = require('gulp')
   , browserify = require('browserify')
-  , exorcist = require('exorcist')
-  , mold = require('mold-source-map')
+  , uglify = require('gulp-uglify')
+  , sourcemaps = require('gulp-sourcemaps')
   , source = require('vinyl-source-stream')
-  , path = require('path')
+  , buffer = require('vinyl-buffer')
+  , envify = require('envify/custom')
   , mocha = require('gulp-mocha')
   , eslint = require('gulp-eslint')
   , pkg = require('./package.json')
   ;
 
-var jsRoot = path.join(__dirname, 'lib')
-  , libName = 'sockjs-' + pkg.version
+var libName = 'sockjs-' + pkg.version
   ;
 
 gulp.task('test', function () {
@@ -30,46 +30,36 @@ gulp.task('watch', function () {
   gulp.watch('tests/*.js', ['test']);
 });
 
-gulp.task('testbundle', function() {
-  return browserify('./lib/entry.js', {
-      standalone: 'SockJS'
-    , debug: true
-    })
-    .ignore('querystring')
-    .bundle()
-    .pipe(mold.transformSourcesRelativeTo(jsRoot))
-    .pipe(exorcist(path.join(__dirname, 'tests/html/lib/sockjs.js.map')))
-    .pipe(source('sockjs.js'))
-    .pipe(gulp.dest('./tests/html/lib/'))
-    ;
-});
-
 gulp.task('browserify', function () {
-  return browserify('./lib/entry.js', {
-      standalone: 'SockJS'
+  return browserify({
+      entries: './lib/entry.js'
+    , standalone: 'SockJS'
     , debug: true
     })
     .ignore('querystring')
     .bundle()
-    .pipe(mold.transformSourcesRelativeTo(jsRoot))
-    .pipe(exorcist(path.join(__dirname, 'build/sockjs.js.map')))
     .pipe(source('sockjs.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./build/'))
     ;
 });
 
 gulp.task('browserify:min', function () {
-  return browserify('./lib/entry.js', {
-      standalone: 'SockJS'
+  return browserify({
+      entries: './lib/entry.js'
+    , standalone: 'SockJS'
     })
     .ignore('querystring')
-    .plugin('minifyify', {
-      map: libName + '.min.js.map'
-    , compressPath: jsRoot
-    , output: './build/' + libName + '.min.js.map'
-    })
+    .exclude('debug')
+    .transform(envify({
+      NODE_ENV: 'production'
+    }))
     .bundle()
     .pipe(source(libName + '.min.js'))
+    .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest('./build/'))
     ;
 });
