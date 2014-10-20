@@ -8,8 +8,7 @@
 , "node": true
 , "browser": true
 , "predef": [
-    "ActiveXObject"
-  , "XDomainRequest"
+    "XDomainRequest"
   , "EventSource"
   , "describe"
   , "it"
