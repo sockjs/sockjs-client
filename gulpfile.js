@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 'use strict';
 
 var util = require('util')
@@ -71,7 +72,12 @@ gulp.task('browserify:min', function () {
     .bundle()
     .pipe(source(libName + '.min.js'))
     .pipe(buffer())
-    .pipe(uglify())
+    .pipe(uglify({
+      compress: {
+        // remove debug statements from output entirely
+        pure_funcs: ['debug']
+      }
+    }))
     .pipe(gulp.dest('./build/'))
     ;
 });
