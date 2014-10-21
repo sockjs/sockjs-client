@@ -7,7 +7,8 @@
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
     "eventsource": "./lib/transport/browser/eventsource.js",
     "./lib/transport/driver/xhr.js": "./lib/transport/browser/abstract-xhr.js",
-    "crypto": "./lib/utils/browser-crypto.js"
+    "crypto": "./lib/utils/browser-crypto.js",
+    "events": "./lib/event/emitter.js"
   },
   "bugs": {
     "url": "https://github.com/sockjs/sockjs-client/issues"

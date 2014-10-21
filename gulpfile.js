@@ -18,7 +18,6 @@ var libName = 'sockjs-' + pkg.version
   , browserifyOptions = {
       entries: './lib/entry.js'
     , standalone: 'SockJS'
-    , fullPaths: true
     , insertGlobalVars: {
         process: function () {
           return '{ env: {} }';
