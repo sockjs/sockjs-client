@@ -108,6 +108,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
     var hookReady, sockJsReady, timeout, i = 0;
 
     hook.open = function() {
+      debug('hook open');
       hook.iobj.loaded();
       i++;
       hookReady = true;
@@ -115,20 +116,23 @@ module.exports.echoFromChild = function echoFromChild(transport) {
       sockJsReady && hook.callback(code);
     };
     hook.onsend = function () {
+      debug('hook onsend');
       timeout = setTimeout(function() {
         expect().fail('echo timeout');
         sjs.close();
         debug('end', title);
-      }, 300);
+      }, 1000);
     };
 
     sjs.onopen = function() {
+      debug('hook sjs open');
       hook.iobj.loaded();
       i++;
       sockJsReady = true;
       hookReady && hook.callback(code);
     };
     sjs.onmessage = function(e) {
+      debug('hook sjs message, e.data');
       clearTimeout(timeout);
       expect(e.data).to.equal('a');
       expect(i).to.equal(2);
@@ -137,6 +141,7 @@ module.exports.echoFromChild = function echoFromChild(transport) {
       sjs.close();
     };
     sjs.onclose = function() {
+      debug('hook sjs close');
       done();
       debug('end', title);
     };
