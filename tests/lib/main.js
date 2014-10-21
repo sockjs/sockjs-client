@@ -11,6 +11,7 @@ describe('SockJS', function() {
     it('should support construction without new', function () {
       var s = SockJS('http://localhost');
       expect(s).to.be.a(SockJS);
+      s.close();
     });
 
     it('create a valid WebSocket object', function () {
@@ -19,6 +20,7 @@ describe('SockJS', function() {
       expect(s).to.have.property('readyState', SockJS.CONNECTING);
       expect(s).to.have.property('extensions', '');
       expect(s).to.have.property('protocol', '');
+      s.close();
     });
 
     describe('WebSocket specification step #1', function () {
