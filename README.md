@@ -1,6 +1,8 @@
 
 # SockJS-client [![Build Status][travis-image]][travis-url]
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/brycekahle.svg)](https://saucelabs.com/u/brycekahle)
+
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
 which creates a low latency, full duplex, cross-domain communication
