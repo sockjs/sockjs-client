@@ -35,7 +35,7 @@ describe('Transports', function () {
       });
 
       if (!Trans.enabled({ cookie_needed: false, nullOrigin: false, sameScheme: true, sameOrigin: true })) {
-        it('[unsupported]', function () { expect(true).to.be.ok(); });
+        it('[unsupported]');
         return;
       }
 

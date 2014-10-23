@@ -26,32 +26,33 @@ describe('End to End', function () {
       };
     });
 
-    it('invalid url port', function (done) {
-      var badUrl;
-      if (global.location) {
-        badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
-      } else {
-        badUrl = 'http://localhost:1079';
-      }
-      // TODO this isn't a great way to disable this test
-      if (!XHRCors.enabled && !XDR.enabled && !InfoIframe.enabled()) {
-        // CORS unsupported, won't actually hit info server
-        done();
-        return;
-      }
+    // TODO this isn't a great way to disable this test
+    if (!XHRCors.enabled && !XDR.enabled && !InfoIframe.enabled()) {
+      // CORS unsupported, won't actually hit info server
+      it('invalid url port [unsupported]');
+      return;
+    } else {
+      it('invalid url port', function (done) {
+        var badUrl;
+        if (global.location) {
+          badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
+        } else {
+          badUrl = 'http://localhost:1079';
+        }
 
-      var sjs = testUtils.newSockJs(badUrl, 'jsonp-polling');
-      expect(sjs).to.be.ok();
-      sjs.onopen = sjs.onmessage = function () {
-        expect().fail('Open/Message event should not fire for an invalid port');
-      };
-      sjs.onclose = function (e) {
-        expect(e.code).to.equal(1002);
-        expect(e.reason).to.equal('Cannot connect to server');
-        expect(e.wasClean).to.equal(false);
-        done();
-      };
-    });
+        var sjs = testUtils.newSockJs(badUrl, 'jsonp-polling');
+        expect(sjs).to.be.ok();
+        sjs.onopen = sjs.onmessage = function () {
+          expect().fail('Open/Message event should not fire for an invalid port');
+        };
+        sjs.onclose = function (e) {
+          expect(e.code).to.equal(1002);
+          expect(e.reason).to.equal('Cannot connect to server');
+          expect(e.wasClean).to.equal(false);
+          done();
+        };
+      });
+    }
 
     it('disabled websocket test', function (done) {
       var sjs = testUtils.newSockJs('/disabled_websocket_echo', 'websocket');

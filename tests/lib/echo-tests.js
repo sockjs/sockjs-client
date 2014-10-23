@@ -93,11 +93,12 @@ module.exports.echoUtfEncoding = function echoUtfEncoding(url, transport) {
 };
 
 module.exports.echoFromChild = function echoFromChild(url, transport) {
+  if (!iframeUtils.iframeEnabled) {
+    it('echo from child [unsupported]');
+    return;
+  }
+
   it('echo from child', function (done) {
-    if (!iframeUtils.iframeEnabled) {
-      done();
-      return;
-    }
     this.timeout(10000);
 
     var title = this.runnable().fullTitle();

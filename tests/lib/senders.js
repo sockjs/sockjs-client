@@ -77,7 +77,7 @@ describe('Senders', function () {
 
   describe('xdr', function () {
     if (!Xdr.enabled) {
-      it('[unsupported]', function() { expect(true).to.be.ok(); });
+      it('[unsupported]');
       return;
     }
     ajaxSimple(Xdr);
