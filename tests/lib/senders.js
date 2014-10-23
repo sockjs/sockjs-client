@@ -20,13 +20,15 @@ function ajaxSimple (Obj) {
 function ajaxStreaming (Obj) {
   it('streaming', function (done) {
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/streaming.txt', null);
+    var i = 0;
     x.on('chunk', function (status, text) {
       expect(status).to.equal(200);
+      i++;
       // 2051 because of transparent proxies
-      expect([2049, 2051]).to.contain(text.length);
-      x.removeAllListeners('chunk');
+      //expect([2049, 2051]).to.contain(text.length);
     });
     x.on('finish', function (status, text) {
+      expect(i).to.be.greaterThan(0);
       expect(status).to.equal(200);
       expect(text.slice(-4)).to.equal('a\nb\n');
       done();

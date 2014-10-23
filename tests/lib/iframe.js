@@ -105,11 +105,22 @@ describe('Transports', function () {
   transportList.forEach(function (Trans) {
     describe(Trans.transportName, function () {
       if (!Trans.enabled({ cookie_needed: false, nullOrigin: false, sameScheme: true, sameOrigin: true })) {
+        it('[unsupported]');
         return;
       }
 
       var transport = Trans.transportName;
-      echoTests.echoFromChild(transport);
+      var soUrl = testUtils.getSameOriginUrl();
+      describe('same origin', function () {
+        echoTests.echoFromChild(soUrl, transport);
+      });
+
+      // var corsUrl = testUtils.getCrossOriginUrl();
+      // if (corsUrl && corsUrl !== soUrl) {
+      //   describe('cross origin', function () {
+      //     echoTests.echoFromChild(corsUrl, transport);
+      //   });
+      // }
     });
   });
 });
