@@ -1,12 +1,15 @@
 'use strict';
 var expect = require('expect.js')
   , testUtils = require('./test-utils')
+  , debug = require('debug')('sockjs-client:tests:batch')
   ;
 
-function batchFactory(transport, messages) {
+function batchFactory(transport, messages, url) {
   return function(done) {
+    var title = this.runnable().fullTitle();
+    debug('start', title);
     this.timeout(10000);
-    var sjs = testUtils.newSockJs('/echo', transport);
+    var sjs = testUtils.newSockJs(url + '/echo', transport);
     var counter = 0;
     sjs.onopen = function () {
       messages.forEach(function (m) {
@@ -24,19 +27,22 @@ function batchFactory(transport, messages) {
       expect(e.code).to.equal(1000);
       expect(counter).to.equal(messages.length);
       done();
+      debug('end', title);
     };
   };
 }
 
-module.exports.largeMessage = function(transport) {
+module.exports.largeMessage = function(url, transport) {
   var messages = [new Array(Math.pow(2, 1)).join('x'), new Array(Math.pow(2, 2)).join('x'), new Array(Math.pow(2, 4)).join('x'), new Array(Math.pow(2, 8)).join('x'), new Array(Math.pow(2, 13)).join('x'), new Array(Math.pow(2, 13)).join('x')];
-  it('large message (batch)', batchFactory(transport, messages));
+  it('large message (batch)', batchFactory(transport, messages, url));
 };
 
-function amplifyFactory(transport, messages) {
+function amplifyFactory(transport, messages, url) {
   return function(done) {
+    var title = this.runnable().fullTitle();
+    debug('start', title);
     this.timeout(10000);
-    var sjs = testUtils.newSockJs('/amplify', transport);
+    var sjs = testUtils.newSockJs(url + '/amplify', transport);
     var counter = 0;
     sjs.onopen = function () {
       messages.forEach(function (m) {
@@ -54,11 +60,12 @@ function amplifyFactory(transport, messages) {
       expect(e.code).to.equal(1000);
       expect(counter).to.equal(messages.length);
       done();
+      debug('end', title);
     };
   };
 }
 
-module.exports.largeDownload = function(transport) {
+module.exports.largeDownload = function(url, transport) {
   var messages = [1, 2, 4, 8, 13, 15, 15];
-  it('large download', amplifyFactory(transport, messages));
+  it('large download', amplifyFactory(transport, messages, url));
 };

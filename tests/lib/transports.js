@@ -6,6 +6,7 @@ var expect = require('expect.js')
   , testUtils = require('./test-utils')
   , echoTests = require('./echo-tests')
   , batchTests = require('./batch-tests')
+  , SockJS = require('../../lib/entry')
   ;
 
 describe('Transports', function () {
@@ -39,27 +40,42 @@ describe('Transports', function () {
       }
 
       var transport = Trans.transportName;
-      echoTests.echoBasic(transport);
-      echoTests.echoQueryString(transport);
-      echoTests.echoRich(transport);
-      echoTests.echoUnicode(transport);
-      echoTests.echoSpecialChars(transport);
-      echoTests.echoLargeMessage(transport);
-      echoTests.echoUtfEncodingSimple(transport);
-      echoTests.echoUtfEncoding(transport);
 
-      batchTests.largeMessage(transport);
-      batchTests.largeDownload(transport);
+      var soUrl = testUtils.getSameOriginUrl();
+      describe('same origin', function () {
+        runTests(soUrl, transport);
+      });
 
-      userClose(transport);
-      serverClose(transport);
+      // var corsUrl = testUtils.getCrossOriginUrl();
+      // if (corsUrl && corsUrl !== soUrl) {
+      //   describe('cross origin', function () {
+      //     runTests(corsUrl, transport);
+      //   });
+      // }
     });
   });
 });
 
-function userClose(transport) {
+function runTests(url, transport) {
+  echoTests.echoBasic(url, transport);
+  echoTests.echoQueryString(url, transport);
+  echoTests.echoRich(url, transport);
+  echoTests.echoUnicode(url, transport);
+  echoTests.echoSpecialChars(url, transport);
+  echoTests.echoLargeMessage(url, transport);
+  echoTests.echoUtfEncodingSimple(url, transport);
+  echoTests.echoUtfEncoding(url, transport);
+
+  batchTests.largeMessage(url, transport);
+  batchTests.largeDownload(url, transport);
+
+  userClose(url, transport);
+  serverClose(url, transport);
+}
+
+function userClose(url, transport) {
   it('user close', function (done) {
-    var sjs = testUtils.newSockJs('/echo', transport);
+    var sjs = new SockJS(url + '/echo', null, transport);
     expect(sjs).to.be.ok();
     var counter = 0;
 
@@ -82,9 +98,9 @@ function userClose(transport) {
   });
 }
 
-function serverClose(transport) {
+function serverClose(url, transport) {
   it('server close', function (done) {
-    var sjs = testUtils.newSockJs('/close', transport);
+    var sjs = new SockJS(url + '/close', null, transport);
     expect(sjs).to.be.ok();
     var i = 0;
     sjs.onopen = function() {

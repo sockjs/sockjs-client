@@ -9,15 +9,22 @@ var SockJS = require('../../lib/entry')
 var MPrefix = '_sockjs_global';
 
 module.exports = {
-  getOriginUrl: function () {
+  getSameOriginUrl: function () {
     if (global.location) {
       return urlUtils.getOrigin(global.location.href);
     }
     return 'http://localhost:8081';
   }
 
+, getCrossOriginUrl: function () {
+    if (global.clientOptions) {
+      return global.clientOptions.url;
+    }
+    return null;
+  }
+
 , getUrl: function (path) {
-    return /^http/.test(path) ? path : this.getOriginUrl() + path;
+    return /^http/.test(path) ? path : this.getSameOriginUrl() + path;
   }
 
 , newSockJs: function (path, transport) {
