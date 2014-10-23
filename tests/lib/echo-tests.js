@@ -7,7 +7,8 @@ var expect = require('expect.js')
 
 function echoFactory(transport, messages, url) {
   return function (done) {
-    var title = this.runnable().fullTitle();
+    var test = this.runnable();
+    var title = test.fullTitle();
     debug('start', title);
     this.timeout(20000);
     var msgs = messages.slice(0);
@@ -17,6 +18,9 @@ function echoFactory(transport, messages, url) {
       sjs.send(msgs[0]);
     };
     sjs.onmessage = function (e) {
+      if (test.timedOut) {
+        return;
+      }
       // TODO don't like having to force the element toString here
       expect(e.data).to.eql('' + msgs[0]);
       msgs.shift();
@@ -27,6 +31,10 @@ function echoFactory(transport, messages, url) {
       }
     };
     sjs.onclose = function (e) {
+      if (test.timedOut) {
+        return;
+      }
+
       expect(e.code).to.equal(1000);
       expect(msgs).to.have.length(0);
       done();
