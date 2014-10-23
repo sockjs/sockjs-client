@@ -3,6 +3,7 @@
 var expect = require('expect.js')
   , testUtils = require('./test-utils')
   , XhrLocal = require('../../lib/transport/sender/xhr-local')
+  , XhrCors = require('../../lib/transport/sender/xhr-cors')
   , Xdr = require('../../lib/transport/sender/xdr')
   ;
 
@@ -18,6 +19,11 @@ function ajaxSimple (Obj) {
 }
 
 function ajaxStreaming (Obj) {
+  if (!XhrCors.enabled) {
+    it('streaming [unsupported]');
+    return;
+  }
+
   it('streaming', function (done) {
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/streaming.txt', null);
     var i = 0;
