@@ -8,7 +8,7 @@ var expect = require('expect.js')
 
 function ajaxSimple (Obj) {
   it('simple', function (done) {
-    var x = new Obj('GET', testUtils.getOriginUrl() + '/simple.txt', null);
+    var x = new Obj('GET', testUtils.getSameOriginUrl() + '/simple.txt', null);
     x.on('finish', function (status, text) {
       expect(text.length).to.equal(2051);
       expect(text.slice(-2)).to.equal('b\n');
@@ -19,7 +19,7 @@ function ajaxSimple (Obj) {
 
 function ajaxStreaming (Obj) {
   it('streaming', function (done) {
-    var x = new Obj('GET', testUtils.getOriginUrl() + '/streaming.txt', null);
+    var x = new Obj('GET', testUtils.getSameOriginUrl() + '/streaming.txt', null);
     x.on('chunk', function (status, text) {
       expect(status).to.equal(200);
       // 2051 because of transparent proxies
@@ -70,7 +70,7 @@ describe('Senders', function () {
     ajaxSimple(XhrLocal);
     ajaxStreaming(XhrLocal);
     wrongPort(XhrLocal);
-    wrongUrl(XhrLocal, testUtils.getOriginUrl() + '/wrong_url_indeed.txt', [0, 404]);
+    wrongUrl(XhrLocal, testUtils.getSameOriginUrl() + '/wrong_url_indeed.txt', [0, 404]);
   });
 
   describe('xdr', function () {
@@ -81,6 +81,6 @@ describe('Senders', function () {
     ajaxSimple(Xdr);
     ajaxStreaming(Xdr);
     wrongPort(Xdr);
-    wrongUrl(Xdr, testUtils.getOriginUrl() + '/wrong_url_indeed.txt', [0, 400]);
+    wrongUrl(Xdr, testUtils.getSameOriginUrl() + '/wrong_url_indeed.txt', [0, 400]);
   });
 });

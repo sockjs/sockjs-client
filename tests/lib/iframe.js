@@ -87,7 +87,7 @@ describe('iframe', function () {
           case 's':
             hook.iobj.loaded();
             i++;
-            hook.iobj.post(hook.id + ' ' + 's', testUtils.getOriginUrl());
+            hook.iobj.post(hook.id + ' ' + 's', testUtils.getSameOriginUrl());
             break;
           case 'e':
             expect(i).to.equal(2);
