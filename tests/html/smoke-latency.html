@@ -13,6 +13,8 @@
 </head>
 <body>
 <form>
+  <input type="text" id="url" size="40">
+  <br />
   <select id="transport">
   <option value="">- any - </option>
   <option value="websocket">websocket</option>
@@ -76,16 +78,19 @@
         var transport = $('#transport').val() || undefined;
         log('[connecting] ' + transport);
         var url;
-        if ($('#sameOrigin').prop('checked')) {
+        if ($('#url').val()) {
+          url = $('#url').val();
+        } else if ($('#sameOrigin').prop('checked')) {
           if (window.location.origin) url = window.location.origin;
           else {
             url = window.location.protocol + '//' + window.location.hostname +
               (window.location.port ? ':' + window.location.port : '');
           }
+          url += '/echo';
         } else {
-          url = clientOptions.url;
+          url = clientOptions.url + '/echo';
         }
-        sjs = new SockJS(url + '/echo', null, transport);
+        sjs = new SockJS(url, null, transport);
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;

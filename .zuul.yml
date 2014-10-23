@@ -3,6 +3,10 @@ scripts:
   - "domain.js"
 server: ./tests/support/sockjs_server.js
 tunnel_provider: ngrok
+capabilities:
+  record-video: false
+  record-screenshots: false
+  avoid-proxy: true
 browsers:
   - name: chrome
     version: latest
