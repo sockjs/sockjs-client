@@ -70,6 +70,7 @@ function wrongUrl(Obj, url, statuses) {
     // Selenium has a long timeout for when it can't connect to the port
     this.timeout(30000);
     var x = new Obj('GET', url, null);
+    x.timeout = 10000;
     x.on('chunk', function (status, text) {
       done(new Error('No chunk should be received: ' + status + ', ' + text));
       x.abort();
