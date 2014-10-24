@@ -18,11 +18,18 @@ function echoFactory(transport, messages, url) {
       sjs.send(msgs[0]);
     };
     sjs.onmessage = function (e) {
-      if (test.timedOut) {
+      if (test.timedOut || test.duration) {
         return;
       }
       // TODO don't like having to force the element toString here
-      expect(e.data).to.eql('' + msgs[0]);
+      try {
+        expect(e.data).to.eql('' + msgs[0]);
+      } catch (e) {
+        done(e);
+        sjs.close();
+        return;
+      }
+
       msgs.shift();
       if (typeof msgs[0] === 'undefined') {
         sjs.close();
@@ -31,12 +38,18 @@ function echoFactory(transport, messages, url) {
       }
     };
     sjs.onclose = function (e) {
-      if (test.timedOut) {
+      if (test.timedOut || test.duration) {
         return;
       }
 
-      expect(e.code).to.equal(1000);
-      expect(msgs).to.have.length(0);
+      try {
+        expect(e.code).to.equal(1000);
+        expect(msgs).to.have.length(0);
+      } catch (e) {
+        done(e);
+        return;
+      }
+
       done();
       debug('end', title);
     };
@@ -109,7 +122,8 @@ module.exports.echoFromChild = function echoFromChild(url, transport) {
   it('echo from child', function (done) {
     this.timeout(10000);
 
-    var title = this.runnable().fullTitle();
+    var test = this.runnable();
+    var title = test.fullTitle();
     debug('start', title);
     var hook = testUtils.createIframe('/sockjs-in-parent.html');
     var sjs = testUtils.newSockJs(url + '/echo', transport);
@@ -127,7 +141,7 @@ module.exports.echoFromChild = function echoFromChild(url, transport) {
     hook.onsend = function () {
       debug('hook onsend');
       timeout = setTimeout(function() {
-        expect().fail('echo timeout');
+        done(new Error('echo timeout'));
         sjs.close();
         debug('end', title);
       }, 1000);
@@ -143,13 +157,28 @@ module.exports.echoFromChild = function echoFromChild(url, transport) {
     sjs.onmessage = function(e) {
       debug('hook sjs message, e.data');
       clearTimeout(timeout);
-      expect(e.data).to.equal('a');
-      expect(i).to.equal(2);
-      hook.iobj.cleanup();
-      hook.del();
-      sjs.close();
+      try {
+        expect(e.data).to.equal('a');
+        expect(i).to.equal(2);
+      } catch (e) {
+        done(e);
+      } finally {
+        hook.iobj.cleanup();
+        hook.del();
+        sjs.close();
+      }
     };
-    sjs.onclose = function() {
+    sjs.onclose = function(e) {
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(e.code).to.equal(1000);
+      } catch (e) {
+        done(e);
+        return;
+      }
       debug('hook sjs close');
       done();
       debug('end', title);

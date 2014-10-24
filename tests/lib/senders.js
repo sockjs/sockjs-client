@@ -9,10 +9,16 @@ var expect = require('expect.js')
 
 function ajaxSimple (Obj) {
   it('simple', function (done) {
+    var test = this.runnable();
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/simple.txt', null);
     x.on('finish', function (status, text) {
-      expect(text.length).to.equal(2051);
-      expect(text.slice(-2)).to.equal('b\n');
+      try {
+        expect(text.length).to.equal(2051);
+        expect(text.slice(-2)).to.equal('b\n');
+      } catch (e) {
+        done(e);
+        return;
+      }
       done();
     });
   });
@@ -25,18 +31,34 @@ function ajaxStreaming (Obj) {
   }
 
   it('streaming', function (done) {
+    var test = this.runnable();
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/streaming.txt', null);
     var i = 0;
     x.on('chunk', function (status, text) {
-      expect(status).to.equal(200);
+      try {
+        expect(status).to.equal(200);
+      } catch (e) {
+        done(e);
+        x.abort();
+        return;
+      }
       i++;
       // 2051 because of transparent proxies
       //expect([2049, 2051]).to.contain(text.length);
     });
     x.on('finish', function (status, text) {
-      expect(i).to.be.greaterThan(0);
-      expect(status).to.equal(200);
-      expect(text.slice(-4)).to.equal('a\nb\n');
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(i).to.be.greaterThan(0);
+        expect(status).to.equal(200);
+        expect(text.slice(-4)).to.equal('a\nb\n');
+      } catch (e) {
+        done(e);
+        return;
+      }
       done();
     });
   });
@@ -44,15 +66,26 @@ function ajaxStreaming (Obj) {
 
 function wrongUrl(Obj, url, statuses) {
   it('wrong url ' + url, function (done) {
+    var test = this.runnable();
     // Selenium has a long timeout for when it can't connect to the port
     this.timeout(30000);
     var x = new Obj('GET', url, null);
     x.on('chunk', function (status, text) {
-      expect().fail('No chunk should be received: ' + status + ', ' + text);
+      done(new Error('No chunk should be received: ' + status + ', ' + text));
+      x.abort();
     });
     x.on('finish', function (status, text) {
-      expect(statuses).to.contain(status);
-      expect(text).not.to.be(undefined);
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(statuses).to.contain(status);
+        expect(text).not.to.be(undefined);
+      } catch (e) {
+        done(e);
+        return;
+      }
       done();
     });
   });

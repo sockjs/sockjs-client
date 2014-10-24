@@ -75,24 +75,41 @@ function runTests(url, transport) {
 
 function userClose(url, transport) {
   it('user close', function (done) {
+    var test = this.runnable();
+    this.timeout(10000);
     var sjs = new SockJS(url + '/echo', null, transport);
     expect(sjs).to.be.ok();
     var counter = 0;
 
     sjs.onopen = function() {
       counter++;
-      expect(counter).to.equal(1);
-      sjs.close(3000, 'User message');
-      expect(counter).to.equal(1);
+      try {
+        expect(counter).to.equal(1);
+        sjs.close(3000, 'User message');
+        expect(counter).to.equal(1);
+      } catch (e) {
+        done(e);
+      }
     };
     sjs.onmessage = function() {
-      expect().fail();
+      done(new Error());
+      sjs.close();
       counter++;
     };
     sjs.onclose = function(e) {
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
       counter++;
-      expect(e.wasClean).to.equal(true);
-      expect(counter).to.equal(2);
+      try {
+        expect(e.wasClean).to.equal(true);
+        expect(counter).to.equal(2);
+      } catch (e) {
+        done(e);
+        return;
+      }
+
       done();
     };
   });
@@ -100,6 +117,8 @@ function userClose(url, transport) {
 
 function serverClose(url, transport) {
   it('server close', function (done) {
+    var test = this.runnable();
+    this.timeout(10000);
     var sjs = new SockJS(url + '/close', null, transport);
     expect(sjs).to.be.ok();
     var i = 0;
@@ -107,13 +126,23 @@ function serverClose(url, transport) {
       i++;
     };
     sjs.onmessage = function() {
-      expect().fail();
+      done(new Error());
+      sjs.close();
     };
     sjs.onclose = function(e) {
-      expect(i).to.equal(1);
-      expect(e.code).to.equal(3000);
-      expect(e.reason).to.equal('Go away!');
-      expect(e.wasClean).to.equal(true);
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(i).to.equal(1);
+        expect(e.code).to.equal(3000);
+        expect(e.reason).to.equal('Go away!');
+        expect(e.wasClean).to.equal(true);
+      } catch (e) {
+        done(e);
+        return;
+      }
       done();
     };
   });

@@ -6,7 +6,8 @@ var expect = require('expect.js')
 
 function batchFactory(transport, messages, url) {
   return function(done) {
-    var title = this.runnable().fullTitle();
+    var test = this.runnable();
+    var title = test.fullTitle();
     debug('start', title);
     this.timeout(10000);
     var sjs = testUtils.newSockJs(url + '/echo', transport);
@@ -17,15 +18,31 @@ function batchFactory(transport, messages, url) {
       });
     };
     sjs.onmessage = function (e) {
-      expect(e.data).to.eql(messages[counter]);
+      try {
+        expect(e.data).to.eql(messages[counter]);
+      } catch (e) {
+        done(e);
+        sjs.close();
+        return;
+      }
+
       counter++;
       if (counter === messages.length) {
         sjs.close();
       }
     };
     sjs.onclose = function (e) {
-      expect(e.code).to.equal(1000);
-      expect(counter).to.equal(messages.length);
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(e.code).to.equal(1000);
+        expect(counter).to.equal(messages.length);
+      } catch (e) {
+        done(e);
+        return;
+      }
       done();
       debug('end', title);
     };
@@ -39,7 +56,8 @@ module.exports.largeMessage = function(url, transport) {
 
 function amplifyFactory(transport, messages, url) {
   return function(done) {
-    var title = this.runnable().fullTitle();
+    var test = this.runnable();
+    var title = test.fullTitle();
     debug('start', title);
     this.timeout(10000);
     var sjs = testUtils.newSockJs(url + '/amplify', transport);
@@ -50,15 +68,31 @@ function amplifyFactory(transport, messages, url) {
       });
     };
     sjs.onmessage = function (e) {
-      expect(e.data).to.have.length(Math.pow(2, messages[counter]));
+      try {
+        expect(e.data).to.have.length(Math.pow(2, messages[counter]));
+      } catch (e) {
+        done(e);
+        sjs.close();
+        return;
+      }
       counter++;
       if (counter === messages.length) {
         sjs.close();
       }
     };
     sjs.onclose = function (e) {
-      expect(e.code).to.equal(1000);
-      expect(counter).to.equal(messages.length);
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(e.code).to.equal(1000);
+        expect(counter).to.equal(messages.length);
+      } catch (e) {
+        done(e);
+        return;
+      }
+
       done();
       debug('end', title);
     };

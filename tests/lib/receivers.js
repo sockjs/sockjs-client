@@ -23,6 +23,7 @@ describe('Receivers', function () {
     });
 
     it('receives data', function (done) {
+      var test = this.runnable();
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
@@ -31,16 +32,32 @@ describe('Receivers', function () {
       };
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.equal('network');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(reason).to.equal('network');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.equal('datadata');
+        try {
+          expect(msg).to.equal('datadata');
+        } catch (e) {
+          done(e);
+          jpr.abort();
+          return;
+        }
       });
     });
 
     it('will timeout', function (done) {
       this.timeout(500);
+      var test = this.runnable();
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
@@ -52,15 +69,26 @@ describe('Receivers', function () {
 
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.contain('timeout');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(reason).to.contain('timeout');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       jpr.on('message', function () {
-        expect().fail('No message should be sent');
+        done(new Error('No message should be sent'));
+        jpr.abort();
       });
     });
 
     it('aborts without sending a message', function (done) {
+      var test = this.runnable();
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
@@ -71,17 +99,28 @@ describe('Receivers', function () {
       };
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.contain('aborted');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(reason).to.contain('aborted');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       jpr.on('message', function () {
-        expect().fail('No message should be sent');
+        done(new Error('No message should be sent'));
+        jpr.abort();
       });
       jpr.abort();
     });
 
     it('will not report error if onerror triggered right before onreadystatechange (IE9)', function (done) {
       JsonpReceiver.scriptErrorTimeout = 300;
+      var test = this.runnable();
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         // simulate a normal JSONP response
@@ -93,11 +132,24 @@ describe('Receivers', function () {
 
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.equal('network');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(reason).to.equal('network');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.equal('datadata');
+        try {
+          expect(msg).to.equal('datadata');
+        } catch (e) {
+          done(e);
+          jpr.abort();
+        }
       });
 
       // simulate script error
@@ -106,6 +158,7 @@ describe('Receivers', function () {
 
     it('will not report error if onerror triggered right after onreadystatechange (IE9)', function (done) {
       JsonpReceiver.scriptErrorTimeout = 100;
+      var test = this.runnable();
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         // simulate a normal JSONP response
@@ -117,11 +170,24 @@ describe('Receivers', function () {
 
       var jpr = new JsonpReceiver('test');
       jpr.on('close', function (code, reason) {
-        expect(reason).to.equal('network');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(reason).to.equal('network');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       jpr.on('message', function (msg) {
-        expect(msg).to.equal('datadata');
+        try {
+          expect(msg).to.equal('datadata');
+        } catch (e) {
+          done(e);
+          jpr.abort();
+        }
       });
 
       // simulate script error
@@ -142,41 +208,81 @@ describe('Receivers', function () {
     });
 
     it('emits multiple messages for multi-line response', function (done) {
+      var test = this.runnable();
       var xhr = new XhrReceiver('test', XhrFake);
       var i = 0, responses = ['test', 'multiple', 'lines', '{}'];
       xhr.on('message', function (msg) {
-        expect(msg).to.equal(responses[i]);
+        try {
+          expect(msg).to.equal(responses[i]);
+        } catch (e) {
+          done(e);
+          xhr.abort();
+          return;
+        }
         i++;
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.equal('network');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(reason).to.equal('network');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       xhr._chunkHandler(200, 'test\nmultiple\nlines');
     });
 
     it('emits no messages for an empty string response', function (done) {
+      var test = this.runnable();
       var xhr = new XhrReceiver('test', XhrFake);
       var i = 0, responses = ['{}'];
       xhr.on('message', function (msg) {
-        expect(i).to.be.lessThan(responses.length);
-        expect(msg).to.equal(responses[i]);
+        try {
+          expect(i).to.be.lessThan(responses.length);
+          expect(msg).to.equal(responses[i]);
+        } catch (e) {
+          done(e);
+          xhr.abort();
+          return;
+        }
         i++;
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.equal('network');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(reason).to.equal('network');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       xhr._chunkHandler(200, '');
     });
 
     it('aborts without sending a message', function (done) {
+      var test = this.runnable();
       var xhr = new XhrReceiver('test', XhrFake);
       xhr.on('message', function () {
-        expect().fail();
+        done(new Error());
+        xhr.abort();
       });
       xhr.on('close', function (code, reason) {
-        expect(reason).to.equal('user');
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(reason).to.equal('user');
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       });
       xhr.abort();

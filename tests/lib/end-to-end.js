@@ -13,15 +13,27 @@ describe('End to End', function () {
 
   describe('Connection Errors', function () {
     it('invalid url 404', function (done) {
+      var test = this.runnable();
       var sjs = testUtils.newSockJs('/invalid_url', 'jsonp-polling');
       expect(sjs).to.be.ok();
       sjs.onopen = sjs.onmessage = function () {
-        expect().fail('Open/Message event should not fire for an invalid url');
+        done(new Error('Open/Message event should not fire for an invalid url'));
+        sjs.close();
       };
       sjs.onclose = function (e) {
-        expect(e.code).to.equal(1002);
-        expect(e.reason).to.equal('Cannot connect to server');
-        expect(e.wasClean).to.equal(false);
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(e.code).to.equal(1002);
+          expect(e.reason).to.equal('Cannot connect to server');
+          expect(e.wasClean).to.equal(false);
+        } catch (e) {
+          done(e);
+          return;
+        }
+
         done();
       };
     });
@@ -33,6 +45,7 @@ describe('End to End', function () {
       return;
     } else {
       it('invalid url port', function (done) {
+        var test = this.runnable();
         var badUrl;
         if (global.location) {
           badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
@@ -43,46 +56,80 @@ describe('End to End', function () {
         var sjs = testUtils.newSockJs(badUrl, 'jsonp-polling');
         expect(sjs).to.be.ok();
         sjs.onopen = sjs.onmessage = function () {
-          expect().fail('Open/Message event should not fire for an invalid port');
+          done(new Error('Open/Message event should not fire for an invalid port'));
+          sjs.close();
         };
         sjs.onclose = function (e) {
-          expect(e.code).to.equal(1002);
-          expect(e.reason).to.equal('Cannot connect to server');
-          expect(e.wasClean).to.equal(false);
+          if (test.timedOut || test.duration) {
+            return;
+          }
+
+          try {
+            expect(e.code).to.equal(1002);
+            expect(e.reason).to.equal('Cannot connect to server');
+            expect(e.wasClean).to.equal(false);
+          } catch (e) {
+            done(e);
+            return;
+          }
+
           done();
         };
       });
     }
 
     it('disabled websocket test', function (done) {
+      var test = this.runnable();
       var sjs = testUtils.newSockJs('/disabled_websocket_echo', 'websocket');
       expect(sjs).to.be.ok();
       sjs.onopen = sjs.onmessage = function () {
-        expect().fail('Open/Message event should not fire for disabled websockets');
+        done(new Error('Open/Message event should not fire for disabled websockets'));
+        sjs.close();
       };
       sjs.onclose = function (e) {
-        expect(e.code).to.equal(2000);
-        expect(e.reason).to.equal('All transports failed');
-        expect(e.wasClean).to.equal(false);
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(e.code).to.equal(2000);
+          expect(e.reason).to.equal('All transports failed');
+          expect(e.wasClean).to.equal(false);
+        } catch (e) {
+          done(e);
+          return;
+        }
         done();
       };
     });
 
     it('close on close', function (done) {
+      var test = this.runnable();
       var sjs = testUtils.newSockJs('/close');
       expect(sjs).to.be.ok();
       sjs.onopen = function () {
         expect(true).to.be.ok();
       };
       sjs.onmessage = function () {
-        expect().fail('Message should not be emitted');
+        done(new Error('Message should not be emitted'));
+        sjs.close();
       };
       sjs.onclose = function (e) {
-        expect(e.code).to.equal(3000);
-        expect(e.reason).to.equal('Go away!');
-        expect(e.wasClean).to.equal(true);
+        if (test.timedOut || test.duration) {
+          return;
+        }
+
+        try {
+          expect(e.code).to.equal(3000);
+          expect(e.reason).to.equal('Go away!');
+          expect(e.wasClean).to.equal(true);
+        } catch (e) {
+          done(e);
+          return;
+        }
+
         sjs.onclose = function () {
-          expect().fail();
+          done(new Error());
         };
         sjs.close();
         setTimeout(function () {

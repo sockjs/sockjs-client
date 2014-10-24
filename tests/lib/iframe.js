@@ -3,6 +3,7 @@
 
 var expect = require('expect.js')
   , eventUtils = require('../../lib/utils/event')
+  , browser = require('../../lib/utils/browser')
   , transportList = require('../../lib/transport-list')
   , testUtils = require('./test-utils')
   , echoTests = require('./echo-tests')
@@ -18,10 +19,19 @@ function onunloadTest (code, done) {
   };
   hook.load = function () {
     i++;
-    return setTimeout(function () { hook.iobj.cleanup(); }, 1);
+    return setTimeout(function () {
+      hook.iobj.cleanup();
+    }, 1);
   };
   hook.unload = function () {
-    expect(i).to.equal(2);
+    try {
+      expect(i).to.equal(2);
+    } catch (e) {
+      done(e);
+      hook.del();
+      return;
+    }
+
     hook.del();
     done();
   };
@@ -29,33 +39,37 @@ function onunloadTest (code, done) {
 
 describe('iframe', function () {
   if (!IframeTransport.enabled()) {
-    it('[unsupported]', function () { expect(true).to.be.ok(); });
+    it('[unsupported]');
     return;
   }
 
-  it('onunload', function (done) {
-    this.timeout(5000);
-    onunloadTest("function attachEvent(event, listener) {" +
-      "    if (typeof window.addEventListener !== 'undefined') {" +
-      "        window.addEventListener(event, listener, false);" +
-      "    } else {" +
-      "        document.attachEvent('on' + event, listener);" +
-      "        window.attachEvent('on' + event, listener);" +
-      "    }" +
-      "}" +
-      "attachEvent('load', function(){" +
-      "    hook.load();" +
-      "});" +
-      "var w = 0;" +
-      "var run = function(){" +
-      "    if(w === 0) {" +
-      "        w = 1;" +
-      "        hook.unload();" +
-      "    }" +
-      "};" +
-      "attachEvent('beforeunload', run);" +
-      "attachEvent('unload', run);", done);
-  });
+  if (browser.isOpera()) {
+    it('onunload [unsupported]');
+  } else {
+    it('onunload', function (done) {
+      this.timeout(5000);
+      onunloadTest("function attachEvent(event, listener) {" +
+        "    if (typeof window.addEventListener !== 'undefined') {" +
+        "        window.addEventListener(event, listener, false);" +
+        "    } else {" +
+        "        document.attachEvent('on' + event, listener);" +
+        "        window.attachEvent('on' + event, listener);" +
+        "    }" +
+        "}" +
+        "attachEvent('load', function(){" +
+        "    hook.load();" +
+        "});" +
+        "var w = 0;" +
+        "var run = function(){" +
+        "    if(w === 0) {" +
+        "        w = 1;" +
+        "        hook.unload();" +
+        "    }" +
+        "};" +
+        "attachEvent('beforeunload', run);" +
+        "attachEvent('unload', run);", done);
+    });
+  }
 
   it('onmessage', function (done) {
     var hook = testUtils.createIframe();
@@ -90,7 +104,15 @@ describe('iframe', function () {
             hook.iobj.post(hook.id + ' ' + 's', testUtils.getSameOriginUrl());
             break;
           case 'e':
-            expect(i).to.equal(2);
+            try {
+              expect(i).to.equal(2);
+            } catch (e) {
+              done(e);
+              hook.iobj.cleanup();
+              hook.del();
+              return;
+            }
+
             hook.iobj.cleanup();
             hook.del();
             done();
