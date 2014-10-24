@@ -1,7 +1,7 @@
 ui: mocha-bdd
 scripts:
-  - "config.js"
-  - "domain.js"
+  - "/config.js"
+  - "/domain.js"
 server: ./tests/support/sockjs_server.js
 tunnel_provider: ngrok
 capabilities:
