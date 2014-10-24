@@ -48,6 +48,16 @@ gulp.task('testbundle', ['browserify:min'], function() {
     .pipe(gulp.dest('./tests/html/lib/'));
 });
 
+gulp.task('testbundle-debug', ['browserify'], function() {
+  gulp.src('./build/sockjs.js')
+    .pipe(rename('sockjs.js'))
+    .pipe(gulp.dest('./tests/html/lib/'));
+
+  return gulp.src('./build/sockjs.js.map')
+    .pipe(rename('sockjs.js.map'))
+    .pipe(gulp.dest('./tests/html/lib/'));
+});
+
 gulp.task('browserify', function () {
   return browserify(util._extend({
       debug: true
