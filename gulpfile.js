@@ -12,7 +12,9 @@ var util = require('util')
   , mocha = require('gulp-mocha')
   , eslint = require('gulp-eslint')
   , rename = require('gulp-rename')
+  , header = require('gulp-header')
   , pkg = require('./package.json')
+  , fs = require('fs')
   ;
 
 var libName = 'sockjs-' + pkg.version
@@ -27,6 +29,8 @@ var libName = 'sockjs-' + pkg.version
     }
   ;
 
+var banner = '/* sockjs-client v<%= pkg.version %> | http://sockjs.org | MIT license */\n';
+
 gulp.task('test', function () {
   gulp.src('tests/node.js', {read: false})
     .pipe(mocha());
@@ -40,6 +44,10 @@ gulp.task('eslint', function () {
 
 gulp.task('watch', function () {
   gulp.watch('tests/*.js', ['test']);
+});
+
+gulp.task('write-version', function () {
+  fs.writeFileSync('./lib/version.js', "module.exports = '" + pkg.version + "';");
 });
 
 gulp.task('testbundle', ['browserify:min'], function() {
@@ -58,7 +66,7 @@ gulp.task('testbundle-debug', ['browserify'], function() {
     .pipe(gulp.dest('./tests/html/lib/'));
 });
 
-gulp.task('browserify', function () {
+gulp.task('browserify', ['write-version'], function () {
   return browserify(util._extend({
       debug: true
     }, browserifyOptions))
@@ -67,12 +75,13 @@ gulp.task('browserify', function () {
     .pipe(source('sockjs.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(header(banner, { pkg: pkg }))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./build/'))
     ;
 });
 
-gulp.task('browserify:min', function () {
+gulp.task('browserify:min', ['write-version'], function () {
   return browserify(browserifyOptions)
     .ignore('querystring')
     .exclude('debug')
@@ -88,6 +97,34 @@ gulp.task('browserify:min', function () {
         pure_funcs: ['debug']
       }
     }))
+    .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest('./build/'))
     ;
+});
+
+gulp.task('release', ['browserify', 'browserify:min'], function () {
+  // sockjs-{version}.min.js
+  gulp.src('./build/' + libName + '.min.js')
+    .pipe(gulp.dest('./dist/'));
+
+  // sockjs-{version}.js
+  gulp.src('./build/sockjs.js')
+    .pipe(rename(libName + '.js'))
+    .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('stable-release', function () {
+  var bower = require('./bower.json');
+  bower.version = pkg.version;
+  fs.writeFileSync('./bower.json', JSON.stringify(bower, null, 2));
+
+  // sockjs.min.js
+  gulp.src('./build/' + libName + '.min.js')
+    .pipe(rename('sockjs.min.js'))
+    .pipe(gulp.dest('./dist/'));
+
+  // sockjs.js
+  gulp.src('./build/sockjs.js')
+    .pipe(rename('sockjs.js'))
+    .pipe(gulp.dest('./dist/'));
 });
