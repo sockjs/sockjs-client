@@ -77,7 +77,7 @@ function userClose(url, transport) {
   it('user close', function (done) {
     var test = this.runnable();
     this.timeout(10000);
-    var sjs = new SockJS(url + '/echo', null, transport);
+    var sjs = new SockJS(url + '/echo', null, { transports: transport });
     expect(sjs).to.be.ok();
     var counter = 0;
 
@@ -119,7 +119,7 @@ function serverClose(url, transport) {
   it('server close', function (done) {
     var test = this.runnable();
     this.timeout(10000);
-    var sjs = new SockJS(url + '/close', null, transport);
+    var sjs = new SockJS(url + '/close', null, { transports: transport });
     expect(sjs).to.be.ok();
     var i = 0;
     sjs.onopen = function() {

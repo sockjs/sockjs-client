@@ -70,14 +70,7 @@ Work in progress:
   * [SockJS-perl](https://github.com/vti/sockjs-perl)
   * [SockJS-go](https://github.com/igm/sockjs-go/)
 
-QUnit tests and smoke tests
----------------------------
-
-SockJS comes with some QUnit tests and a few smoke tests (using
-[SockJS-node](https://github.com/sockjs/sockjs-node) on the server
-side).
-
-Example
+Getting Started
 -------
 
 SockJS mimics the [WebSockets API](http://dev.w3.org/html5/websockets/),
@@ -104,6 +97,9 @@ SockJS server. Here's a simple example:
  sock.onclose = function() {
      console.log('close');
  };
+
+ sock.send('test');
+ sock.close();
 ```
 
 SockJS-client API
@@ -111,7 +107,7 @@ SockJS-client API
 
 ### SockJS class
 
-Similar to 'WebSocket' class 'SockJS' constructor takes one, or more arguments:
+Similar to the 'WebSocket' API, the 'SockJS' constructor takes one, or more arguments:
 
 ```javascript
 var sockjs = new SockJS(url, _reserved, options);
@@ -119,27 +115,15 @@ var sockjs = new SockJS(url, _reserved, options);
 
 Where `options` is a hash which can contain:
 
- *  **debug (boolean)**
-
-    Print some debugging messages using 'console.log'.
-
- *  **devel (boolean)**
-
-    Development mode. Currently, setting it disables caching of the
-    'iframe.html'.
-
  *  **server (string)**
 
     String to append to url for actual data connection. Defaults to a random 4 digit number.
 
- *  **protocols_whitelist (list of strings)**
+ *  **transports (string OR array of strings)**
 
-    Sometimes it is useful to disable some fallback protocols. This
-    option allows you to supply a list protocols that may be used by
-    SockJS. By default all available protocols will be used, which is
-    equivalent to supplying: "['websocket', 'xdr-streaming', 'xhr-streaming',
-    'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling',
-    'iframe-xhr-polling', 'jsonp-polling']"
+    Sometimes it is useful to disable some fallback transports. This
+    option allows you to supply a list transports that may be used by
+    SockJS. By default all available transports will be used.
 
 
 Although the 'SockJS' object tries to emulate the 'WebSocket'
@@ -193,7 +177,7 @@ Sometimes you may want to serve your html from "file://" address - for
 development or if you're using PhoneGap or similar technologies. But
 due to the Cross Origin Policy files served from "file://" have no
 Origin, and that means some of SockJS transports won't work. For this
-reason the SockJS protocol table is different than usually, major
+reason the SockJS transport table is different than usually, major
 differences are:
 
 _Browser_       | _Websockets_  | _Streaming_        | _Polling_
@@ -211,7 +195,9 @@ websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
 websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
 xhr-streaming        | Transport using [Cross domain XHR][^5] [streaming][^7] capability (readyState=3).
 xdr-streaming        | Transport using [XDomainRequest][^9] [streaming][^7] capability (readyState=3).
+eventsource          | [EventSource][^4].
 iframe-eventsource   | [EventSource][^4] used from an [iframe via postMessage][^3].
+htmlfile             | [HtmlFile][^8].
 iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
 xhr-polling          | Long-polling using [cross domain XHR][^5].
 xdr-polling          | Long-polling using [XDomainRequest][^9].
@@ -267,83 +253,32 @@ session stickiness, take a look at the
 Development and testing
 -----------------------
 
-SockJS-client needs [Node.js](http://nodejs.org/) for running a test
+SockJS-client needs [node.js](http://nodejs.org/) for running a test
 server and JavaScript minification. If you want to work on
-SockJS-client source code, check out the git repo and follow this
+SockJS-client source code, checkout the git repo and follow this
 steps:
 
     cd sockjs-client
     npm install
-    npm install --dev
 
 To generate JavaScript, run:
 
-    make sockjs.js
+    gulp browserify
 
 To generate minified JavaScript, run:
 
-    make sockjs.min.js
+    gulp browserify:min
 
-(To generate both, run `make build`.)
-
+Both commands output into the `build` directory.
 
 ### Testing
 
 Once you've compiled the SockJS-client you may want to check if your changes
-pass all the tests. To run the tests you need a server that can answer
-various SockJS requests. A common way is to use `SockJS-node` test
-server for that. To run it (by default it will be listening on port 8081):
+pass all the tests.
 
-    cd sockjs-node
-    npm install
-    npm install --dev
-    ln -s .. node_modules/sockjs
-    make build
-    make test_server
+    make test-local
 
-At this point you're ready to run a SockJS-client server that will
-serve your freshly compiled JavaScript and various static http and
-javascript files (by default it will run on port 8080).
-
-    cd sockjs-client
-    make test
-
-At that point you should have two web servers running: sockjs-node on
-8081 and sockjs-client on 8080. When you open the browser on
-[http://localhost:8080/](http://localhost:8080/) you should be able
-run the QUnit tests against your sockjs-node server.
-
-#### Testing Hiccups
-
-If you look at your browser console you will see warnings like:
-
-    Incompatible SockJS! Main site uses: "a", the iframe: "b".
-
-This is due to the fact that SockJS-node test server is using compiled
-JavaScript from a CDN, rather than your freshly compiled version. To fix
-that you must amend `sockjs_url` which is used by SockJS-node test
-server. Edit the [`config.js`](https://github.com/sockjs/sockjs-node/blob/master/examples/test_server/config.js) file:
-
-    vim sockjs-node/examples/test_server/config.js
-
-And replace the `sockjs_url` setting, which by default points to a CDN:
-
-    sockjs_url: 'http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js',
-
-to a freshly compiled SockJS, for example:
-
-    sockjs_url: 'http://localhost:8080/lib/sockjs.js',
-
-
-Also, if you want to run tests against a SockJS server not running on
-`localhost:8081` you may want to edit the
-[`tests/config.js`](https://github.com/sockjs/sockjs-client/blob/master/tests/config.js)
-file.
-
-Additionally, if you're doing more serious development consider using
-`make serve`, which will automatically reload the server when you
-modify the source code.
-
+This will start [zuul](https://github.com/defunctzombie/zuul) and a test support server. Open the browser to [http://localhost:9090/_zuul](http://localhost:9090/_zuul) and watch the tests run.
 
 Browser Quirks
 --------------

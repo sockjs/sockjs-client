@@ -13,8 +13,6 @@ var clientOptions = {
   // Address of a sockjs test server.
   url: 'http://localhost:' + port,
   sockjs_opts: {
-      devel: true,
-      debug: true,
       // websocket:false
       info: {cookie_needed:false}
   }

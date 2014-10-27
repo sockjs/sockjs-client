@@ -28,7 +28,7 @@ module.exports = {
   }
 
 , newSockJs: function (path, transport) {
-    return new SockJS(this.getUrl(path), null, transport);
+    return new SockJS(this.getUrl(path), null, { transports: transport });
   }
 
 , createHook: function () {
