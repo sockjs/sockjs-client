@@ -1,9 +1,9 @@
-1.0.0 (unreleased)
+1.0.0-rc1
 =====
 
  * Relax requirements when using same origin XHR - #80
  * Upgrade to JSON3 from JSON2 - #123
- * Package library with browserify supporting the UMD pattern
+ * Package library with browserify supporting the UMD pattern - #184
  * Move tests to JavaScript
  * Add Gulp.js build script
  * Fix getOrigin for file:/// urls and standard ports - #173
@@ -16,12 +16,14 @@
  * Check for an empty response from /info request - #143
  * Add Content-Type to XHR requests to fix issue over HTTPS on Galaxy S4 - #164
  * Fix iframe fallback when message is sent from a popup in IE7/8 - #166
- * Add support for query strings on the url - #74
+ * Add support for query strings on the url - #72
  * Now works inside of Web Workers - #181
  * Support EventSource / Server Sent Events outside of iframes - #201
  * Rename protocols to transports - #65
  * Allow transports which need the body to trigger on 'interactive' readyState - #175
-
+ * try/catch access to document.domain - #187
+ * Use `window.location` instead of `document.location` - #195
+ * Allow usage from node.js with same API
 
 0.3.4
 =====
