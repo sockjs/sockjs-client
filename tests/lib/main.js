@@ -26,21 +26,7 @@ describe('SockJS', function() {
     describe('WebSocket specification step #1', function () {
       it('should throw SyntaxError for an invalid url', function () {
         expect(function () {
-          new SockJS('//localhost');
-        }).to.throwException(function (e) {
-          expect(e).to.be.a(SyntaxError);
-        });
-
-        expect(function () {
           new SockJS('http://');
-        }).to.throwException(function (e) {
-          expect(e).to.be.a(SyntaxError);
-        });
-      });
-
-      it('should throw SyntaxError for an empty url - #8', function () {
-        expect(function () {
-          new SockJS('');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
         });
