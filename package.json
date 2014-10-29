@@ -27,7 +27,8 @@
     "eventsource": "^0.1.3",
     "faye-websocket": "~0.7.3",
     "inherits": "^2.0.1",
-    "json3": "^3.3.2"
+    "json3": "^3.3.2",
+    "url-parse": "0.0.3"
   },
   "devDependencies": {
     "browserify": "^6.1.0",

@@ -2,14 +2,14 @@
 testbundle:
 	@./node_modules/.bin/gulp testbundle
 
-test: testbundle
+test:
 	@if [ "x$(BROWSER_NAME)" = "x" ]; then make test-node; else make test-zuul; fi
 
 test-node:
 	@./node_modules/.bin/mocha \
 		tests/node.js
 
-test-zuul:
+test-zuul: testbundle
 	@if [ "x$(BROWSER_PLATFORM)" = "x" ]; then \
 		./node_modules/.bin/zuul \
 		--browser-name $(BROWSER_NAME) \

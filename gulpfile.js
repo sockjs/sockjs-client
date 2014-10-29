@@ -70,7 +70,7 @@ gulp.task('browserify', ['write-version'], function () {
   return browserify(util._extend({
       debug: true
     }, browserifyOptions))
-    .ignore('querystring')
+    .ignore('url')
     .bundle()
     .pipe(source('sockjs.js'))
     .pipe(buffer())
@@ -83,7 +83,7 @@ gulp.task('browserify', ['write-version'], function () {
 
 gulp.task('browserify:min', ['write-version'], function () {
   return browserify(browserifyOptions)
-    .ignore('querystring')
+    .ignore('url')
     .exclude('debug')
     .transform(envify({
       NODE_ENV: 'production'
