@@ -56,6 +56,7 @@ SockJS family:
   * [Spring Framework](http://projects.spring.io/spring-framework) Java server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
   * [Xitrum](http://xitrum-framework.github.io/) Scala server
+  * [Atmosphere Framework](http://github.com/Atmosphere/atmosphere) JavaEE Server, Play Framework, Netty, Vert.x
 
 Work in progress:
 
