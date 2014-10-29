@@ -53,7 +53,7 @@ SockJS family:
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone) Python/Cyclone/Twisted server
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
-  * [Spring Framework](http://projects.spring.io/spring-framework) Java server
+  * [Spring Framework](http://projects.spring.io/spring-framework) Java [client](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/sockjs/client/package-summary.html) & server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
   * [Xitrum](http://xitrum-framework.github.io/) Scala server
   * [Atmosphere Framework](http://github.com/Atmosphere/atmosphere) JavaEE Server, Play Framework, Netty, Vert.x
