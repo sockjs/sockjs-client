@@ -1,3 +1,14 @@
+1.0.0-beta.4
+=====
+
+ * Upgrade `url-parse` to 0.1.0 and `sockjs` to 0.3.11
+ * Update .npmignore
+
+1.0.0-beta.3
+=====
+
+ * Move `debug` from devDependencies to dependencies
+
 1.0.0-beta.2
 =====
 
