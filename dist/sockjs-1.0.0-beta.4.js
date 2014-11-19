@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.3 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.4 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -32,7 +32,7 @@ inherits(CloseEvent, Event);
 
 module.exports = CloseEvent;
 
-},{"./event":4,"inherits":57}],3:[function(require,module,exports){
+},{"./event":4,"inherits":56}],3:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -85,7 +85,7 @@ EventEmitter.prototype.removeListener = EventTarget.prototype.removeEventListene
 
 module.exports.EventEmitter = EventEmitter;
 
-},{"./eventtarget":5,"inherits":57}],4:[function(require,module,exports){
+},{"./eventtarget":5,"inherits":56}],4:[function(require,module,exports){
 'use strict';
 
 function Event(eventType) {
@@ -188,7 +188,7 @@ inherits(TransportMessageEvent, Event);
 
 module.exports = TransportMessageEvent;
 
-},{"./event":4,"inherits":57}],7:[function(require,module,exports){
+},{"./event":4,"inherits":56}],7:[function(require,module,exports){
 'use strict';
 
 var JSON3 = require('json3')
@@ -217,7 +217,7 @@ FacadeJS.prototype._close = function() {
 
 module.exports = FacadeJS;
 
-},{"./utils/iframe":47,"json3":58}],8:[function(require,module,exports){
+},{"./utils/iframe":47,"json3":57}],8:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -323,7 +323,7 @@ module.exports = function(SockJS, availableTransports) {
 };
 
 }).call(this,{ env: {} })
-},{"./facade":7,"./info-iframe-receiver":10,"./location":13,"./utils/event":46,"./utils/iframe":47,"./utils/url":51,"debug":54,"json3":58}],9:[function(require,module,exports){
+},{"./facade":7,"./info-iframe-receiver":10,"./location":13,"./utils/event":46,"./utils/iframe":47,"./utils/url":51,"debug":53,"json3":57}],9:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -376,7 +376,7 @@ InfoAjax.prototype.close = function() {
 module.exports = InfoAjax;
 
 }).call(this,{ env: {} })
-},{"./utils/object":48,"debug":54,"events":3,"inherits":57,"json3":58}],10:[function(require,module,exports){
+},{"./utils/object":48,"debug":53,"events":3,"inherits":56,"json3":57}],10:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -411,7 +411,7 @@ InfoReceiverIframe.prototype.close = function() {
 
 module.exports = InfoReceiverIframe;
 
-},{"./info-ajax":9,"./transport/sender/xhr-local":37,"events":3,"inherits":57,"json3":58}],11:[function(require,module,exports){
+},{"./info-ajax":9,"./transport/sender/xhr-local":37,"events":3,"inherits":56,"json3":57}],11:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -484,7 +484,7 @@ InfoIframe.prototype.close = function() {
 module.exports = InfoIframe;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./info-iframe-receiver":10,"./transport/iframe":22,"./utils/event":46,"debug":54,"events":3,"inherits":57,"json3":58}],12:[function(require,module,exports){
+},{"./info-iframe-receiver":10,"./transport/iframe":22,"./utils/event":46,"debug":53,"events":3,"inherits":56,"json3":57}],12:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -577,7 +577,7 @@ InfoReceiver.timeout = 8000;
 module.exports = InfoReceiver;
 
 }).call(this,{ env: {} })
-},{"./info-ajax":9,"./info-iframe":11,"./transport/sender/xdr":34,"./transport/sender/xhr-cors":35,"./transport/sender/xhr-fake":36,"./transport/sender/xhr-local":37,"./utils/url":51,"debug":54,"events":3,"inherits":57}],13:[function(require,module,exports){
+},{"./info-ajax":9,"./info-iframe":11,"./transport/sender/xdr":34,"./transport/sender/xhr-cors":35,"./transport/sender/xhr-fake":36,"./transport/sender/xhr-local":37,"./utils/url":51,"debug":53,"events":3,"inherits":56}],13:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -597,7 +597,7 @@ module.exports = global.location || {
 
 require('./shims');
 
-var parse = require('url-parse')
+var URL = require('url-parse')
   , inherits = require('inherits')
   , JSON3 = require('json3')
   , random = require('./utils/random')
@@ -644,8 +644,8 @@ function SockJS(url, protocols, options) {
   this._server = options.server || random.numberString(1000);
 
   // Step 1 of WS spec - parse and validate the url. Issue #8
-  var parsedUrl = parse(url);
-  if (!parsedUrl.host || !parsedUrl.pathname || !parsedUrl.protocol) {
+  var parsedUrl = new URL(url);
+  if (!parsedUrl.host || !parsedUrl.protocol) {
     throw new SyntaxError("The URL '" + url + "' is invalid");
   } else if (parsedUrl.hash) {
     throw new SyntaxError('The URL must not contain a fragment');
@@ -682,16 +682,8 @@ function SockJS(url, protocols, options) {
   var o = urlUtils.getOrigin(loc.href);
   this._origin = o ? o.toLowerCase() : null;
 
-  // strip port numbers for 80 and 443 cases
-  // Issue #74
-  if (!secure && parsedUrl.port === '80') {
-    parsedUrl.host = parsedUrl.port = null;
-  } else if (secure && parsedUrl.port === '443') {
-    parsedUrl.host = parsedUrl.port = null;
-  }
-
   // remove the trailing slash
-  parsedUrl.path = parsedUrl.pathname.replace(/[/]+$/, '') + (parsedUrl.search || '');
+  parsedUrl.path = parsedUrl.pathname.replace(/[/]+$/, '') + (parsedUrl.query || '');
 
   // store the sanitized url
   this.url = parsedUrl.protocol + '//' + parsedUrl.hostname + (parsedUrl.port ? (':' + parsedUrl.port) : '') + parsedUrl.path;
@@ -968,7 +960,7 @@ module.exports = function(availableTransports) {
 };
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/trans-message":6,"./iframe-bootstrap":8,"./info-receiver":12,"./location":13,"./shims":15,"./utils/browser":44,"./utils/escape":45,"./utils/event":46,"./utils/object":48,"./utils/random":49,"./utils/transport":50,"./utils/url":51,"./version":52,"debug":54,"inherits":57,"json3":58,"url-parse":59}],15:[function(require,module,exports){
+},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/trans-message":6,"./iframe-bootstrap":8,"./info-receiver":12,"./location":13,"./shims":15,"./utils/browser":44,"./utils/escape":45,"./utils/event":46,"./utils/object":48,"./utils/random":49,"./utils/transport":50,"./utils/url":51,"./version":52,"debug":53,"inherits":56,"json3":57,"url-parse":58}],15:[function(require,module,exports){
 /* eslint-disable */
 /* jscs: disable */
 'use strict';
@@ -1652,7 +1644,7 @@ AbstractXHRObject.supportsCORS = cors;
 module.exports = AbstractXHRObject;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/event":46,"../../utils/url":51,"debug":54,"events":3,"inherits":57}],18:[function(require,module,exports){
+},{"../../utils/event":46,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],18:[function(require,module,exports){
 (function (global){
 module.exports = global.EventSource;
 
@@ -1691,7 +1683,7 @@ EventSourceTransport.roundTrips = 2;
 
 module.exports = EventSourceTransport;
 
-},{"./lib/ajax-based":24,"./receiver/eventsource":29,"./sender/xhr-cors":35,"eventsource":18,"inherits":57}],21:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/eventsource":29,"./sender/xhr-cors":35,"eventsource":18,"inherits":56}],21:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -1718,7 +1710,7 @@ HtmlFileTransport.roundTrips = 2;
 
 module.exports = HtmlFileTransport;
 
-},{"./lib/ajax-based":24,"./receiver/htmlfile":30,"./sender/xhr-local":37,"inherits":57}],22:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/htmlfile":30,"./sender/xhr-local":37,"inherits":56}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1861,7 +1853,7 @@ IframeTransport.roundTrips = 2;
 module.exports = IframeTransport;
 
 }).call(this,{ env: {} })
-},{"../utils/event":46,"../utils/iframe":47,"../utils/random":49,"../utils/url":51,"../version":52,"debug":54,"events":3,"inherits":57,"json3":58}],23:[function(require,module,exports){
+},{"../utils/event":46,"../utils/iframe":47,"../utils/random":49,"../utils/url":51,"../version":52,"debug":53,"events":3,"inherits":56,"json3":57}],23:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1899,7 +1891,7 @@ JsonPTransport.needBody = true;
 module.exports = JsonPTransport;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/sender-receiver":28,"./receiver/jsonp":31,"./sender/jsonp":33,"inherits":57}],24:[function(require,module,exports){
+},{"./lib/sender-receiver":28,"./receiver/jsonp":31,"./sender/jsonp":33,"inherits":56}],24:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1952,7 +1944,7 @@ inherits(AjaxBasedTransport, SenderReceiver);
 module.exports = AjaxBasedTransport;
 
 }).call(this,{ env: {} })
-},{"../../utils/url":51,"./sender-receiver":28,"debug":54,"inherits":57}],25:[function(require,module,exports){
+},{"../../utils/url":51,"./sender-receiver":28,"debug":53,"inherits":56}],25:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2043,7 +2035,7 @@ BufferedSender.prototype.stop = function() {
 module.exports = BufferedSender;
 
 }).call(this,{ env: {} })
-},{"debug":54,"events":3,"inherits":57}],26:[function(require,module,exports){
+},{"debug":53,"events":3,"inherits":56}],26:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2080,7 +2072,7 @@ module.exports = function(transport) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/object":48,"../iframe":22,"inherits":57}],27:[function(require,module,exports){
+},{"../../utils/object":48,"../iframe":22,"inherits":56}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2141,7 +2133,7 @@ Polling.prototype.abort = function() {
 module.exports = Polling;
 
 }).call(this,{ env: {} })
-},{"debug":54,"events":3,"inherits":57}],28:[function(require,module,exports){
+},{"debug":53,"events":3,"inherits":56}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2190,7 +2182,7 @@ SenderReceiver.prototype.close = function() {
 module.exports = SenderReceiver;
 
 }).call(this,{ env: {} })
-},{"../../utils/url":51,"./buffered-sender":25,"./polling":27,"debug":54,"inherits":57}],29:[function(require,module,exports){
+},{"../../utils/url":51,"./buffered-sender":25,"./polling":27,"debug":53,"inherits":56}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2257,7 +2249,7 @@ EventSourceReceiver.prototype._close = function(reason) {
 module.exports = EventSourceReceiver;
 
 }).call(this,{ env: {} })
-},{"debug":54,"events":3,"eventsource":18,"inherits":57}],30:[function(require,module,exports){
+},{"debug":53,"events":3,"eventsource":18,"inherits":56}],30:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2346,7 +2338,7 @@ HtmlfileReceiver.enabled = HtmlfileReceiver.htmlfileEnabled || iframeUtils.ifram
 module.exports = HtmlfileReceiver;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":54,"events":3,"inherits":57}],31:[function(require,module,exports){
+},{"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],31:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2529,7 +2521,7 @@ JsonpReceiver.prototype._createScript = function(url) {
 module.exports = JsonpReceiver;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/browser":44,"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":54,"events":3,"inherits":57}],32:[function(require,module,exports){
+},{"../../utils/browser":44,"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],32:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2603,7 +2595,7 @@ XhrReceiver.prototype.abort = function() {
 module.exports = XhrReceiver;
 
 }).call(this,{ env: {} })
-},{"debug":54,"events":3,"inherits":57}],33:[function(require,module,exports){
+},{"debug":53,"events":3,"inherits":56}],33:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2706,7 +2698,7 @@ module.exports = function(url, payload, callback) {
 };
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/random":49,"../../utils/url":51,"debug":54}],34:[function(require,module,exports){
+},{"../../utils/random":49,"../../utils/url":51,"debug":53}],34:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2811,7 +2803,7 @@ XDRObject.enabled = !!(global.XDomainRequest && browser.hasDomain());
 module.exports = XDRObject;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/browser":44,"../../utils/event":46,"../../utils/url":51,"debug":54,"events":3,"inherits":57}],35:[function(require,module,exports){
+},{"../../utils/browser":44,"../../utils/event":46,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],35:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2828,7 +2820,7 @@ XHRCorsObject.enabled = XhrDriver.enabled && XhrDriver.supportsCORS;
 
 module.exports = XHRCorsObject;
 
-},{"../driver/xhr":17,"inherits":57}],36:[function(require,module,exports){
+},{"../driver/xhr":17,"inherits":56}],36:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter
@@ -2854,7 +2846,7 @@ XHRFake.timeout = 2000;
 
 module.exports = XHRFake;
 
-},{"events":3,"inherits":57}],37:[function(require,module,exports){
+},{"events":3,"inherits":56}],37:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2873,7 +2865,7 @@ XHRLocalObject.enabled = XhrDriver.enabled;
 
 module.exports = XHRLocalObject;
 
-},{"../driver/xhr":17,"inherits":57}],38:[function(require,module,exports){
+},{"../driver/xhr":17,"inherits":56}],38:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2975,7 +2967,7 @@ WebSocketTransport.roundTrips = 2;
 module.exports = WebSocketTransport;
 
 }).call(this,{ env: {} })
-},{"../utils/event":46,"../utils/url":51,"./driver/websocket":19,"debug":54,"events":3,"inherits":57}],39:[function(require,module,exports){
+},{"../utils/event":46,"../utils/url":51,"./driver/websocket":19,"debug":53,"events":3,"inherits":56}],39:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3000,7 +2992,7 @@ XdrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"./xdr-streaming":40,"inherits":57}],40:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"./xdr-streaming":40,"inherits":56}],40:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3034,7 +3026,7 @@ XdrStreamingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrStreamingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"inherits":57}],41:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"inherits":56}],41:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3069,7 +3061,7 @@ XhrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XhrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],42:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":56}],42:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3114,7 +3106,7 @@ XhrStreamingTransport.needBody = !!global.document;
 module.exports = XhrStreamingTransport;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils/browser":44,"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],43:[function(require,module,exports){
+},{"../utils/browser":44,"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":56}],43:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3217,7 +3209,7 @@ module.exports = {
   }
 };
 
-},{"json3":58}],46:[function(require,module,exports){
+},{"json3":57}],46:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3471,7 +3463,7 @@ if (global.document) {
 }
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./browser":44,"./event":46,"debug":54,"json3":58}],48:[function(require,module,exports){
+},{"./browser":44,"./event":46,"debug":53,"json3":57}],48:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -3582,11 +3574,11 @@ module.exports = function(availableTransports) {
 };
 
 }).call(this,{ env: {} })
-},{"debug":54}],51:[function(require,module,exports){
+},{"debug":53}],51:[function(require,module,exports){
 (function (process){
 'use strict';
 
-var parse = require('url-parse');
+var URL = require('url-parse');
 
 var debug = function() {};
 if (process.env.NODE_ENV !== 'production') {
@@ -3599,7 +3591,7 @@ module.exports = {
       return null;
     }
 
-    var p = parse(url);
+    var p = new URL(url);
     if (p.protocol === 'file:') {
       return null;
     }
@@ -3633,11 +3625,9 @@ module.exports = {
 };
 
 }).call(this,{ env: {} })
-},{"debug":54,"url-parse":59}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.3';
+},{"debug":53,"url-parse":58}],52:[function(require,module,exports){
+module.exports = '1.0.0-beta.4';
 },{}],53:[function(require,module,exports){
-
-},{}],54:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -3786,7 +3776,7 @@ function load() {
 
 exports.enable(load());
 
-},{"./debug":55}],55:[function(require,module,exports){
+},{"./debug":54}],54:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -3985,7 +3975,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":56}],56:[function(require,module,exports){
+},{"ms":55}],55:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -4098,7 +4088,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],57:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -4123,7 +4113,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],58:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -5029,105 +5019,159 @@ if (typeof Object.create === 'function') {
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],59:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
+var required = require('requires-port')
+  , lolcation = require('./lolcation')
+  , qs = require('querystringify');
+
+//
+// MOARE: Mother Of All Regular Expressions.
+//
+var regexp = /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/
+  , keys = ',,protocol,username,password,host,hostname,port,pathname,query,hash'.split(',')
+  , parts = keys.length;
+
 /**
- * A DOM and Node.js compatible URL parser which leverages the DOM to do the
- * actual parsing of our URLs.
+ * The actual URL instance. Instead of returning an object we've opted-in to
+ * create an actual constructor as it's much more memory efficient and
+ * faster and it pleases my CDO.
  *
- * @type {Function}
- * @param {String} url URL that needs to be parsed.
- * @param {Boolean} qs Also parse the query string.
- * @returns {Object} A parsed URL.
+ * @constructor
+ * @param {String} address URL we want to parse.
+ * @param {Boolean|function} parser Parser for the query string.
+ * @param {Object} location Location defaults for relative paths.
  * @api public
  */
-var parse = 'undefined' !== typeof document ? function parse(url, qs) {
-  var div = document.createElement('div')
-    , data = {}
-    , key
-    , a;
+function URL(address, location, parser) {
+  if (!(this instanceof URL)) return new URL(address, location, parser);
 
   //
-  // Uses an innerHTML property to obtain an absolute URL for older browser
-  // support like IE6.
+  // The following if statements allows this module two have compatibility with
+  // 2 different API:
   //
-  // @see http://grack.com/blog/2009/11/17/absolutizing-url-in-javascript/
+  // 1. Node.js's `url.parse` api which accepts a URL, boolean as arguments
+  //    where the boolean indicates that the query string should also be parsed.
   //
-  div.innerHTML = '<a href="' + url + '"/>';
-  a = div.firstChild;
+  // 2. The `URL` interface of the browser which accepts a URL, object as
+  //    arguments. The supplied object will be used as default values / fall-back
+  //    for relative paths.
+  //
+  if ('object' !== typeof location) { parser = location; location = null; }
+  if (parser && 'function' !== typeof parser) parser = qs.parse;
 
-  //
-  // Transform it from a readOnly object to a read/writable object so we can
-  // change some parsed values. This is required if we ever want to override
-  // a port number etc. (as browsers remove port 443 and 80 from the URL's).
-  //
-  for (key in a) {
-    if ('string' === typeof a[key] || 'number' === typeof a[key]) {
-      data[key] = a[key];
+  location = lolcation(location);
+
+  for (var i = 0, bits = regexp.exec(address), key; i < parts; key = keys[++i]) {
+    if (key) {
+      this[key] = bits[i] || location[key] || '';
+
+      //
+      // The protocol, host, host name should always be lower cased even if they
+      // are supplied in uppercase. This way, when people generate an `origin`
+      // it be correct.
+      //
+      if (i === 2 || i === 5 || i === 6) this[key] = this[key].toLowerCase();
     }
   }
 
   //
-  // encodeURI and decodeURI are needed to normalize URL between IE and non-IE,
-  // since IE doesn't encode the href property value and return it
+  // Also parse the supplied query string in to an object. If we're supplied
+  // with a custom parser as function use that instead of the default build-in
+  // parser.
   //
-  // @see http://jsfiddle.net/Yq9M8/1/
-  //
-  data.href = encodeURI(decodeURI(data.href));
+  if (parser) this.query = parser(this.query);
 
   //
-  // If we don't obtain a port number (e.g. when using zombie) then try
-  // and guess at a value from the 'href' value.
+  // We should not add port numbers if they are already the default port number
+  // for a given protocol. As the host also contains the port number we're going
+  // override it with the hostname which contains no port number.
   //
-  if (!data.port) {
-    var splits = (data.href || '').split('/');
-    if (splits.length > 2) {
-      var host = splits[2]
-        , atSignIndex = host.lastIndexOf('@');
-
-      if (~atSignIndex) host = host.slice(atSignIndex + 1);
-
-      splits = host.split(':');
-      if (splits.length === 2) data.port = splits[1];
-    }
+  if (!required(this.port, this.protocol)) {
+    this.host = this.hostname;
+    this.port = '';
   }
 
   //
-  // IE quirk: The `protocol` is parsed as ":" when a protocol agnostic URL
-  // is used. In this case we extract the value from the `href` value. In
-  // addition to that, it's possible in IE11 that the protocol is an string for
-  // relative URL's.
+  // The href is just the compiled result.
   //
-  // @see https://github.com/primus/primus/issues/242
-  //
-  if (!data.protocol || ':' === data.protocol) {
-    data.protocol = data.href.substr(0, data.href.indexOf(':') + 1);
+  this.href = this.toString();
+}
+
+/**
+ * Transform the properties back in to a valid and full URL string.
+ *
+ * @param {Function} stringify Optional query stringify function.
+ * @returns {String}
+ * @api public
+ */
+URL.prototype.toString = function toString(stringify) {
+  if (!stringify || 'function' !== typeof stringify) stringify = qs.stringify;
+
+  var result = this.protocol +'//'
+    , query;
+
+  if (this.username) result += this.username +':'+ this.password +'@';
+
+  result += this.hostname;
+  if (this.port) result += ':'+ this.port;
+
+  result += this.pathname;
+
+  if (this.query) {
+    if ('object' === typeof this.query) query = stringify(this.query);
+    else query = this.query;
+
+    result += (query.charAt(0) === '?' ? '' : '?') + query;
   }
 
-  //
-  // Safari 5.1.7 (windows) quirk: When parsing a URL without a port number
-  // the `port` in the data object will default to "0" instead of the expected
-  // "". We're going to do an explicit check on "0" and force it to "".
-  //
-  if ('0' === data.port) data.port = '';
+  if (this.hash) result += this.hash;
 
-  //
-  // Browsers do not parse authorization information, so we need to extract
-  // that from the URL.
-  //
-  if (~data.href.indexOf('@') && !data.auth) {
-    var start = data.protocol.length + 2;
-    data.auth = data.href.slice(start, data.href.indexOf(data.pathname, start)).split('@')[0];
+  return result;
+};
+
+//
+// Expose the URL parser.
+//
+URL.qs = qs;
+module.exports = URL;
+
+},{"./lolcation":59,"querystringify":60,"requires-port":61}],59:[function(require,module,exports){
+'use strict';
+
+var URL;
+
+/**
+ * The location object differs when your code is loaded through a normal page,
+ * Worker or through a worker using a blob. And with the blobble begins the
+ * trouble as the location object will contain the URL of the blob, not the
+ * location of the page where our code is loaded in. The actual origin is
+ * encoded in the `pathname` so we can thankfully generate a good "default"
+ * location from it so we can generate proper relative URL's again.
+ *
+ * @param {Object} location Optional default location object.
+ * @returns {Object} lolcation object.
+ * @api public
+ */
+module.exports = function lolcation(location) {
+  location = location || (new Function('return this.location'))() || {};
+  URL = URL || require('./');
+
+  var finaldestination = {}
+    , key;
+
+  if ('blob:' === location.protocol) {
+    finaldestination = new URL(unescape(location.pathname));
+  } else for (key in location) {
+    finaldestination[key] = location[key];
   }
 
-  if (qs && 'string' === typeof data.query) {
-    data.query = querystring(data.query || data.search);
-  }
+  return finaldestination;
+};
 
-  data.query = data.query || data.search;
-  return data;
-} : require('url').parse;
+},{"./":58}],60:[function(require,module,exports){
+'use strict';
 
 /**
  * Simple query string parser.
@@ -5158,6 +5202,7 @@ function querystring(query) {
  * Transform a query string to an object.
  *
  * @param {Object} obj Object that should be transformed.
+ * @param {String} prefix Optional prefix.
  * @returns {String}
  * @api public
  */
@@ -5183,11 +5228,50 @@ function querystringify(obj, prefix) {
 //
 // Expose the module.
 //
-parse.querystringify = querystringify;
-parse.querystring = querystring;
-module.exports = parse;
+exports.stringify = querystringify;
+exports.parse = querystring;
 
-},{"url":53}]},{},[1])(1)
+},{}],61:[function(require,module,exports){
+'use strict';
+
+/**
+ * Check if we're required to add a port number.
+ *
+ * @see https://url.spec.whatwg.org/#default-port
+ * @param {Number|String} port Port number we need to check
+ * @param {String} protocol Protocol we need to check against.
+ * @returns {Boolean} Is it a default port for the given protocol
+ * @api private
+ */
+module.exports = function required(port, protocol) {
+  protocol = protocol.split(':')[0];
+  port = +port;
+
+  if (!port) return false;
+
+  switch (protocol) {
+    case 'http':
+    case 'ws':
+    return port !== 80;
+
+    case 'https':
+    case 'wss':
+    return port !== 443;
+
+    case 'ftp':
+    return port !== 22;
+
+    case 'gopher':
+    return port !== 70;
+
+    case 'file':
+    return false;
+  }
+
+  return port !== 0;
+};
+
+},{}]},{},[1])(1)
 });
 
 
