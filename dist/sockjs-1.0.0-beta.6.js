@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.5 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.6 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -3626,7 +3626,7 @@ module.exports = {
 
 }).call(this,{ env: {} })
 },{"debug":53,"url-parse":58}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.5';
+module.exports = '1.0.0-beta.6';
 },{}],53:[function(require,module,exports){
 
 /**
@@ -5045,7 +5045,9 @@ var regexp = /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\
  * @api public
  */
 function URL(address, location, parser) {
-  if (!(this instanceof URL)) return new URL(address, location, parser);
+  if (!(this instanceof URL)) {
+    return new URL(address, location, parser);
+  }
 
   //
   // The following if statements allows this module two have compatibility with
@@ -5058,8 +5060,16 @@ function URL(address, location, parser) {
   //    arguments. The supplied object will be used as default values / fall-back
   //    for relative paths.
   //
-  if ('object' !== typeof location) { parser = location; location = null; }
-  if (parser && 'function' !== typeof parser) parser = qs.parse;
+  var type = typeof location;
+
+  if ('object' !== type && 'string' !== type) {
+    parser = location;
+    location = null;
+  }
+
+  if (parser && 'function' !== typeof parser) {
+    parser = qs.parse;
+  }
 
   location = lolcation(location);
 
@@ -5138,6 +5148,7 @@ URL.qs = qs;
 module.exports = URL;
 
 },{"./lolcation":59,"querystringify":60,"requires-port":61}],59:[function(require,module,exports){
+(function (global){
 'use strict';
 
 /**
@@ -5159,27 +5170,32 @@ var ignore = { hash: 1, query: 1 }
  * encoded in the `pathname` so we can thankfully generate a good "default"
  * location from it so we can generate proper relative URL's again.
  *
- * @param {Object} location Optional default location object.
+ * @param {Object} loc Optional default location object.
  * @returns {Object} lolcation object.
  * @api public
  */
-module.exports = function lolcation(location) {
-  location = location || (new Function('return this.location'))() || {};
+module.exports = function lolcation(loc) {
+  loc = loc || global.location || {};
   URL = URL || require('./');
 
   var finaldestination = {}
+    , type = typeof loc
     , key;
 
-  if ('blob:' === location.protocol) {
-    finaldestination = new URL(unescape(location.pathname));
-  } else for (key in location) {
+  if ('blob:' === loc.protocol) {
+    finaldestination = new URL(unescape(loc.pathname), {});
+  } else if ('string' === type) {
+    finaldestination = new URL(loc, {});
+    for (key in ignore) delete finaldestination[key];
+  } else if ('object' === type) for (key in loc) {
     if (key in ignore) continue;
-    finaldestination[key] = location[key];
+    finaldestination[key] = loc[key];
   }
 
   return finaldestination;
 };
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./":58}],60:[function(require,module,exports){
 'use strict';
 

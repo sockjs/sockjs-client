@@ -1,3 +1,8 @@
+1.0.0-beta.6
+====
+
+ * Upgrade `url-parse` to 0.1.3 to avoid CSP issues
+
 1.0.0-beta.5
 =====
 
