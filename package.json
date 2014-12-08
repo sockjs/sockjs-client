@@ -1,7 +1,7 @@
 {
   "name": "sockjs-client",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "author": "Bryce Kahle",
   "browser": {
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
@@ -29,7 +29,7 @@
     "faye-websocket": "~0.7.3",
     "inherits": "^2.0.1",
     "json3": "^3.3.2",
-    "url-parse": "^0.1.3"
+    "url-parse": "^0.1.5"
   },
   "devDependencies": {
     "browserify": "^6.1.0",
@@ -64,6 +64,7 @@
   "scripts": {
     "test": "make test",
     "test_local": "./node_modules/.bin/zuul --local 9090 -- tests/browser.js",
-    "zuul": "./node_modules/.bin/zuul -- tests/browser.js"
+    "zuul": "./node_modules/.bin/zuul -- tests/browser.js",
+    "gulp": "./node_modules/.bin/gulp"
   }
 }
