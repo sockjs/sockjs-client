@@ -23,6 +23,12 @@ describe('SockJS', function() {
       s.close();
     });
 
+    it('should not remove basic authentication credentials', function () {
+      var s = new SockJS('http://user:password@localhost');
+      expect(s).to.have.property('url', 'http://user:password@localhost');
+      s.close();
+    });
+
     describe('WebSocket specification step #1', function () {
       it('should throw SyntaxError for an invalid url', function () {
         expect(function () {
@@ -32,7 +38,7 @@ describe('SockJS', function() {
         });
       });
 
-      it('should throw TypeError for an null url', function () {
+      it('should throw TypeError for a null url', function () {
         expect(function () {
           new SockJS();
         }).to.throwException(function (e) {
@@ -41,7 +47,7 @@ describe('SockJS', function() {
       });
 
       it('should throw SyntaxError when the url contains a fragment', function () {
-         expect(function () {
+        expect(function () {
           new SockJS('http://localhost/#test');
         }).to.throwException(function (e) {
           expect(e).to.be.a(SyntaxError);
