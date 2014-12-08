@@ -63,8 +63,8 @@
   },
   "scripts": {
     "test": "make test",
-    "test_local": "./node_modules/.bin/zuul --local 9090 -- tests/browser.js",
-    "zuul": "./node_modules/.bin/zuul -- tests/browser.js",
-    "gulp": "./node_modules/.bin/gulp"
+    "test_local": "zuul --local 9090 -- tests/browser.js",
+    "zuul": "zuul -- tests/browser.js",
+    "gulp": "gulp"
   }
 }
