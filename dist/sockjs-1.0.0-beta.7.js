@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.6 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.7 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -685,8 +685,14 @@ function SockJS(url, protocols, options) {
   // remove the trailing slash
   parsedUrl.path = parsedUrl.pathname.replace(/[/]+$/, '') + (parsedUrl.query || '');
 
+  // basic authentication
+  parsedUrl.auth = parsedUrl.username
+    ? parsedUrl.username + ':' + parsedUrl.password + '@'
+    : '';
+
   // store the sanitized url
-  this.url = parsedUrl.protocol + '//' + parsedUrl.hostname + (parsedUrl.port ? (':' + parsedUrl.port) : '') + parsedUrl.path;
+  this.url = parsedUrl.protocol + '//' + parsedUrl.auth + parsedUrl.hostname +
+    (parsedUrl.port ? ':' + parsedUrl.port : '') + parsedUrl.path;
   debug('using url', this.url);
 
   // Step 7 - start connection in background
@@ -3626,7 +3632,7 @@ module.exports = {
 
 }).call(this,{ env: {} })
 },{"debug":53,"url-parse":58}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.6';
+module.exports = '1.0.0-beta.7';
 },{}],53:[function(require,module,exports){
 
 /**
@@ -5026,11 +5032,7 @@ var required = require('requires-port')
   , lolcation = require('./lolcation')
   , qs = require('querystringify');
 
-//
-// MOARE: Mother Of All Regular Expressions.
-//
-var regexp = /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/
-  , keys = ',,protocol,username,password,host,hostname,port,pathname,query,hash'.split(',')
+var keys = ',,protocol,username,password,host,hostname,port,pathname,query,hash'.split(',')
   , parts = keys.length;
 
 /**
@@ -5048,6 +5050,18 @@ function URL(address, location, parser) {
   if (!(this instanceof URL)) {
     return new URL(address, location, parser);
   }
+
+  //
+  // Inline the massive regular expression because it causes issues in FireFox
+  // because our `exec` usage in this function. Normally there should be no side
+  // affects because we're not doing global matching so the lastIndex of regular
+  // expression should stay the same but it's causing `too much recursion`
+  // errors in FireFox when calling the parse method for a second time. Now,
+  // with great pleasure I introduce to you:
+  //
+  // MOARE: Mother Of All Regular Expressions.
+  //
+  var regexp = /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/;
 
   //
   // The following if statements allows this module two have compatibility with
@@ -5142,9 +5156,11 @@ URL.prototype.toString = function toString(stringify) {
 };
 
 //
-// Expose the URL parser.
+// Expose the URL parser and some additional properties that might be useful for
+// others.
 //
 URL.qs = qs;
+URL.location = lolcation;
 module.exports = URL;
 
 },{"./lolcation":59,"querystringify":60,"requires-port":61}],59:[function(require,module,exports){

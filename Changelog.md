@@ -1,3 +1,9 @@
+1.0.0-beta.7
+====
+
+ * Upgrade `url-parse` to 0.1.5 to fix #218
+ * Don't strip basic auth from url - #219
+
 1.0.0-beta.6
 ====
 
