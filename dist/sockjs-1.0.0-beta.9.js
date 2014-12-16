@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.8 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.9 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -3632,7 +3632,7 @@ module.exports = {
 
 }).call(this,{ env: {} })
 },{"debug":53,"url-parse":58}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.8';
+module.exports = '1.0.0-beta.9';
 },{}],53:[function(require,module,exports){
 
 /**
@@ -5036,6 +5036,37 @@ var keys = ',,protocol,username,password,host,hostname,port,pathname,query,hash'
   , inherit = { protocol: 1, host: 1, hostname: 1 }
   , parts = keys.length;
 
+//
+// Story time children:
+//
+// FireFox 34 has some problems with their Regular Expression engine and
+// executing a RegExp can cause a `too much recursion` error. We initially fixed
+// this by moving the Regular Expression in the URL constructor so it's created
+// every single time. This fixed it for some URL's but the more complex the
+// URL's get the easier it is to trigger. Complexer URL like:
+//
+//   https://www.mozilla.org/en-US/firefox/34.0/whatsnew/?oldversion=33.1
+//
+// Still triggered the recursion error. After talking with Chrome and FireFox
+// engineers it seemed to be caused by:
+//
+//   https://code.google.com/p/v8/issues/detail?id=430
+//
+// As FireFox started using Chrome's RegExp engine. After testing various of
+// workarounds I finally stumbled upon this gem, use new RegExp as it sometimes
+// behaves different then a RegExp literal.
+//
+// Steps for compiling the new RegExp:
+//
+// 1. Take the regular RegExp as seen below.
+// 2. Escape the RegExp using XRegExp.escape from http://xregexp.com/tests/
+// 3. ??
+// 4. Profit.
+//
+// RegExp source: /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/
+//
+var regexp = new RegExp('\^\(\?:\(\?:\(\(\[\^:\\/\#\\\?\]\+:\)\?\(\?:\(\?:\\/\\/\)\(\?:\(\?:\(\?:\(\[\^:@\\/\#\\\?\]\+\)\(\?:\\:\(\[\^:@\\/\#\\\?\]\*\)\)\?\)@\)\?\(\(\[\^:\\/\#\\\?\\\]\\\[\]\+\|\\\[\[\^\\/\\\]@\#\?\]\+\\\]\)\(\?:\\:\(\[0\-9\]\+\)\)\?\)\)\?\)\?\)\?\(\(\?:\\/\?\(\?:\[\^\\/\\\?\#\]\+\\/\+\)\*\)\(\?:\[\^\\\?\#\]\*\)\)\)\?\(\\\?\[\^\#\]\+\)\?\)\(\#\.\*\)\?');
+
 /**
  * The actual URL instance. Instead of returning an object we've opted-in to
  * create an actual constructor as it's much more memory efficient and
@@ -5052,21 +5083,11 @@ function URL(address, location, parser) {
     return new URL(address, location, parser);
   }
 
-  //
-  // Inline the massive regular expression because it causes issues in FireFox
-  // because our `exec` usage in this function. Normally there should be no side
-  // affects because we're not doing global matching so the lastIndex of regular
-  // expression should stay the same but it's causing `too much recursion`
-  // errors in FireFox when calling the parse method for a second time. Now,
-  // with great pleasure I introduce to you:
-  //
-  // MOARE: Mother Of All Regular Expressions.
-  //
-  var regexp = /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/
-    , bits = regexp.exec(address)
+  var bits = regexp.exec(address)
     , type = typeof location
     , url = this
     , i = 0
+    , bits
     , key;
 
   //

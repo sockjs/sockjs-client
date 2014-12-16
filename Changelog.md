@@ -1,3 +1,8 @@
+1.0.0-beta.9
+====
+
+ * Upgrade `url-parse` to 0.2.1 to fix 'too much recursion' errors
+
 1.0.0-beta.8
 ====
 
