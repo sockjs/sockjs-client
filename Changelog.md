@@ -1,3 +1,8 @@
+1.0.0-beta.8
+====
+
+ * Upgrade `url-parse` to 0.2.0 to fix inheritance issues
+
 1.0.0-beta.7
 ====
 
