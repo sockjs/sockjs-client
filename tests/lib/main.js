@@ -30,14 +30,6 @@ describe('SockJS', function() {
     });
 
     describe('WebSocket specification step #1', function () {
-      it('should throw SyntaxError for an invalid url', function () {
-        expect(function () {
-          new SockJS('http://');
-        }).to.throwException(function (e) {
-          expect(e).to.be.a(SyntaxError);
-        });
-      });
-
       it('should throw TypeError for a null url', function () {
         expect(function () {
           new SockJS();

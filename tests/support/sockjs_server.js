@@ -18,7 +18,7 @@ var clientOptions = {
   }
 };
 
-var staticDir = new nodeStatic.Server(path.join(__dirname, '../html'));
+var staticDir = new nodeStatic.Server(path.join(__dirname, '../html'), { cache: 0 });
 
 var server = http.createServer();
 server.addListener('request', function(req, res) {
