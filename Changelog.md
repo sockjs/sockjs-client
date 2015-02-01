@@ -1,3 +1,8 @@
+1.0.0-beta.12
+====
+
+ * Upgrade `url-parse` to 1.0.0 to fix #218 again
+
 1.0.0-beta.10
 ====
 

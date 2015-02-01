@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.11 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.12 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -3632,7 +3632,7 @@ module.exports = {
 
 }).call(this,{ env: {} })
 },{"debug":53,"url-parse":58}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.11';
+module.exports = '1.0.0-beta.12';
 },{}],53:[function(require,module,exports){
 
 /**
@@ -5030,12 +5030,31 @@ if (typeof Object.create === 'function') {
 
 var required = require('requires-port')
   , lolcation = require('./lolcation')
-  , qs = require('querystringify');
+  , qs = require('querystringify')
+  , relativere = /^\/(?!\/)/;
 
-var keys = ',,protocol,username,password,host,hostname,port,pathname,query,hash'.split(',')
-  , inherit = { protocol: 1, host: 1, hostname: 1 }
-  , relativere = /^\/(?!\/)/
-  , parts = keys.length;
+/**
+ * These are the parse instructions for the URL parsers, it informs the parser
+ * about:
+ *
+ * 0. The char it Needs to parse, if it's a string it should be done using
+ *    indexOf, RegExp using exec and NaN means set as current value.
+ * 1. The property we should set when parsing this value.
+ * 2. Indication if it's backwards or forward parsing, when set as number it's
+ *    the value of extra chars that should be split off.
+ * 3. Inherit from location if non existing in the parser.
+ * 4. `toLowerCase` the resulting value.
+ */
+var instructions = [
+  ['#', 'hash'],                        // Extract from the back.
+  ['?', 'query'],                       // Extract from the back.
+  ['//', 'protocol', 2, 1, 1],          // Extract from the front.
+  ['/', 'pathname'],                    // Extract from the back.
+  ['@', 'auth', 1],                     // Extract from the front.
+  [NaN, 'host', undefined, 1, 1],       // Set left over value.
+  [/\:(\d+)$/, 'port'],                 // RegExp the back.
+  [NaN, 'hostname', undefined, 1, 1]    // Set left over.
+];
 
 /**
  * The actual URL instance. Instead of returning an object we've opted-in to
@@ -5053,46 +5072,11 @@ function URL(address, location, parser) {
     return new URL(address, location, parser);
   }
 
-  //
-  // Story time children:
-  //
-  // FireFox 34 has some problems with their Regular Expression engine and
-  // executing a RegExp can cause a `too much recursion` error. We initially fixed
-  // this by moving the Regular Expression in the URL constructor so it's created
-  // every single time. This fixed it for some URL's but the more complex the
-  // URL's get the easier it is to trigger. Complexer URL like:
-  //
-  //   https://www.mozilla.org/en-US/firefox/34.0/whatsnew/?oldversion=33.1
-  //
-  // Still triggered the recursion error. After talking with Chrome and FireFox
-  // engineers it seemed to be caused by:
-  //
-  //   https://code.google.com/p/v8/issues/detail?id=430
-  //
-  // As FireFox started using Chrome's RegExp engine. After testing various of
-  // workarounds I finally stumbled upon this gem, use new RegExp as it sometimes
-  // behaves different then a RegExp literal. The biggest problem with this
-  // FireFox problem is that it's super hard to reproduce as our "normal" test
-  // suite doesn't catch it. The only way to reproduce it was run the parser in
-  // jsperf.com (uses the benchmark module from npm) and supply it the URL
-  // mentioned above as URL to parse.
-  //
-  // Steps for compiling the new RegExp:
-  //
-  // 1. Take the regular RegExp as seen below.
-  // 2. Escape the RegExp using XRegExp.escape from http://xregexp.com/tests/
-  // 3. ??
-  // 4. Profit.
-  //
-  // RegExp source: /^(?:(?:(([^:\/#\?]+:)?(?:(?:\/\/)(?:(?:(?:([^:@\/#\?]+)(?:\:([^:@\/#\?]*))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((?:\/?(?:[^\/\?#]+\/+)*)(?:[^\?#]*)))?(\?[^#]+)?)(#.*)?/
-  //
-  var regexp = new RegExp('\^\(\?:\(\?:\(\(\[\^:\\/\#\\\?\]\+:\)\?\(\?:\(\?:\\/\\/\)\(\?:\(\?:\(\?:\(\[\^:@\\/\#\\\?\]\+\)\(\?:\\:\(\[\^:@\\/\#\\\?\]\*\)\)\?\)@\)\?\(\(\[\^:\\/\#\\\?\\\]\\\[\]\+\|\\\[\[\^\\/\\\]@\#\?\]\+\\\]\)\(\?:\\:\(\[0\-9\]\+\)\)\?\)\)\?\)\?\)\?\(\(\?:\\/\?\(\?:\[\^\\/\\\?\#\]\+\\/\+\)\*\)\(\?:\[\^\\\?\#\]\*\)\)\)\?\(\\\?\[\^\#\]\+\)\?\)\(\#\.\*\)\?')
-    , relative = relativere.test(address)
-    , bits = regexp.exec(address)
+  var relative = relativere.test(address)
+    , parse, instruction, index, key
     , type = typeof location
     , url = this
-    , i = 0
-    , key;
+    , i = 0;
 
   //
   // The following if statements allows this module two have compatibility with
@@ -5116,17 +5100,37 @@ function URL(address, location, parser) {
 
   location = lolcation(location);
 
-  for (; i < parts; key = keys[++i]) {
-    if (!key) continue;
+  for (; i < instructions.length; i++) {
+    instruction = instructions[i];
+    parse = instruction[0];
+    key = instruction[1];
 
-    url[key] = bits[i] || (key in inherit || ('port' === key && relative) ? location[key] || '' : '');
+    if (parse !== parse) {
+      url[key] = address;
+    } else if ('string' === typeof parse) {
+      if (~(index = address.indexOf(parse))) {
+        if ('number' === typeof instruction[2]) {
+          url[key] = address.slice(0, index);
+          address = address.slice(index + instruction[2]);
+        } else {
+          url[key] = address.slice(index);
+          address = address.slice(0, index);
+        }
+      }
+    } else if (index = parse.exec(address)) {
+      url[key] = index[1];
+      address = address.slice(0, address.length - index[0].length);
+    }
+
+    url[key] = url[key] || (instruction[3] || ('port' === key && relative) ? location[key] || '' : '');
 
     //
-    // The protocol, host, host name should always be lower cased even if they
-    // are supplied in uppercase. This way, when people generate an `origin`
-    // it be correct.
+    // Hostname, host and protocol should be lowercased so they can be used to
+    // create a proper `origin`.
     //
-    if (i === 2 || i === 5 || i === 6) url[key] = url[key].toLowerCase();
+    if (instruction[4]) {
+      url[key] = url[key].toLowerCase();
+    }
   }
 
   //
@@ -5144,6 +5148,16 @@ function URL(address, location, parser) {
   if (!required(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
+  }
+
+  //
+  // Parse down the `auth` for the username and password.
+  //
+  url.username = url.password = '';
+  if (url.auth) {
+    instruction = url.auth.split(':');
+    url.username = instruction[0] || '';
+    url.password = instruction[1] || '';
   }
 
   //
