@@ -220,7 +220,7 @@ jsonp-polling        | Slow and old fashioned [JSONP polling][^6]. This transpor
 Connecting to SockJS without the client
 ---------------------------------------
 
-Although the main point of SockJS it to enable browser-to-server
+Although the main point of SockJS is to enable browser-to-server
 connectivity, it is possible to connect to SockJS from an external
 application. Any SockJS server complying with 0.3 protocol does
 support a raw WebSocket url. The raw WebSocket url for the test server
