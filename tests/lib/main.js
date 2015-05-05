@@ -23,7 +23,13 @@ describe('SockJS', function() {
       s.close();
     });
 
-    it('should not remove basic authentication credentials', function () {
+    it('should not remove basic authentication credentials (1/2)', function () {
+      var s = new SockJS('http://user@localhost');
+      expect(s).to.have.property('url', 'http://user@localhost');
+      s.close();
+    });
+
+    it('should not remove basic authentication credentials (2/2)', function () {
       var s = new SockJS('http://user:password@localhost');
       expect(s).to.have.property('url', 'http://user:password@localhost');
       s.close();
