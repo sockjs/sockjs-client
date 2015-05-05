@@ -1,3 +1,8 @@
+1.0.0-beta.13
+===
+
+ * Transport timeout on connection should fallback - #238
+
 1.0.0-beta.12
 ====
 

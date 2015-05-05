@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.12 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0-beta.13 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -13,6 +13,7 @@ if ('_sockjs_onload' in global) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{"./main":14,"./transport-list":16}],2:[function(require,module,exports){
 'use strict';
 
@@ -32,7 +33,7 @@ inherits(CloseEvent, Event);
 
 module.exports = CloseEvent;
 
-},{"./event":4,"inherits":56}],3:[function(require,module,exports){
+},{"./event":4,"inherits":57}],3:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -85,7 +86,7 @@ EventEmitter.prototype.removeListener = EventTarget.prototype.removeEventListene
 
 module.exports.EventEmitter = EventEmitter;
 
-},{"./eventtarget":5,"inherits":56}],4:[function(require,module,exports){
+},{"./eventtarget":5,"inherits":57}],4:[function(require,module,exports){
 'use strict';
 
 function Event(eventType) {
@@ -188,7 +189,7 @@ inherits(TransportMessageEvent, Event);
 
 module.exports = TransportMessageEvent;
 
-},{"./event":4,"inherits":56}],7:[function(require,module,exports){
+},{"./event":4,"inherits":57}],7:[function(require,module,exports){
 'use strict';
 
 var JSON3 = require('json3')
@@ -217,7 +218,7 @@ FacadeJS.prototype._close = function() {
 
 module.exports = FacadeJS;
 
-},{"./utils/iframe":47,"json3":57}],8:[function(require,module,exports){
+},{"./utils/iframe":47,"json3":58}],8:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -323,7 +324,8 @@ module.exports = function(SockJS, availableTransports) {
 };
 
 }).call(this,{ env: {} })
-},{"./facade":7,"./info-iframe-receiver":10,"./location":13,"./utils/event":46,"./utils/iframe":47,"./utils/url":51,"debug":53,"json3":57}],9:[function(require,module,exports){
+
+},{"./facade":7,"./info-iframe-receiver":10,"./location":13,"./utils/event":46,"./utils/iframe":47,"./utils/url":52,"debug":54,"json3":58}],9:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -376,7 +378,8 @@ InfoAjax.prototype.close = function() {
 module.exports = InfoAjax;
 
 }).call(this,{ env: {} })
-},{"./utils/object":48,"debug":53,"events":3,"inherits":56,"json3":57}],10:[function(require,module,exports){
+
+},{"./utils/object":49,"debug":54,"events":3,"inherits":57,"json3":58}],10:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -411,7 +414,7 @@ InfoReceiverIframe.prototype.close = function() {
 
 module.exports = InfoReceiverIframe;
 
-},{"./info-ajax":9,"./transport/sender/xhr-local":37,"events":3,"inherits":56,"json3":57}],11:[function(require,module,exports){
+},{"./info-ajax":9,"./transport/sender/xhr-local":37,"events":3,"inherits":57,"json3":58}],11:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -484,7 +487,8 @@ InfoIframe.prototype.close = function() {
 module.exports = InfoIframe;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./info-iframe-receiver":10,"./transport/iframe":22,"./utils/event":46,"debug":53,"events":3,"inherits":56,"json3":57}],12:[function(require,module,exports){
+
+},{"./info-iframe-receiver":10,"./transport/iframe":22,"./utils/event":46,"debug":54,"events":3,"inherits":57,"json3":58}],12:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -577,7 +581,8 @@ InfoReceiver.timeout = 8000;
 module.exports = InfoReceiver;
 
 }).call(this,{ env: {} })
-},{"./info-ajax":9,"./info-iframe":11,"./transport/sender/xdr":34,"./transport/sender/xhr-cors":35,"./transport/sender/xhr-fake":36,"./transport/sender/xhr-local":37,"./utils/url":51,"debug":53,"events":3,"inherits":56}],13:[function(require,module,exports){
+
+},{"./info-ajax":9,"./info-iframe":11,"./transport/sender/xdr":34,"./transport/sender/xhr-cors":35,"./transport/sender/xhr-fake":36,"./transport/sender/xhr-local":37,"./utils/url":52,"debug":54,"events":3,"inherits":57}],13:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -591,6 +596,7 @@ module.exports = global.location || {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],14:[function(require,module,exports){
 (function (process,global){
 'use strict';
@@ -607,6 +613,7 @@ var URL = require('url-parse')
   , transport = require('./utils/transport')
   , objectUtils = require('./utils/object')
   , browser = require('./utils/browser')
+  , log = require('./utils/log')
   , Event = require('./event/event')
   , EventTarget = require('./event/eventtarget')
   , loc = require('./location')
@@ -640,6 +647,9 @@ function SockJS(url, protocols, options) {
 
   // non-standard extension
   options = options || {};
+  if (options.protocols_whitelist) {
+    log.warn("'protocols_whitelist' is DEPRECATED. Use 'transports' instead.");
+  }
   this._transportsWhitelist = options.transports;
   this._server = options.server || random.numberString(1000);
 
@@ -685,14 +695,9 @@ function SockJS(url, protocols, options) {
   // remove the trailing slash
   parsedUrl.path = parsedUrl.pathname.replace(/[/]+$/, '') + (parsedUrl.query || '');
 
-  // basic authentication
-  parsedUrl.auth = parsedUrl.username
-    ? parsedUrl.username + ':' + parsedUrl.password + '@'
-    : '';
-
   // store the sanitized url
-  this.url = parsedUrl.protocol + '//' + parsedUrl.auth + parsedUrl.hostname +
-    (parsedUrl.port ? ':' + parsedUrl.port : '') + parsedUrl.path;
+  this.url = parsedUrl.protocol + '//' + (parsedUrl.auth ? parsedUrl.auth + '@' : '') +
+    parsedUrl.hostname + (parsedUrl.port ? ':' + parsedUrl.port : '') + parsedUrl.path;
   debug('using url', this.url);
 
   // Step 7 - start connection in background
@@ -801,11 +806,11 @@ SockJS.prototype._connect = function() {
 
     var transportUrl = urlUtils.addPath(this._transUrl, '/' + this._server + '/' + random.string(8));
     debug('transport url', transportUrl);
-    var transport = new Transport(transportUrl, this._transUrl);
-    transport.on('message', this._transportMessage.bind(this));
-    transport.once('close', this._transportClose.bind(this));
-    transport.transportName = Transport.transportName;
-    this._transport = transport;
+    var transportObj = new Transport(transportUrl, this._transUrl);
+    transportObj.on('message', this._transportMessage.bind(this));
+    transportObj.once('close', this._transportClose.bind(this));
+    transportObj.transportName = Transport.transportName;
+    this._transport = transportObj;
 
     return;
   }
@@ -815,7 +820,7 @@ SockJS.prototype._connect = function() {
 SockJS.prototype._transportTimeout = function() {
   debug('_transportTimeout');
   if (this.readyState === SockJS.CONNECTING) {
-    this._close(2007, 'Transport timed out');
+    this._transportClose(2007, 'Transport timed out');
   }
 };
 
@@ -966,7 +971,8 @@ module.exports = function(availableTransports) {
 };
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/trans-message":6,"./iframe-bootstrap":8,"./info-receiver":12,"./location":13,"./shims":15,"./utils/browser":44,"./utils/escape":45,"./utils/event":46,"./utils/object":48,"./utils/random":49,"./utils/transport":50,"./utils/url":51,"./version":52,"debug":53,"inherits":56,"json3":57,"url-parse":58}],15:[function(require,module,exports){
+
+},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/trans-message":6,"./iframe-bootstrap":8,"./info-receiver":12,"./location":13,"./shims":15,"./utils/browser":44,"./utils/escape":45,"./utils/event":46,"./utils/log":48,"./utils/object":49,"./utils/random":50,"./utils/transport":51,"./utils/url":52,"./version":53,"debug":54,"inherits":57,"json3":58,"url-parse":59}],15:[function(require,module,exports){
 /* eslint-disable */
 /* jscs: disable */
 'use strict';
@@ -1650,16 +1656,19 @@ AbstractXHRObject.supportsCORS = cors;
 module.exports = AbstractXHRObject;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/event":46,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],18:[function(require,module,exports){
+
+},{"../../utils/event":46,"../../utils/url":52,"debug":54,"events":3,"inherits":57}],18:[function(require,module,exports){
 (function (global){
 module.exports = global.EventSource;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],19:[function(require,module,exports){
 (function (global){
 module.exports = global.WebSocket || global.MozWebSocket;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],20:[function(require,module,exports){
 'use strict';
 
@@ -1689,7 +1698,7 @@ EventSourceTransport.roundTrips = 2;
 
 module.exports = EventSourceTransport;
 
-},{"./lib/ajax-based":24,"./receiver/eventsource":29,"./sender/xhr-cors":35,"eventsource":18,"inherits":56}],21:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/eventsource":29,"./sender/xhr-cors":35,"eventsource":18,"inherits":57}],21:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -1716,7 +1725,7 @@ HtmlFileTransport.roundTrips = 2;
 
 module.exports = HtmlFileTransport;
 
-},{"./lib/ajax-based":24,"./receiver/htmlfile":30,"./sender/xhr-local":37,"inherits":56}],22:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/htmlfile":30,"./sender/xhr-local":37,"inherits":57}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1859,7 +1868,8 @@ IframeTransport.roundTrips = 2;
 module.exports = IframeTransport;
 
 }).call(this,{ env: {} })
-},{"../utils/event":46,"../utils/iframe":47,"../utils/random":49,"../utils/url":51,"../version":52,"debug":53,"events":3,"inherits":56,"json3":57}],23:[function(require,module,exports){
+
+},{"../utils/event":46,"../utils/iframe":47,"../utils/random":50,"../utils/url":52,"../version":53,"debug":54,"events":3,"inherits":57,"json3":58}],23:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1897,7 +1907,8 @@ JsonPTransport.needBody = true;
 module.exports = JsonPTransport;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/sender-receiver":28,"./receiver/jsonp":31,"./sender/jsonp":33,"inherits":56}],24:[function(require,module,exports){
+
+},{"./lib/sender-receiver":28,"./receiver/jsonp":31,"./sender/jsonp":33,"inherits":57}],24:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1950,7 +1961,8 @@ inherits(AjaxBasedTransport, SenderReceiver);
 module.exports = AjaxBasedTransport;
 
 }).call(this,{ env: {} })
-},{"../../utils/url":51,"./sender-receiver":28,"debug":53,"inherits":56}],25:[function(require,module,exports){
+
+},{"../../utils/url":52,"./sender-receiver":28,"debug":54,"inherits":57}],25:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2041,7 +2053,8 @@ BufferedSender.prototype.stop = function() {
 module.exports = BufferedSender;
 
 }).call(this,{ env: {} })
-},{"debug":53,"events":3,"inherits":56}],26:[function(require,module,exports){
+
+},{"debug":54,"events":3,"inherits":57}],26:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2078,7 +2091,8 @@ module.exports = function(transport) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/object":48,"../iframe":22,"inherits":56}],27:[function(require,module,exports){
+
+},{"../../utils/object":49,"../iframe":22,"inherits":57}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2139,7 +2153,8 @@ Polling.prototype.abort = function() {
 module.exports = Polling;
 
 }).call(this,{ env: {} })
-},{"debug":53,"events":3,"inherits":56}],28:[function(require,module,exports){
+
+},{"debug":54,"events":3,"inherits":57}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2188,7 +2203,8 @@ SenderReceiver.prototype.close = function() {
 module.exports = SenderReceiver;
 
 }).call(this,{ env: {} })
-},{"../../utils/url":51,"./buffered-sender":25,"./polling":27,"debug":53,"inherits":56}],29:[function(require,module,exports){
+
+},{"../../utils/url":52,"./buffered-sender":25,"./polling":27,"debug":54,"inherits":57}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2255,7 +2271,8 @@ EventSourceReceiver.prototype._close = function(reason) {
 module.exports = EventSourceReceiver;
 
 }).call(this,{ env: {} })
-},{"debug":53,"events":3,"eventsource":18,"inherits":56}],30:[function(require,module,exports){
+
+},{"debug":54,"events":3,"eventsource":18,"inherits":57}],30:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2344,7 +2361,8 @@ HtmlfileReceiver.enabled = HtmlfileReceiver.htmlfileEnabled || iframeUtils.ifram
 module.exports = HtmlfileReceiver;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],31:[function(require,module,exports){
+
+},{"../../utils/iframe":47,"../../utils/random":50,"../../utils/url":52,"debug":54,"events":3,"inherits":57}],31:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2527,7 +2545,8 @@ JsonpReceiver.prototype._createScript = function(url) {
 module.exports = JsonpReceiver;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/browser":44,"../../utils/iframe":47,"../../utils/random":49,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],32:[function(require,module,exports){
+
+},{"../../utils/browser":44,"../../utils/iframe":47,"../../utils/random":50,"../../utils/url":52,"debug":54,"events":3,"inherits":57}],32:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2601,7 +2620,8 @@ XhrReceiver.prototype.abort = function() {
 module.exports = XhrReceiver;
 
 }).call(this,{ env: {} })
-},{"debug":53,"events":3,"inherits":56}],33:[function(require,module,exports){
+
+},{"debug":54,"events":3,"inherits":57}],33:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2704,7 +2724,8 @@ module.exports = function(url, payload, callback) {
 };
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/random":49,"../../utils/url":51,"debug":53}],34:[function(require,module,exports){
+
+},{"../../utils/random":50,"../../utils/url":52,"debug":54}],34:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -2809,7 +2830,8 @@ XDRObject.enabled = !!(global.XDomainRequest && browser.hasDomain());
 module.exports = XDRObject;
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../utils/browser":44,"../../utils/event":46,"../../utils/url":51,"debug":53,"events":3,"inherits":56}],35:[function(require,module,exports){
+
+},{"../../utils/browser":44,"../../utils/event":46,"../../utils/url":52,"debug":54,"events":3,"inherits":57}],35:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2826,7 +2848,7 @@ XHRCorsObject.enabled = XhrDriver.enabled && XhrDriver.supportsCORS;
 
 module.exports = XHRCorsObject;
 
-},{"../driver/xhr":17,"inherits":56}],36:[function(require,module,exports){
+},{"../driver/xhr":17,"inherits":57}],36:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter
@@ -2852,7 +2874,7 @@ XHRFake.timeout = 2000;
 
 module.exports = XHRFake;
 
-},{"events":3,"inherits":56}],37:[function(require,module,exports){
+},{"events":3,"inherits":57}],37:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2871,7 +2893,7 @@ XHRLocalObject.enabled = XhrDriver.enabled;
 
 module.exports = XHRLocalObject;
 
-},{"../driver/xhr":17,"inherits":56}],38:[function(require,module,exports){
+},{"../driver/xhr":17,"inherits":57}],38:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2973,7 +2995,8 @@ WebSocketTransport.roundTrips = 2;
 module.exports = WebSocketTransport;
 
 }).call(this,{ env: {} })
-},{"../utils/event":46,"../utils/url":51,"./driver/websocket":19,"debug":53,"events":3,"inherits":56}],39:[function(require,module,exports){
+
+},{"../utils/event":46,"../utils/url":52,"./driver/websocket":19,"debug":54,"events":3,"inherits":57}],39:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2998,7 +3021,7 @@ XdrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"./xdr-streaming":40,"inherits":56}],40:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"./xdr-streaming":40,"inherits":57}],40:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3032,7 +3055,7 @@ XdrStreamingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrStreamingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"inherits":56}],41:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"inherits":57}],41:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3067,7 +3090,7 @@ XhrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XhrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":56}],42:[function(require,module,exports){
+},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],42:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3112,7 +3135,8 @@ XhrStreamingTransport.needBody = !!global.document;
 module.exports = XhrStreamingTransport;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils/browser":44,"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":56}],43:[function(require,module,exports){
+
+},{"../utils/browser":44,"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],43:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3133,6 +3157,7 @@ if (global.crypto && global.crypto.getRandomValues) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],44:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -3164,6 +3189,7 @@ module.exports = {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],45:[function(require,module,exports){
 'use strict';
 
@@ -3215,7 +3241,7 @@ module.exports = {
   }
 };
 
-},{"json3":57}],46:[function(require,module,exports){
+},{"json3":58}],46:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3284,7 +3310,8 @@ var unloadTriggered = function() {
 module.exports.attachEvent('unload', unloadTriggered);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./random":49}],47:[function(require,module,exports){
+
+},{"./random":50}],47:[function(require,module,exports){
 (function (process,global){
 'use strict';
 
@@ -3469,7 +3496,24 @@ if (global.document) {
 }
 
 }).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./browser":44,"./event":46,"debug":53,"json3":57}],48:[function(require,module,exports){
+
+},{"./browser":44,"./event":46,"debug":54,"json3":58}],48:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var logObject = {};
+['log', 'debug', 'warn'].forEach(function (level) {
+  var levelExists = global.console && global.console[level] && global.console[level].apply;
+  logObject[level] = levelExists ? function () {
+    return global.console[level].apply(global.console, arguments);
+  } : (level === 'log' ? function () {} : logObject.log);
+});
+
+module.exports = logObject;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}],49:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -3495,7 +3539,7 @@ module.exports = {
   }
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 /* global crypto:true */
@@ -3526,7 +3570,7 @@ module.exports = {
   }
 };
 
-},{"crypto":43}],50:[function(require,module,exports){
+},{"crypto":43}],51:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3580,7 +3624,8 @@ module.exports = function(availableTransports) {
 };
 
 }).call(this,{ env: {} })
-},{"debug":53}],51:[function(require,module,exports){
+
+},{"debug":54}],52:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3631,9 +3676,10 @@ module.exports = {
 };
 
 }).call(this,{ env: {} })
-},{"debug":53,"url-parse":58}],52:[function(require,module,exports){
-module.exports = '1.0.0-beta.12';
-},{}],53:[function(require,module,exports){
+
+},{"debug":54,"url-parse":59}],53:[function(require,module,exports){
+module.exports = '1.0.0-beta.13';
+},{}],54:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -3647,6 +3693,17 @@ exports.formatArgs = formatArgs;
 exports.save = save;
 exports.load = load;
 exports.useColors = useColors;
+
+/**
+ * Use chrome.storage.local if we are in an app
+ */
+
+var storage;
+
+if (typeof chrome !== 'undefined' && typeof chrome.storage !== 'undefined')
+  storage = chrome.storage.local;
+else
+  storage = localstorage();
 
 /**
  * Colors.
@@ -3737,10 +3794,10 @@ function formatArgs() {
  */
 
 function log() {
-  // This hackery is required for IE8,
-  // where the `console.log` function doesn't have 'apply'
-  return 'object' == typeof console
-    && 'function' == typeof console.log
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
     && Function.prototype.apply.call(console.log, console, arguments);
 }
 
@@ -3754,9 +3811,9 @@ function log() {
 function save(namespaces) {
   try {
     if (null == namespaces) {
-      localStorage.removeItem('debug');
+      storage.removeItem('debug');
     } else {
-      localStorage.debug = namespaces;
+      storage.debug = namespaces;
     }
   } catch(e) {}
 }
@@ -3771,7 +3828,7 @@ function save(namespaces) {
 function load() {
   var r;
   try {
-    r = localStorage.debug;
+    r = storage.debug;
   } catch(e) {}
   return r;
 }
@@ -3782,7 +3839,24 @@ function load() {
 
 exports.enable(load());
 
-},{"./debug":54}],54:[function(require,module,exports){
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+},{"./debug":55}],55:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -3981,7 +4055,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":55}],55:[function(require,module,exports){
+},{"ms":56}],56:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -4022,13 +4096,15 @@ module.exports = function(val, options){
  */
 
 function parse(str) {
-  var match = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(str);
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
   if (!match) return;
   var n = parseFloat(match[1]);
   var type = (match[2] || 'ms').toLowerCase();
   switch (type) {
     case 'years':
     case 'year':
+    case 'yrs':
+    case 'yr':
     case 'y':
       return n * y;
     case 'days':
@@ -4037,16 +4113,26 @@ function parse(str) {
       return n * d;
     case 'hours':
     case 'hour':
+    case 'hrs':
+    case 'hr':
     case 'h':
       return n * h;
     case 'minutes':
     case 'minute':
+    case 'mins':
+    case 'min':
     case 'm':
       return n * m;
     case 'seconds':
     case 'second':
+    case 'secs':
+    case 'sec':
     case 's':
       return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
     case 'ms':
       return n;
   }
@@ -4094,7 +4180,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -4119,7 +4205,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -5025,7 +5111,8 @@ if (typeof Object.create === 'function') {
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],58:[function(require,module,exports){
+
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var required = require('requires-port')
@@ -5252,7 +5339,7 @@ URL.qs = qs;
 URL.location = lolcation;
 module.exports = URL;
 
-},{"./lolcation":59,"querystringify":60,"requires-port":61}],59:[function(require,module,exports){
+},{"./lolcation":60,"querystringify":61,"requires-port":62}],60:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -5301,7 +5388,8 @@ module.exports = function lolcation(loc) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./":58}],60:[function(require,module,exports){
+
+},{"./":59}],61:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
@@ -5355,7 +5443,7 @@ function querystringify(obj, prefix) {
     }
   }
 
-  return prefix + pairs.join('&');
+  return pairs.length ? prefix + pairs.join('&') : '';
 }
 
 //
@@ -5364,7 +5452,7 @@ function querystringify(obj, prefix) {
 exports.stringify = querystringify;
 exports.parse = querystring;
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 /**
