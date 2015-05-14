@@ -111,7 +111,7 @@ gulp.task('release', ['browserify', 'browserify:min'], function () {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('stable-release', function () {
+gulp.task('stable-release', ['release'], function () {
   var bower = require('./bower.json');
   bower.version = pkg.version;
   fs.writeFileSync('./bower.json', JSON.stringify(bower, null, 2));
