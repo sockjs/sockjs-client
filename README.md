@@ -1,5 +1,7 @@
 
-# SockJS-client [![Build Status][travis-image]][travis-url] [![Sauce Test Status](https://saucelabs.com/buildstatus/brycekahle)](https://saucelabs.com/u/brycekahle)
+# SockJS-client
+
+[![npm version](https://img.shields.io/npm/v/sockjs-client.svg?style=flat-square)](https://www.npmjs.com/package/sockjs-client)[![Build Status](https://img.shields.io/travis/sockjs/sockjs-client/master.svg?style=flat-square)](https://travis-ci.org/sockjs/sockjs-client)[![Dependencies](https://img.shields.io/david/sockjs/sockjs-client.svg?style=flat-square)](https://david-dm.org/sockjs/sockjs-client)[![Sauce Test Status](https://saucelabs.com/buildstatus/brycekahle)](https://saucelabs.com/u/brycekahle)[![Chat](https://img.shields.io/badge/Chat-gitter.im-blue.svg?style=flat-square)](https://gitter.im/sockjs/sockjs-client)
 
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
@@ -320,5 +322,3 @@ There are various browser quirks which we don't intend to address:
    you're a serious SockJS user then consider using SSL
    ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
 
-[travis-url]: https://travis-ci.org/sockjs/sockjs-client?branch=master
-[travis-image]: http://img.shields.io/travis/sockjs/sockjs-client/master.svg
