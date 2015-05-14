@@ -1,3 +1,9 @@
+1.0.0
+===
+
+ * Simplify url handling by delegating to `url-parse` - #242
+ * Upgrade to `url-parse` 1.0.1 to fix colon issue if auth has no password
+
 1.0.0-beta.13
 ===
 

@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0-beta.13 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.0 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -693,11 +693,10 @@ function SockJS(url, protocols, options) {
   this._origin = o ? o.toLowerCase() : null;
 
   // remove the trailing slash
-  parsedUrl.path = parsedUrl.pathname.replace(/[/]+$/, '') + (parsedUrl.query || '');
+  parsedUrl.set('pathname', parsedUrl.pathname.replace(/\/+$/, ''));
 
   // store the sanitized url
-  this.url = parsedUrl.protocol + '//' + (parsedUrl.auth ? parsedUrl.auth + '@' : '') +
-    parsedUrl.hostname + (parsedUrl.port ? ':' + parsedUrl.port : '') + parsedUrl.path;
+  this.url = parsedUrl.href;
   debug('using url', this.url);
 
   // Step 7 - start connection in background
@@ -3678,7 +3677,7 @@ module.exports = {
 }).call(this,{ env: {} })
 
 },{"debug":54,"url-parse":59}],53:[function(require,module,exports){
-module.exports = '1.0.0-beta.13';
+module.exports = '1.0.0';
 },{}],54:[function(require,module,exports){
 
 /**
@@ -5312,7 +5311,11 @@ URL.prototype.toString = function toString(stringify) {
     , url = this
     , result = url.protocol +'//';
 
-  if (url.username) result += url.username +':'+ url.password +'@';
+  if (url.username) {
+    result += url.username;
+    if (url.password) result += ':'+ url.password;
+    result += '@';
+  }
 
   result += url.hostname;
   if (url.port) result += ':'+ url.port;

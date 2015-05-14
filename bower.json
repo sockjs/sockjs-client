@@ -1,6 +1,6 @@
 {
   "name": "sockjs-client",
-  "version": "0.3.4",
+  "version": "1.0.0",
   "homepage": "http://sockjs.org",
   "authors": [
     "Bryce Kahle <bkahle@gmail.com>"
