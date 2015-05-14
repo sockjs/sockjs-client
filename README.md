@@ -1,7 +1,8 @@
 
 # SockJS-client
 
-[![npm version](https://img.shields.io/npm/v/sockjs-client.svg?style=flat-square)](https://www.npmjs.com/package/sockjs-client)[![Build Status](https://img.shields.io/travis/sockjs/sockjs-client/master.svg?style=flat-square)](https://travis-ci.org/sockjs/sockjs-client)[![Dependencies](https://img.shields.io/david/sockjs/sockjs-client.svg?style=flat-square)](https://david-dm.org/sockjs/sockjs-client)[![Sauce Test Status](https://saucelabs.com/buildstatus/brycekahle)](https://saucelabs.com/u/brycekahle)[![Chat](https://img.shields.io/badge/Chat-gitter.im-blue.svg?style=flat-square)](https://gitter.im/sockjs/sockjs-client)
+[![npm version](https://img.shields.io/npm/v/sockjs-client.svg?style=flat-square)](https://www.npmjs.com/package/sockjs-client)[![Build Status](https://img.shields.io/travis/sockjs/sockjs-client/master.svg?style=flat-square)](https://travis-ci.org/sockjs/sockjs-client)[![Dependencies](https://img.shields.io/david/sockjs/sockjs-client.svg?style=flat-square)](https://david-dm.org/sockjs/sockjs-client)[![Chat](https://img.shields.io/badge/Chat-gitter.im-blue.svg?style=flat-square)](https://gitter.im/sockjs/sockjs-client)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/brycekahle)](https://saucelabs.com/u/brycekahle)
 
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
