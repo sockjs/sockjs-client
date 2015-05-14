@@ -61,3 +61,10 @@ matrix:
   #   env: BROWSER_NAME=android BROWSER_VERSION=4.3
   # - node_js: '0.10'
   #   env: BROWSER_NAME=android BROWSER_VERSION=4.4
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/be9ef89cdfc53fc9c60c
+    on_success: change
+    on_start: false
+    on_failure: change
