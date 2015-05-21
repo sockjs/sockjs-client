@@ -82,7 +82,7 @@ First, you need to load the SockJS JavaScript library. For example, you can
 put that in your HTML head:
 
 ```html
-<script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.0/sockjs.min.js"></script>
 ```
 
 After the script is loaded you can establish a connection with the
