@@ -127,6 +127,17 @@ Where `options` is a hash which can contain:
     option allows you to supply a list transports that may be used by
     SockJS. By default all available transports will be used.
 
+ *  **sessionId (number OR function)**
+
+    Both client and server use session identifiers to distinguish connections.
+    If you specify this option as a number, SockJS will use its random string
+    generator function to generate session ids that are N-character long
+    (where N corresponds to the number specified by **sessionId**).
+    When you specify this option as a function, the function must return a
+    randomly generated string. Every time SockJS needs to generate a session
+    id it will call this function and use the returned string directly.
+    If you don't specify this option, the default is to use the default random
+    string generator to generate 8-character long session ids.
 
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all of its features. An

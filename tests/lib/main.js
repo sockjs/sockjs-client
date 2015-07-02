@@ -70,5 +70,36 @@ describe('SockJS', function() {
         });
       });
     });
+
+    it('should generate 8-character-long session ids by default', function () {
+      var s = SockJS('http://localhost');
+      expect(s._generateSessionId().length).to.be(8);
+      s.close();
+    });
+
+    it('should generate N-character-long session ids', function () {
+      for (var i = 1; i <= 100; i++) {
+        var s = SockJS('http://localhost', null, {sessionId: i});
+        expect(s._generateSessionId().length).to.be(i);
+        s.close();
+      }
+    });
+
+    it('should generate sessionIds using the custom generator function', function () {
+      var f = function() {
+        return 'this_is_not_random';
+      };
+      var s = SockJS('http://localhost', null, {sessionId: f});
+      expect(s._generateSessionId).to.be(f);
+      s.close();
+    });
+
+    it('should throw TypeError if sessionId is neither a number nor a function', function () {
+        expect(function () {
+          new SockJS('http://localhost', null, {sessionId: 'this is wrong'});
+        }).to.throwException(function (e) {
+          expect(e).to.be.a(TypeError);
+        });
+    });
   });
 });
