@@ -1,4 +1,4 @@
-/* sockjs-client v1.0.0 | http://sockjs.org | MIT license */
+/* sockjs-client v1.0.1 | http://sockjs.org | MIT license */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.SockJS=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -431,12 +431,12 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:info-iframe');
 }
 
-function InfoIframe(url) {
+function InfoIframe(baseUrl, url) {
   var self = this;
   EventEmitter.call(this);
 
   var go = function() {
-    var ifr = self.ifr = new IframeTransport(InfoReceiverIframe.transportName, url, url);
+    var ifr = self.ifr = new IframeTransport(InfoReceiverIframe.transportName, url, baseUrl);
 
     ifr.once('message', function(msg) {
       if (msg) {
@@ -522,7 +522,7 @@ inherits(InfoReceiver, EventEmitter);
 
 // TODO this is currently ignoring the list of available transports and the whitelist
 
-InfoReceiver._getReceiver = function(url, urlInfo) {
+InfoReceiver._getReceiver = function(baseUrl, url, urlInfo) {
   // determine method of CORS support (if needed)
   if (urlInfo.sameOrigin) {
     return new InfoAjax(url, XHRLocal);
@@ -534,7 +534,7 @@ InfoReceiver._getReceiver = function(url, urlInfo) {
     return new InfoAjax(url, XDR);
   }
   if (InfoIframe.enabled()) {
-    return new InfoIframe(url);
+    return new InfoIframe(baseUrl, url);
   }
   return new InfoAjax(url, XHRFake);
 };
@@ -545,7 +545,7 @@ InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo) {
     ;
   debug('doXhr', url);
 
-  this.xo = InfoReceiver._getReceiver(url, urlInfo);
+  this.xo = InfoReceiver._getReceiver(baseUrl, url, urlInfo);
 
   this.timeoutRef = setTimeout(function() {
     debug('timeout');
@@ -651,6 +651,18 @@ function SockJS(url, protocols, options) {
     log.warn("'protocols_whitelist' is DEPRECATED. Use 'transports' instead.");
   }
   this._transportsWhitelist = options.transports;
+
+  var sessionId = options.sessionId || 8;
+  if (typeof sessionId === 'function') {
+    this._generateSessionId = sessionId;
+  } else if (typeof sessionId === 'number') {
+    this._generateSessionId = function() {
+      return random.string(sessionId);
+    };
+  } else {
+    throw new TypeError("If sessionId is used in the options, it needs to be a number or a function.");
+  }
+
   this._server = options.server || random.numberString(1000);
 
   // Step 1 of WS spec - parse and validate the url. Issue #8
@@ -803,7 +815,7 @@ SockJS.prototype._connect = function() {
     this._transportTimeoutId = setTimeout(this._transportTimeout.bind(this), timeoutMs);
     debug('using timeout', timeoutMs);
 
-    var transportUrl = urlUtils.addPath(this._transUrl, '/' + this._server + '/' + random.string(8));
+    var transportUrl = urlUtils.addPath(this._transUrl, '/' + this._server + '/' + this._generateSessionId());
     debug('transport url', transportUrl);
     var transportObj = new Transport(transportUrl, this._transUrl);
     transportObj.on('message', this._transportMessage.bind(this));
@@ -3248,6 +3260,8 @@ var random = require('./random');
 
 var onUnload = {}
   , afterUnload = false
+    // detect google chrome packaged apps because they don't allow the 'unload' event
+  , isChromePackagedApp = global.chrome && global.chrome.app && global.chrome.app.runtime
   ;
 
 module.exports = {
@@ -3274,6 +3288,10 @@ module.exports = {
   }
 
 , unloadAdd: function(listener) {
+    if (isChromePackagedApp) {
+      return null;
+    }
+
     var ref = random.string(8);
     onUnload[ref] = listener;
     if (afterUnload) {
@@ -3306,7 +3324,9 @@ var unloadTriggered = function() {
 
 // 'unload' alone is not reliable in opera within an iframe, but we
 // can't use `beforeunload` as IE fires it on javascript: links.
-module.exports.attachEvent('unload', unloadTriggered);
+if (!isChromePackagedApp) {
+  module.exports.attachEvent('unload', unloadTriggered);
+}
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
@@ -3677,7 +3697,7 @@ module.exports = {
 }).call(this,{ env: {} })
 
 },{"debug":54,"url-parse":59}],53:[function(require,module,exports){
-module.exports = '1.0.0';
+module.exports = '1.0.1';
 },{}],54:[function(require,module,exports){
 
 /**

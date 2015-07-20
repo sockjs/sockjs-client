@@ -1,3 +1,12 @@
+1.0.1
+==
+
+ * Use proper base url for iframe-based info receiver - #249
+ * Don't register unload event in chrome packaged app - #223
+ * Allow custom session ids - #250
+ * Remove version property from bower.json - #247
+ * Update example CDN url - #244
+
 1.0.0
 ===
 

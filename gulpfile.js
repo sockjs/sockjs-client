@@ -112,10 +112,6 @@ gulp.task('release', ['browserify', 'browserify:min'], function () {
 });
 
 gulp.task('stable-release', ['release'], function () {
-  var bower = require('./bower.json');
-  bower.version = pkg.version;
-  fs.writeFileSync('./bower.json', JSON.stringify(bower, null, 2));
-
   // sockjs.min.js
   gulp.src('./build/' + libName + '.min.js')
     .pipe(rename('sockjs.min.js'))
