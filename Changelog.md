@@ -1,3 +1,9 @@
+1.0.2
+==
+
+ * Fix iframe info receiver url
+ * Move iframe.contentWindow check inside setTimeout - #246
+
 1.0.1
 ==
 
