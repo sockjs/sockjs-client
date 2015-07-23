@@ -269,7 +269,7 @@ Development and testing
 
 SockJS-client needs [node.js](http://nodejs.org/) for running a test
 server and JavaScript minification. If you want to work on
-SockJS-client source code, checkout the git repo and follow this
+SockJS-client source code, checkout the git repo and follow these
 steps:
 
     cd sockjs-client
