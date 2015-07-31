@@ -1,3 +1,8 @@
+1.0.3
+==
+
+ * Use `https` module for xhr requests in node when url uses https - #254
+
 1.0.2
 ==
 
