@@ -14,7 +14,7 @@ var clientOptions = {
   url: 'http://localhost:' + port,
   sockjs_opts: {
       // websocket:false
-      info: {cookie_needed:false}
+      info: {cookie_needed: false}
   }
 };
 

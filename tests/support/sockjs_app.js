@@ -11,9 +11,9 @@ exports.install = function(opts, server) {
       debug('    [-] echo close   ' + conn);
     });
     conn.on('data', function(m) {
-      var d  = JSON.stringify(m);
+      var d = JSON.stringify(m);
       debug('    [ ] echo message ' + conn,
-                  d.slice(0,64) +
+                  d.slice(0, 64) +
                   ((d.length > 64) ? '...' : ''));
       conn.write(m);
     });
@@ -75,14 +75,14 @@ exports.install = function(opts, server) {
   });
 
 
-  sjs_echo.installHandlers(server, {prefix:'/echo',
+  sjs_echo.installHandlers(server, {prefix: '/echo',
                                     response_limit: 4096});
-  sjs_echo.installHandlers(server, {prefix:'/disabled_websocket_echo',
+  sjs_echo.installHandlers(server, {prefix: '/disabled_websocket_echo',
                                     websocket: false});
-  sjs_echo.installHandlers(server, {prefix:'/cookie_needed_echo',
+  sjs_echo.installHandlers(server, {prefix: '/cookie_needed_echo',
                                     jsessionid: true});
-  sjs_close.installHandlers(server, {prefix:'/close'});
-  sjs_ticker.installHandlers(server, {prefix:'/ticker'});
-  sjs_amplify.installHandlers(server, {prefix:'/amplify'});
-  sjs_broadcast.installHandlers(server, {prefix:'/broadcast'});
+  sjs_close.installHandlers(server, {prefix: '/close'});
+  sjs_ticker.installHandlers(server, {prefix: '/ticker'});
+  sjs_amplify.installHandlers(server, {prefix: '/amplify'});
+  sjs_broadcast.installHandlers(server, {prefix: '/broadcast'});
 };

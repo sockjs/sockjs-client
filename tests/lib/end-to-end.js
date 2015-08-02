@@ -29,8 +29,8 @@ describe('End to End', function () {
           expect(e.code).to.equal(1002);
           expect(e.reason).to.equal('Cannot connect to server');
           expect(e.wasClean).to.equal(false);
-        } catch (e) {
-          done(e);
+        } catch (err) {
+          done(err);
           return;
         }
 
@@ -68,8 +68,8 @@ describe('End to End', function () {
             expect(e.code).to.equal(1002);
             expect(e.reason).to.equal('Cannot connect to server');
             expect(e.wasClean).to.equal(false);
-          } catch (e) {
-            done(e);
+          } catch (err) {
+            done(err);
             return;
           }
 
@@ -95,8 +95,8 @@ describe('End to End', function () {
           expect(e.code).to.equal(2000);
           expect(e.reason).to.equal('All transports failed');
           expect(e.wasClean).to.equal(false);
-        } catch (e) {
-          done(e);
+        } catch (err) {
+          done(err);
           return;
         }
         done();
@@ -123,8 +123,8 @@ describe('End to End', function () {
           expect(e.code).to.equal(3000);
           expect(e.reason).to.equal('Go away!');
           expect(e.wasClean).to.equal(true);
-        } catch (e) {
-          done(e);
+        } catch (err) {
+          done(err);
           return;
         }
 

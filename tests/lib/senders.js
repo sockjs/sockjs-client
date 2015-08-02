@@ -9,7 +9,6 @@ var expect = require('expect.js')
 
 function ajaxSimple (Obj) {
   it('simple', function (done) {
-    var test = this.runnable();
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/simple.txt', null);
     x.on('finish', function (status, text) {
       try {
@@ -34,7 +33,7 @@ function ajaxStreaming (Obj) {
     var test = this.runnable();
     var x = new Obj('GET', testUtils.getSameOriginUrl() + '/streaming.txt', null);
     var i = 0;
-    x.on('chunk', function (status, text) {
+    x.on('chunk', function (status/*, text*/) {
       try {
         expect(status).to.equal(200);
       } catch (e) {

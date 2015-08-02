@@ -106,8 +106,8 @@ describe('iframe', function () {
           case 'e':
             try {
               expect(i).to.equal(2);
-            } catch (e) {
-              done(e);
+            } catch (err) {
+              done(err);
               hook.iobj.cleanup();
               hook.del();
               return;

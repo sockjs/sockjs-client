@@ -37,14 +37,16 @@ module.exports = {
     var windowId = 'a' + random.string(8);
     if (!global[MPrefix]) {
       var map = {};
-      global[MPrefix] = function(windowId) {
-        if (!(windowId in map)) {
-          map[windowId] = {
-            id: windowId,
-            del: function() {delete map[windowId];}
+      global[MPrefix] = function(id) {
+        if (!(id in map)) {
+          map[id] = {
+            id: id,
+            del: function() {
+              delete map[id];
+            }
           };
         }
-        return map[windowId];
+        return map[id];
       };
     }
     return global[MPrefix](windowId);

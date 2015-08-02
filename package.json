@@ -65,6 +65,7 @@
     "test": "make test",
     "test_local": "zuul --local 9090 -- tests/browser.js",
     "zuul": "zuul -- tests/browser.js",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "lint": "gulp eslint"
   }
 }

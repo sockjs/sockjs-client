@@ -20,8 +20,8 @@ function batchFactory(transport, messages, url) {
     sjs.onmessage = function (e) {
       try {
         expect(e.data).to.eql(messages[counter]);
-      } catch (e) {
-        done(e);
+      } catch (err) {
+        done(err);
         sjs.close();
         return;
       }
@@ -39,8 +39,8 @@ function batchFactory(transport, messages, url) {
       try {
         expect(e.code).to.equal(1000);
         expect(counter).to.equal(messages.length);
-      } catch (e) {
-        done(e);
+      } catch (err) {
+        done(err);
         return;
       }
       done();
@@ -70,8 +70,8 @@ function amplifyFactory(transport, messages, url) {
     sjs.onmessage = function (e) {
       try {
         expect(e.data).to.have.length(Math.pow(2, messages[counter]));
-      } catch (e) {
-        done(e);
+      } catch (err) {
+        done(err);
         sjs.close();
         return;
       }
@@ -88,8 +88,8 @@ function amplifyFactory(transport, messages, url) {
       try {
         expect(e.code).to.equal(1000);
         expect(counter).to.equal(messages.length);
-      } catch (e) {
-        done(e);
+      } catch (err) {
+        done(err);
         return;
       }
 

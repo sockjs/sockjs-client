@@ -9,6 +9,98 @@ var expect = require('expect.js')
   , SockJS = require('../../lib/entry')
   ;
 
+function userClose(url, transport) {
+  it('user close', function (done) {
+    var test = this.runnable();
+    this.timeout(10000);
+    var sjs = new SockJS(url + '/echo', null, { transports: transport });
+    expect(sjs).to.be.ok();
+    var counter = 0;
+
+    sjs.onopen = function() {
+      counter++;
+      try {
+        expect(counter).to.equal(1);
+        sjs.close(3000, 'User message');
+        expect(counter).to.equal(1);
+      } catch (e) {
+        done(e);
+      }
+    };
+    sjs.onmessage = function() {
+      done(new Error());
+      sjs.close();
+      counter++;
+    };
+    sjs.onclose = function(e) {
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      counter++;
+      try {
+        expect(e.wasClean).to.equal(true);
+        expect(counter).to.equal(2);
+      } catch (err) {
+        done(err);
+        return;
+      }
+
+      done();
+    };
+  });
+}
+
+function serverClose(url, transport) {
+  it('server close', function (done) {
+    var test = this.runnable();
+    this.timeout(10000);
+    var sjs = new SockJS(url + '/close', null, { transports: transport });
+    expect(sjs).to.be.ok();
+    var i = 0;
+    sjs.onopen = function() {
+      i++;
+    };
+    sjs.onmessage = function() {
+      done(new Error());
+      sjs.close();
+    };
+    sjs.onclose = function(e) {
+      if (test.timedOut || test.duration) {
+        return;
+      }
+
+      try {
+        expect(i).to.equal(1);
+        expect(e.code).to.equal(3000);
+        expect(e.reason).to.equal('Go away!');
+        expect(e.wasClean).to.equal(true);
+      } catch (err) {
+        done(err);
+        return;
+      }
+      done();
+    };
+  });
+}
+
+function runTests(url, transport) {
+  echoTests.echoBasic(url, transport);
+  echoTests.echoQueryString(url, transport);
+  echoTests.echoRich(url, transport);
+  echoTests.echoUnicode(url, transport);
+  echoTests.echoSpecialChars(url, transport);
+  echoTests.echoLargeMessage(url, transport);
+  echoTests.echoUtfEncodingSimple(url, transport);
+  echoTests.echoUtfEncoding(url, transport);
+
+  batchTests.largeMessage(url, transport);
+  batchTests.largeDownload(url, transport);
+
+  userClose(url, transport);
+  serverClose(url, transport);
+}
+
 describe('Transports', function () {
   transportList.forEach(function (Trans) {
     describe(Trans.transportName, function () {
@@ -55,95 +147,3 @@ describe('Transports', function () {
     });
   });
 });
-
-function runTests(url, transport) {
-  echoTests.echoBasic(url, transport);
-  echoTests.echoQueryString(url, transport);
-  echoTests.echoRich(url, transport);
-  echoTests.echoUnicode(url, transport);
-  echoTests.echoSpecialChars(url, transport);
-  echoTests.echoLargeMessage(url, transport);
-  echoTests.echoUtfEncodingSimple(url, transport);
-  echoTests.echoUtfEncoding(url, transport);
-
-  batchTests.largeMessage(url, transport);
-  batchTests.largeDownload(url, transport);
-
-  userClose(url, transport);
-  serverClose(url, transport);
-}
-
-function userClose(url, transport) {
-  it('user close', function (done) {
-    var test = this.runnable();
-    this.timeout(10000);
-    var sjs = new SockJS(url + '/echo', null, { transports: transport });
-    expect(sjs).to.be.ok();
-    var counter = 0;
-
-    sjs.onopen = function() {
-      counter++;
-      try {
-        expect(counter).to.equal(1);
-        sjs.close(3000, 'User message');
-        expect(counter).to.equal(1);
-      } catch (e) {
-        done(e);
-      }
-    };
-    sjs.onmessage = function() {
-      done(new Error());
-      sjs.close();
-      counter++;
-    };
-    sjs.onclose = function(e) {
-      if (test.timedOut || test.duration) {
-        return;
-      }
-
-      counter++;
-      try {
-        expect(e.wasClean).to.equal(true);
-        expect(counter).to.equal(2);
-      } catch (e) {
-        done(e);
-        return;
-      }
-
-      done();
-    };
-  });
-}
-
-function serverClose(url, transport) {
-  it('server close', function (done) {
-    var test = this.runnable();
-    this.timeout(10000);
-    var sjs = new SockJS(url + '/close', null, { transports: transport });
-    expect(sjs).to.be.ok();
-    var i = 0;
-    sjs.onopen = function() {
-      i++;
-    };
-    sjs.onmessage = function() {
-      done(new Error());
-      sjs.close();
-    };
-    sjs.onclose = function(e) {
-      if (test.timedOut || test.duration) {
-        return;
-      }
-
-      try {
-        expect(i).to.equal(1);
-        expect(e.code).to.equal(3000);
-        expect(e.reason).to.equal('Go away!');
-        expect(e.wasClean).to.equal(true);
-      } catch (e) {
-        done(e);
-        return;
-      }
-      done();
-    };
-  });
-}
