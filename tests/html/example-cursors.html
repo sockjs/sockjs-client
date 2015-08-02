@@ -86,7 +86,7 @@
         } else {
           url = clientOptions.url;
         }
-        sjs = new SockJS(url + '/broadcast', null, transport);
+        sjs = new SockJS(url + '/broadcast', null, { transports: transport });
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;

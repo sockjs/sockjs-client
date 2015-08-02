@@ -69,7 +69,7 @@
             } else {
               url = clientOptions.url;
             }
-            sjs = new SockJS(clientOptions.url + '/echo', null, transport);
+            sjs = new SockJS(clientOptions.url + '/echo', null, { transports: transport });
             sjs.onopen = onopen
             sjs.onclose = onclose;
         } else {

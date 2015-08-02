@@ -90,7 +90,7 @@
         } else {
           url = clientOptions.url + '/echo';
         }
-        sjs = new SockJS(url, null, transport);
+        sjs = new SockJS(url, null, { transports: transport });
         sjs.onopen = onopen
         sjs.onclose = onclose;
         sjs.onmessage = xonmessage;
