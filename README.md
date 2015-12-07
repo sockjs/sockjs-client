@@ -82,7 +82,7 @@ First, you need to load the SockJS JavaScript library. For example, you can
 put that in your HTML head:
 
 ```html
-<script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
 ```
 
 After the script is loaded you can establish a connection with the
@@ -255,7 +255,7 @@ You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
 ```html
-<script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+<script src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
 ```
 
 
