@@ -327,9 +327,6 @@ There are various browser quirks which we don't intend to address:
    not a good idea. The other way around should be fine.
  * Long polling is known to cause problems on Heroku, but a
    [workaround for SockJS is available](https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187).
- * Don't use "javascript:" links on a page that uses SockJS. For
-   some reason clicking on this type of link breaks XDR/XHR requests
-   on IE (see [#90](https://github.com/sockjs/sockjs-client/issues/90)).
  * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
    you're a serious SockJS user then consider using SSL
    ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
