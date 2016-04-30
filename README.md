@@ -168,7 +168,8 @@ Chrome 6-13     | hixie-76         | xhr-streaming   | xhr-polling
 Chrome 14+      | hybi-10 / rfc6455| xhr-streaming   | xhr-polling
 Firefox <10     | no &Dagger;      | xhr-streaming   | xhr-polling
 Firefox 10+     | hybi-10 / rfc6455| xhr-streaming   | xhr-polling
-Safari 5        | hixie-76         | xhr-streaming   | xhr-polling
+Safari 5.x      | hixie-76         | xhr-streaming   | xhr-polling
+Safari 6+       | rfc6455          | xhr-streaming   | xhr-polling
 Opera 10.70+    | no &Dagger;      | iframe-eventsource | iframe-xhr-polling
 Opera 12.10+    | rfc6455          | xhr-streaming | xhr-polling
 Konqueror       | no               | no          | jsonp-polling
