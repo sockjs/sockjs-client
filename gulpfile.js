@@ -114,6 +114,9 @@ gulp.task('release', ['browserify', 'browserify:min'], function () {
   gulp.src('./build/sockjs.js')
     .pipe(rename(libName + '.js'))
     .pipe(gulp.dest('./dist/'));
+
+  gulp.src('./build/sockjs.js.map')
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('stable-release', ['release'], function () {
