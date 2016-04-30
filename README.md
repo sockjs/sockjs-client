@@ -115,6 +115,8 @@ Similar to the 'WebSocket' API, the 'SockJS' constructor takes one, or more argu
 var sockjs = new SockJS(url, _reserved, options);
 ```
 
+`url` may contain a query string, if one is desired.
+
 Where `options` is a hash which can contain:
 
  *  **server (string)**
