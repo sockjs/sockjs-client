@@ -74,3 +74,5 @@ sockjs.install({
 
 console.log(' [*] Listening on', port);
 server.listen(port);
+
+module.exports = server;
