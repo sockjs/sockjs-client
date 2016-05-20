@@ -1,3 +1,8 @@
+1.1.1
+==
+
+ * Do not pass `protocols` or `options` arguments to browser WebSocket constructor - #309
+
 1.1.0
 ==
 
