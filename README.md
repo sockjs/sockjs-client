@@ -212,8 +212,8 @@ websocket (hixie-76) | [draft-hixie-thewebsocketprotocol-76][^1]
 websocket (hybi-10)  | [draft-ietf-hybi-thewebsocketprotocol-10][^2]
 xhr-streaming        | Transport using [Cross domain XHR][^5] [streaming][^7] capability (readyState=3).
 xdr-streaming        | Transport using [XDomainRequest][^9] [streaming][^7] capability (readyState=3).
-eventsource          | [EventSource][^4].
-iframe-eventsource   | [EventSource][^4] used from an [iframe via postMessage][^3].
+eventsource          | [EventSource/Server-sent events][^4].
+iframe-eventsource   | [EventSource/Server-sent events][^4] used from an [iframe via postMessage][^3].
 htmlfile             | [HtmlFile][^8].
 iframe-htmlfile      | [HtmlFile][^8] used from an [iframe via postMessage][^3].
 xhr-polling          | Long-polling using [cross domain XHR][^5].
@@ -225,7 +225,7 @@ jsonp-polling        | Slow and old fashioned [JSONP polling][^6]. This transpor
 [^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
 [^2]: http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
 [^3]: https://developer.mozilla.org/en/DOM/window.postMessage
-[^4]: http://dev.w3.org/html5/eventsource/
+[^4]: https://html.spec.whatwg.org/multipage/comms.html#server-sent-events
 [^5]: https://secure.wikimedia.org/wikipedia/en/wiki/XMLHttpRequest#Cross-domain_requests
 [^6]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
