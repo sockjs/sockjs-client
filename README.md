@@ -75,7 +75,7 @@ Work in progress:
 Getting Started
 -------
 
-SockJS mimics the [WebSockets API](http://dev.w3.org/html5/websockets/),
+SockJS mimics the [WebSockets API](https://www.w3.org/TR/2011/WD-websockets-20110419/),
 but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load the SockJS JavaScript library. For example, you can
