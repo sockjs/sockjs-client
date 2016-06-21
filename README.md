@@ -26,7 +26,7 @@ SockJS-client does require a server counterpart:
 Philosophy:
 
  * The API should follow
-   [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as
+   [HTML5 Websockets API](https://www.w3.org/TR/2011/WD-websockets-20110419/) as
    closely as possible.
  * All the transports must support cross domain connections out of the
    box. It's possible and recommended to host a SockJS server on a
@@ -75,7 +75,7 @@ Work in progress:
 Getting Started
 -------
 
-SockJS mimics the [WebSockets API](http://dev.w3.org/html5/websockets/),
+SockJS mimics the [WebSockets API](https://www.w3.org/TR/2011/WD-websockets-20110419/),
 but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load the SockJS JavaScript library. For example, you can
