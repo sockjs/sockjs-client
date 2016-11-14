@@ -1,39 +1,33 @@
-'use strict';
-
-var SockJS = require('../../lib/entry')
-  , iframeUtils = require('../../lib/utils/iframe')
-  , urlUtils = require('../../lib/utils/url')
-  , random = require('../../lib/utils/random')
-  ;
+import SockJS = require('../../lib/entry');
+import iframeUtils = require('../../lib/utils/iframe');
+import urlUtils = require('../../lib/utils/url');
+import random = require('../../lib/utils/random');
 
 var MPrefix = '_sockjs_global';
 
-module.exports = {
-  getSameOriginUrl: function () {
-    if (global.location) {
-      return urlUtils.getOrigin(global.location.href);
+export function getSameOriginUrl () {
+    if ((<any>global).location) {
+      return urlUtils.getOrigin((<any>global).location.href);
     }
-    return /^v0\.(?:8|10)/.test(process.version)
-      ? 'http://localhost:8081'
-      : 'http://[::1]:8081';
+    return 'http://localhost:8081';
   }
 
-, getCrossOriginUrl: function () {
-    if (global.clientOptions) {
-      return global.clientOptions.url;
+export function getCrossOriginUrl () {
+    if ((<any>global).clientOptions) {
+      return (<any>global).clientOptions.url;
     }
     return null;
   }
 
-, getUrl: function (path) {
+export function getUrl (path) {
     return /^http/.test(path) ? path : this.getSameOriginUrl() + path;
   }
 
-, newSockJs: function (path, transport) {
+export function newSockJs (path, transport?) {
     return new SockJS(this.getUrl(path), null, { transports: transport });
   }
 
-, createHook: function () {
+export function createHook () {
     var windowId = 'a' + random.string(8);
     if (!global[MPrefix]) {
       var map = {};
@@ -52,7 +46,7 @@ module.exports = {
     return global[MPrefix](windowId);
   }
 
-, createIframe: function (path) {
+export function createIframe (path?) {
     path = path || '/iframe.html';
     var hook = this.createHook();
     hook.iobj = iframeUtils.createIframe(path + '?a=' + random.number(1000) + '#' + hook.id, function () {
@@ -60,4 +54,3 @@ module.exports = {
     });
     return hook;
   }
-};

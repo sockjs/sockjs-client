@@ -1,10 +1,8 @@
-'use strict';
+import random = require('../../utils/random');
+import urlUtils = require('../../utils/url');
 
-var random = require('../../utils/random')
-  , urlUtils = require('../../utils/url')
-  ;
-
-var debug = function() {};
+var debug = function (..._) {
+};
 if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:sender:jsonp');
 }
@@ -15,9 +13,9 @@ function createIframe(id) {
   debug('createIframe', id);
   try {
     // ie6 dynamic iframes with target="" support (thanks Chris Lambacher)
-    return global.document.createElement('<iframe name="' + id + '">');
+    return (<any>global).document.createElement('<iframe name="' + id + '">');
   } catch (x) {
-    var iframe = global.document.createElement('iframe');
+    var iframe = (<any>global).document.createElement('iframe');
     iframe.name = id;
     return iframe;
   }
@@ -25,21 +23,21 @@ function createIframe(id) {
 
 function createForm() {
   debug('createForm');
-  form = global.document.createElement('form');
+  form = (<any>global).document.createElement('form');
   form.style.display = 'none';
   form.style.position = 'absolute';
   form.method = 'POST';
   form.enctype = 'application/x-www-form-urlencoded';
   form.acceptCharset = 'UTF-8';
 
-  area = global.document.createElement('textarea');
+  area = (<any>global).document.createElement('textarea');
   area.name = 'd';
   form.appendChild(area);
 
-  global.document.body.appendChild(form);
+  (<any>global).document.body.appendChild(form);
 }
 
-module.exports = function(url, payload, callback) {
+export function jsonpSender(url, payload, callback) {
   debug(url, payload);
   if (!form) {
     createForm();
@@ -60,7 +58,7 @@ module.exports = function(url, payload, callback) {
   }
   form.submit();
 
-  var completed = function(err) {
+  var completed = function (err?) {
     debug('completed', id, err);
     if (!iframe.onerror) {
       return;
@@ -68,7 +66,7 @@ module.exports = function(url, payload, callback) {
     iframe.onreadystatechange = iframe.onerror = iframe.onload = null;
     // Opera mini doesn't like if we GC iframe
     // immediately, thus this timeout.
-    setTimeout(function() {
+    setTimeout(function () {
       debug('cleaning up', id);
       iframe.parentNode.removeChild(iframe);
       iframe = null;
@@ -78,21 +76,21 @@ module.exports = function(url, payload, callback) {
     // failed to submit our form.
     callback(err);
   };
-  iframe.onerror = function() {
+  iframe.onerror = function () {
     debug('onerror', id);
     completed();
   };
-  iframe.onload = function() {
+  iframe.onload = function () {
     debug('onload', id);
     completed();
   };
-  iframe.onreadystatechange = function(e) {
+  iframe.onreadystatechange = function (e) {
     debug('onreadystatechange', id, iframe.readyState, e);
     if (iframe.readyState === 'complete') {
       completed();
     }
   };
-  return function() {
+  return function () {
     debug('aborted', id);
     completed(new Error('Aborted'));
   };

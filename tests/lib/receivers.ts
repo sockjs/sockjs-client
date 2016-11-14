@@ -1,11 +1,8 @@
-'use strict';
-
-var expect = require('expect.js')
-  , JsonpReceiver = require('../../lib/transport/receiver/jsonp')
-  , XhrReceiver = require('../../lib/transport/receiver/xhr')
-  , XhrFake = require('../../lib/transport/sender/xhr-fake')
-  , utils = require('../../lib/utils/iframe')
-  ;
+var expect = require('expect.js');
+import {JsonpReceiver} from '../../lib/transport/receiver/jsonp';
+import {XhrReceiver} from '../../lib/transport/receiver/xhr';
+import {XHRFake} from '../../lib/transport/sender/xhr-fake';
+import * as utils from '../../lib/utils/iframe';
 
 describe('Receivers', function () {
   describe('jsonp', function () {
@@ -200,16 +197,16 @@ describe('Receivers', function () {
   describe('xhr', function () {
     var oldTimeout;
     before(function () {
-      oldTimeout = XhrFake.timeout;
-      XhrFake.timeout = 100;
+      oldTimeout = XHRFake.timeout;
+      XHRFake.timeout = 100;
     });
     after(function () {
-      XhrFake.timeout = oldTimeout;
+      XHRFake.timeout = oldTimeout;
     });
 
     it('emits multiple messages for multi-line response', function (done) {
       var test = this.runnable();
-      var xhr = new XhrReceiver('test', XhrFake);
+      var xhr = new XhrReceiver('test', XHRFake);
       var i = 0, responses = ['test', 'multiple', 'lines', '{}'];
       xhr.on('message', function (msg) {
         try {
@@ -238,7 +235,7 @@ describe('Receivers', function () {
 
     it('emits no messages for an empty string response', function (done) {
       var test = this.runnable();
-      var xhr = new XhrReceiver('test', XhrFake);
+      var xhr = new XhrReceiver('test', XHRFake);
       var i = 0, responses = ['{}'];
       xhr.on('message', function (msg) {
         try {
@@ -268,7 +265,7 @@ describe('Receivers', function () {
 
     it('aborts without sending a message', function (done) {
       var test = this.runnable();
-      var xhr = new XhrReceiver('test', XhrFake);
+      var xhr = new XhrReceiver('test', XHRFake);
       xhr.on('message', function () {
         done(new Error());
         xhr.abort();

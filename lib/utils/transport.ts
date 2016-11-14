@@ -1,16 +1,15 @@
-'use strict';
-
-var debug = function() {};
+var debug = function (..._) {
+};
 if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:utils:transport');
 }
 
-module.exports = function(availableTransports) {
+export function transport(availableTransports) {
   return {
-    filterToEnabled: function(transportsWhitelist, info) {
+    filterToEnabled: function (transportsWhitelist, info) {
       var transports = {
         main: []
-      , facade: []
+        , facade: []
       };
       if (!transportsWhitelist) {
         transportsWhitelist = [];
@@ -18,7 +17,7 @@ module.exports = function(availableTransports) {
         transportsWhitelist = [transportsWhitelist];
       }
 
-      availableTransports.forEach(function(trans) {
+      availableTransports.forEach(function (trans) {
         if (!trans) {
           return;
         }
@@ -29,7 +28,7 @@ module.exports = function(availableTransports) {
         }
 
         if (transportsWhitelist.length &&
-            transportsWhitelist.indexOf(trans.transportName) === -1) {
+          transportsWhitelist.indexOf(trans.transportName) === -1) {
           debug('not in whitelist', trans.transportName);
           return;
         }

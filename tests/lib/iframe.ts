@@ -1,14 +1,10 @@
-/* eslint quotes: 0, camelcase: 0 */
-'use strict';
-
-var expect = require('expect.js')
-  , eventUtils = require('../../lib/utils/event')
-  , browser = require('../../lib/utils/browser')
-  , transportList = require('../../lib/transport-list')
-  , testUtils = require('./test-utils')
-  , echoTests = require('./echo-tests')
-  , IframeTransport = require('../../lib/transport/iframe')
-  ;
+var expect = require('expect.js');
+import eventUtils = require('../../lib/utils/event');
+import browser = require('../../lib/utils/browser');
+import {transportList} from '../../lib/transport-list';
+import testUtils = require('./test-utils');
+import echoTests = require('./echo-tests');
+import {IframeTransport} from '../../lib/transport/iframe';
 
 function onunloadTest (code, done) {
   var hook = testUtils.createIframe();
@@ -123,7 +119,7 @@ describe('iframe', function () {
   });
 });
 
-describe('Transports', function () {
+describe('Transports Iframe', function () {
   transportList.forEach(function (Trans) {
     describe(Trans.transportName, function () {
       if (!Trans.enabled({ cookie_needed: false, nullOrigin: false, sameScheme: true, sameOrigin: true })) {

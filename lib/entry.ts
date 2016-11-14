@@ -1,10 +1,9 @@
-'use strict';
+import {transportList} from './transport-list';
+import {main} from './main';
 
-var transportList = require('./transport-list');
-
-module.exports = require('./main')(transportList);
+export = main(transportList);
 
 // TODO can't get rid of this until all servers do
 if ('_sockjs_onload' in global) {
-  setTimeout(global._sockjs_onload, 1);
+  setTimeout((<any>global)._sockjs_onload, 1);
 }

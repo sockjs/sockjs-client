@@ -1,23 +1,17 @@
-'use strict';
+import {AjaxBasedTransport} from './lib/ajax-based';
+import {XdrStreamingTransport} from './xdr-streaming';
+import {XhrReceiver} from './receiver/xhr';
+import {XDRObject} from './sender/xdr';
 
-var inherits = require('inherits')
-  , AjaxBasedTransport = require('./lib/ajax-based')
-  , XdrStreamingTransport = require('./xdr-streaming')
-  , XhrReceiver = require('./receiver/xhr')
-  , XDRObject = require('./sender/xdr')
-  ;
-
-function XdrPollingTransport(transUrl) {
-  if (!XDRObject.enabled) {
-    throw new Error('Transport created when disabled');
+export class XdrPollingTransport extends AjaxBasedTransport {
+  constructor(transUrl) {
+    if (!XDRObject.enabled) {
+      throw new Error('Transport created when disabled');
+    }
+    super(transUrl, '/xhr', XhrReceiver, XDRObject);
   }
-  AjaxBasedTransport.call(this, transUrl, '/xhr', XhrReceiver, XDRObject);
+
+  static enabled = XdrStreamingTransport.enabled;
+  static transportName = 'xdr-polling';
+  static roundTrips = 2; // preflight, ajax
 }
-
-inherits(XdrPollingTransport, AjaxBasedTransport);
-
-XdrPollingTransport.enabled = XdrStreamingTransport.enabled;
-XdrPollingTransport.transportName = 'xdr-polling';
-XdrPollingTransport.roundTrips = 2; // preflight, ajax
-
-module.exports = XdrPollingTransport;

@@ -3,10 +3,8 @@
 require('../lib/shims');
 
 // prevent global leak warnings on this
-global._jp = {};
-/* eslint-disable camelcase */
-global._sockjs_global = null;
-/* eslint-enable camelcase */
+(<any>global)._jp = {};
+(<any>global)._sockjs_global = null;
 
 require('./lib/main');
 require('./lib/utils');

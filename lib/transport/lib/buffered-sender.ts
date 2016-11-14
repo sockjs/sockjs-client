@@ -1,31 +1,35 @@
 'use strict';
 
-var inherits = require('inherits')
-  , EventEmitter = require('events').EventEmitter
-  ;
+import {EventEmitter} from 'events';
 
-var debug = function() {};
+var debug = function (..._) {
+};
 if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:buffered-sender');
 }
 
-function BufferedSender(url, sender) {
-  debug(url);
-  EventEmitter.call(this);
-  this.sendBuffer = [];
-  this.sender = sender;
-  this.url = url;
-}
+export class BufferedSender extends EventEmitter {
+  sendBuffer;
+  sender;
+  url;
+  sendStop;
 
-inherits(BufferedSender, EventEmitter);
-
-BufferedSender.prototype.send = function(message) {
-  debug('send', message);
-  this.sendBuffer.push(message);
-  if (!this.sendStop) {
-    this.sendSchedule();
+  constructor(url, sender) {
+    super();
+    debug(url);
+    this.sendBuffer = [];
+    this.sender = sender;
+    this.url = url;
   }
-};
+
+
+  send(message) {
+    debug('send', message);
+    this.sendBuffer.push(message);
+    if (!this.sendStop) {
+      this.sendSchedule();
+    }
+  };
 
 // For polling transports in a situation when in the message callback,
 // new message is being send. If the sending connection was started
@@ -35,53 +39,52 @@ BufferedSender.prototype.send = function(message) {
 // connection be started beforehand. This is only a halfmeasure and
 // does not fix the big problem, but it does make the tests go more
 // stable on slow networks.
-BufferedSender.prototype.sendScheduleWait = function() {
-  debug('sendScheduleWait');
-  var self = this;
-  var tref;
-  this.sendStop = function() {
-    debug('sendStop');
-    self.sendStop = null;
-    clearTimeout(tref);
-  };
-  tref = setTimeout(function() {
-    debug('timeout');
-    self.sendStop = null;
-    self.sendSchedule();
-  }, 25);
-};
-
-BufferedSender.prototype.sendSchedule = function() {
-  debug('sendSchedule', this.sendBuffer.length);
-  var self = this;
-  if (this.sendBuffer.length > 0) {
-    var payload = '[' + this.sendBuffer.join(',') + ']';
-    this.sendStop = this.sender(this.url, payload, function(err) {
+  sendScheduleWait() {
+    debug('sendScheduleWait');
+    var self = this;
+    var tref;
+    this.sendStop = function () {
+      debug('sendStop');
       self.sendStop = null;
-      if (err) {
-        debug('error', err);
-        self.emit('close', err.code || 1006, 'Sending error: ' + err);
-        self._cleanup();
-      } else {
-        self.sendScheduleWait();
-      }
-    });
-    this.sendBuffer = [];
-  }
-};
+      clearTimeout(tref);
+    };
+    tref = setTimeout(function () {
+      debug('timeout');
+      self.sendStop = null;
+      self.sendSchedule();
+    }, 25);
+  };
 
-BufferedSender.prototype._cleanup = function() {
-  debug('_cleanup');
-  this.removeAllListeners();
-};
+  sendSchedule() {
+    debug('sendSchedule', this.sendBuffer.length);
+    var self = this;
+    if (this.sendBuffer.length > 0) {
+      var payload = '[' + this.sendBuffer.join(',') + ']';
+      this.sendStop = this.sender(this.url, payload, function (err) {
+        self.sendStop = null;
+        if (err) {
+          debug('error', err);
+          self.emit('close', err.code || 1006, 'Sending error: ' + err);
+          self._cleanup();
+        } else {
+          self.sendScheduleWait();
+        }
+      });
+      this.sendBuffer = [];
+    }
+  };
 
-BufferedSender.prototype.stop = function() {
-  debug('stop');
-  this._cleanup();
-  if (this.sendStop) {
-    this.sendStop();
-    this.sendStop = null;
-  }
-};
+  _cleanup() {
+    debug('_cleanup');
+    this.removeAllListeners();
+  };
 
-module.exports = BufferedSender;
+  stop() {
+    debug('stop');
+    this._cleanup();
+    if (this.sendStop) {
+      this.sendStop();
+      this.sendStop = null;
+    }
+  };
+}

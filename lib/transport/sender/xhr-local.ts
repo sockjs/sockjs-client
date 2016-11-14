@@ -1,17 +1,11 @@
-'use strict';
+import XhrDriver = require('../driver/xhr');
 
-var inherits = require('inherits')
-  , XhrDriver = require('../driver/xhr')
-  ;
+export class XHRLocalObject extends XhrDriver {
+  constructor(method, url, payload /*, opts */) {
+    super(method, url, payload, {
+      noCredentials: true
+    });
+  }
 
-function XHRLocalObject(method, url, payload /*, opts */) {
-  XhrDriver.call(this, method, url, payload, {
-    noCredentials: true
-  });
+  static enabled = XhrDriver.enabled;
 }
-
-inherits(XHRLocalObject, XhrDriver);
-
-XHRLocalObject.enabled = XhrDriver.enabled;
-
-module.exports = XHRLocalObject;

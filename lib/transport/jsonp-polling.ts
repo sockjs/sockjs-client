@@ -8,27 +8,23 @@
 //   o you will get a spinning cursor
 //   o for Konqueror a dumb timer is needed to detect errors
 
-var inherits = require('inherits')
-  , SenderReceiver = require('./lib/sender-receiver')
-  , JsonpReceiver = require('./receiver/jsonp')
-  , jsonpSender = require('./sender/jsonp')
-  ;
+import {SenderReceiver} from './lib/sender-receiver';
+import {JsonpReceiver} from './receiver/jsonp';
+import {jsonpSender} from './sender/jsonp';
 
-function JsonPTransport(transUrl) {
-  if (!JsonPTransport.enabled()) {
-    throw new Error('Transport created when disabled');
+export class JsonPTransport extends SenderReceiver {
+  constructor(transUrl) {
+    if (!JsonPTransport.enabled()) {
+      throw new Error('Transport created when disabled');
+    }
+    super(transUrl, '/jsonp', jsonpSender, JsonpReceiver);
   }
-  SenderReceiver.call(this, transUrl, '/jsonp', jsonpSender, JsonpReceiver);
+
+  static enabled = function () {
+    return !!(<any>global).document;
+  };
+
+  static transportName = 'jsonp-polling';
+  static roundTrips = 1;
+  static needBody = true;
 }
-
-inherits(JsonPTransport, SenderReceiver);
-
-JsonPTransport.enabled = function() {
-  return !!global.document;
-};
-
-JsonPTransport.transportName = 'jsonp-polling';
-JsonPTransport.roundTrips = 1;
-JsonPTransport.needBody = true;
-
-module.exports = JsonPTransport;

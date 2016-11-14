@@ -3,7 +3,7 @@
 
 var http = require('http');
 var nodeStatic = require('node-static');
-var sockjs = require('./sockjs_app');
+import sockjs = require('./sockjs_app');
 var url = require('url');
 var path = require('path');
 var debug = require('debug')('sockjs-client:test-server:main');

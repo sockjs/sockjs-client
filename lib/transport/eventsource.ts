@@ -1,27 +1,21 @@
-'use strict';
+import {AjaxBasedTransport} from './lib/ajax-based';
+import {EventSourceReceiver} from './receiver/eventsource';
+import {XHRCorsObject} from './sender/xhr-cors';
+var EventSourceDriver = require('eventsource');
 
-var inherits = require('inherits')
-  , AjaxBasedTransport = require('./lib/ajax-based')
-  , EventSourceReceiver = require('./receiver/eventsource')
-  , XHRCorsObject = require('./sender/xhr-cors')
-  , EventSourceDriver = require('eventsource')
-  ;
+export class EventSourceTransport extends AjaxBasedTransport {
+  constructor(transUrl) {
+    if (!EventSourceTransport.enabled()) {
+      throw new Error('Transport created when disabled');
+    }
 
-function EventSourceTransport(transUrl) {
-  if (!EventSourceTransport.enabled()) {
-    throw new Error('Transport created when disabled');
+    super(transUrl, '/eventsource', EventSourceReceiver, XHRCorsObject);
   }
 
-  AjaxBasedTransport.call(this, transUrl, '/eventsource', EventSourceReceiver, XHRCorsObject);
+  static enabled = function () {
+    return !!EventSourceDriver;
+  };
+
+  static transportName = 'eventsource';
+  static roundTrips = 2;
 }
-
-inherits(EventSourceTransport, AjaxBasedTransport);
-
-EventSourceTransport.enabled = function() {
-  return !!EventSourceDriver;
-};
-
-EventSourceTransport.transportName = 'eventsource';
-EventSourceTransport.roundTrips = 2;
-
-module.exports = EventSourceTransport;

@@ -1,15 +1,13 @@
 /* eslint new-cap: 0, no-new: 0 */
 /* jshint ignore: start */
-'use strict';
 
-var expect = require('expect.js')
-  , SockJS = require('../../lib/entry')
-  ;
+var expect = require('expect.js');
+import SockJS = require('../../lib/entry');
 
 describe('SockJS', function() {
   describe('Constructor', function () {
     it('should support construction without new', function () {
-      var s = SockJS('http://localhost');
+      var s = (<any>SockJS)('http://localhost');
       expect(s).to.be.a(SockJS);
       s.close();
     });
@@ -72,14 +70,14 @@ describe('SockJS', function() {
     });
 
     it('should generate 8-character-long session ids by default', function () {
-      var s = SockJS('http://localhost');
+      var s = new SockJS('http://localhost');
       expect(s._generateSessionId().length).to.be(8);
       s.close();
     });
 
     it('should generate N-character-long session ids', function () {
       for (var i = 1; i <= 100; i++) {
-        var s = SockJS('http://localhost', null, {sessionId: i});
+        var s = new SockJS('http://localhost', null, {sessionId: i});
         expect(s._generateSessionId().length).to.be(i);
         s.close();
       }
@@ -89,7 +87,7 @@ describe('SockJS', function() {
       var f = function() {
         return 'this_is_not_random';
       };
-      var s = SockJS('http://localhost', null, {sessionId: f});
+      var s = new SockJS('http://localhost', null, {sessionId: f});
       expect(s._generateSessionId).to.be(f);
       s.close();
     });

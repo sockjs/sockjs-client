@@ -1,70 +1,75 @@
 language: node_js
 node_js:
-  - '0.10'
-git:
-  depth: 1
+  - '7.0'
+addons:
+  firefox: "49.0"
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+#git:
+#  depth: 1
 script:
-  - '[ "${TRAVIS_SECURE_ENV_VARS}" = "true" ] && npm test || false'
-env:
-  global:
-  - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
-  - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
-  - secure: V39QiKk9SMbu2T9Uytitc/d0iZcC2vLkXsP0lEOOhdH2TvwB2naIr62i0MG3/MSa54pjEp7X8db+lNBVQZ6dlfUMS0SJcybCbf4whmNyvdThuAkWS2pWkg3ZW7uT43XqXX2JXvKA3IXHWsBJUyrOn+GYTNN7OTw0fo/4GFDbsnE=
-matrix:
-  include:
-  - node_js: '0.10'
-    env: BROWSER_NAME=chrome BROWSER_VERSION=latest
-  - node_js: '0.10'
-    env: BROWSER_NAME=firefox BROWSER_VERSION=latest
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=safari BROWSER_VERSION=5
-  - node_js: '0.10'
-    env: BROWSER_NAME=safari BROWSER_VERSION=6
-  - node_js: '0.10'
-    env: BROWSER_NAME=safari BROWSER_VERSION=7
-  # Global usage is < 0.10% for IE6 & 7
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=6
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=7
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=8
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=9
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=10 BROWSER_PLATFORM="Windows 2012"
-  - node_js: '0.10'
-    env: BROWSER_NAME=ie BROWSER_VERSION=latest BROWSER_PLATFORM="Windows 2012"
-  # Global Usage < 0.10% on less than 12
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=opera BROWSER_VERSION=11
-  # Sauce Labs doesn't have anything newer than 12 :(
-  - node_js: '0.10'
-    env: BROWSER_NAME=opera BROWSER_VERSION=12
-  # Super low usage, Apple no longer accepts apps for these versions, and I can no longer download the simulators
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=iphone BROWSER_VERSION=5.1
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=iphone BROWSER_VERSION=6.1
-  - node_js: '0.10'
-    env: BROWSER_NAME=iphone BROWSER_VERSION=7.1
-  - node_js: '0.10'
-    env: BROWSER_NAME=iphone BROWSER_VERSION=8.0
-  # Android VMs on Sauce Labs don't seem to work correctly
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.0
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.1
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.2
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.3
-  # - node_js: '0.10'
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.4
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/be9ef89cdfc53fc9c60c
-    on_success: change
-    on_start: never
-    on_failure: change
+  - 'npm test'
+#env:
+#  global:
+#  - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
+#  - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
+#  - secure: V39QiKk9SMbu2T9Uytitc/d0iZcC2vLkXsP0lEOOhdH2TvwB2naIr62i0MG3/MSa54pjEp7X8db+lNBVQZ6dlfUMS0SJcybCbf4whmNyvdThuAkWS2pWkg3ZW7uT43XqXX2JXvKA3IXHWsBJUyrOn+GYTNN7OTw0fo/4GFDbsnE=
+#matrix:
+#  include:
+#  - node_js: '6.5'
+#    env: BROWSER_NAME=chrome BROWSER_VERSION=latest
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=firefox BROWSER_VERSION=latest
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=safari BROWSER_VERSION=5
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=safari BROWSER_VERSION=6
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=safari BROWSER_VERSION=7
+#  # Global usage is < 0.10% for IE6 & 7
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=6
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=7
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=8
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=9
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=10 BROWSER_PLATFORM="Windows 2012"
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=ie BROWSER_VERSION=latest BROWSER_PLATFORM="Windows 2012"
+#  # Global Usage < 0.10% on less than 12
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=opera BROWSER_VERSION=11
+#  # Sauce Labs doesn't have anything newer than 12 :(
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=opera BROWSER_VERSION=12
+#  # Super low usage, Apple no longer accepts apps for these versions, and I can no longer download the simulators
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=iphone BROWSER_VERSION=5.1
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=iphone BROWSER_VERSION=6.1
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=iphone BROWSER_VERSION=7.1
+#  - node_js: '0.10'
+#    env: BROWSER_NAME=iphone BROWSER_VERSION=8.0
+#  # Android VMs on Sauce Labs don't seem to work correctly
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=android BROWSER_VERSION=4.0
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=android BROWSER_VERSION=4.1
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=android BROWSER_VERSION=4.2
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=android BROWSER_VERSION=4.3
+#  # - node_js: '0.10'
+#  #   env: BROWSER_NAME=android BROWSER_VERSION=4.4
+#notifications:
+#  webhooks:
+#    urls:
+#      - https://webhooks.gitter.im/e/be9ef89cdfc53fc9c60c
+#    on_success: change
+#    on_start: never
+#    on_failure: change

@@ -1,15 +1,9 @@
-'use strict';
+import XhrDriver = require('../driver/xhr');
 
-var inherits = require('inherits')
-  , XhrDriver = require('../driver/xhr')
-  ;
+export class XHRCorsObject extends XhrDriver {
+  constructor(method, url, payload, opts) {
+    super(method, url, payload, opts);
+  }
 
-function XHRCorsObject(method, url, payload, opts) {
-  XhrDriver.call(this, method, url, payload, opts);
+  static enabled = XhrDriver.enabled && XhrDriver.supportsCORS;
 }
-
-inherits(XHRCorsObject, XhrDriver);
-
-XHRCorsObject.enabled = XhrDriver.enabled && XhrDriver.supportsCORS;
-
-module.exports = XHRCorsObject;

@@ -1,22 +1,18 @@
-'use strict';
+export class Event {
+  timeStamp: number;
 
-function Event(eventType) {
-  this.type = eventType;
+  constructor(public type: string,
+              public bubbles?: boolean,
+              public cancelable?: boolean) {
+    this.timeStamp = +new Date();
+  }
+
+  stopPropagation() {
+  };
+  preventDefault() {
+  };
+
+  static CAPTURING_PHASE = 1;
+  static AT_TARGET = 2;
+  static BUBBLING_PHASE = 3;
 }
-
-Event.prototype.initEvent = function(eventType, canBubble, cancelable) {
-  this.type = eventType;
-  this.bubbles = canBubble;
-  this.cancelable = cancelable;
-  this.timeStamp = +new Date();
-  return this;
-};
-
-Event.prototype.stopPropagation = function() {};
-Event.prototype.preventDefault = function() {};
-
-Event.CAPTURING_PHASE = 1;
-Event.AT_TARGET = 2;
-Event.BUBBLING_PHASE = 3;
-
-module.exports = Event;

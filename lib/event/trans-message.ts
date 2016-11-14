@@ -1,15 +1,9 @@
 'use strict';
 
-var inherits = require('inherits')
-  , Event = require('./event')
-  ;
+import {Event} from './event';
 
-function TransportMessageEvent(data) {
-  Event.call(this);
-  this.initEvent('message', false, false);
-  this.data = data;
+export class TransportMessageEvent extends Event {
+  constructor(public data: string) {
+    super('message', false, false);
+  }
 }
-
-inherits(TransportMessageEvent, Event);
-
-module.exports = TransportMessageEvent;

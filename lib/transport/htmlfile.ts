@@ -1,25 +1,19 @@
-'use strict';
+import {HtmlfileReceiver} from './receiver/htmlfile';
+import {XHRLocalObject} from './sender/xhr-local';
+import {AjaxBasedTransport} from './lib/ajax-based';
 
-var inherits = require('inherits')
-  , HtmlfileReceiver = require('./receiver/htmlfile')
-  , XHRLocalObject = require('./sender/xhr-local')
-  , AjaxBasedTransport = require('./lib/ajax-based')
-  ;
-
-function HtmlFileTransport(transUrl) {
-  if (!HtmlfileReceiver.enabled) {
-    throw new Error('Transport created when disabled');
+export class HtmlFileTransport extends AjaxBasedTransport {
+  constructor(transUrl) {
+    if (!HtmlfileReceiver.enabled) {
+      throw new Error('Transport created when disabled');
+    }
+    super(transUrl, '/htmlfile', HtmlfileReceiver, XHRLocalObject);
   }
-  AjaxBasedTransport.call(this, transUrl, '/htmlfile', HtmlfileReceiver, XHRLocalObject);
+
+  static enabled(info) {
+    return HtmlfileReceiver.enabled && info.sameOrigin;
+  };
+
+  static transportName = 'htmlfile';
+  static roundTrips = 2;
 }
-
-inherits(HtmlFileTransport, AjaxBasedTransport);
-
-HtmlFileTransport.enabled = function(info) {
-  return HtmlfileReceiver.enabled && info.sameOrigin;
-};
-
-HtmlFileTransport.transportName = 'htmlfile';
-HtmlFileTransport.roundTrips = 2;
-
-module.exports = HtmlFileTransport;

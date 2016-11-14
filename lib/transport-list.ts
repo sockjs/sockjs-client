@@ -1,18 +1,26 @@
-'use strict';
+import {XhrStreamingTransport} from './transport/xhr-streaming';
+import {XdrStreamingTransport} from './transport/xdr-streaming';
+import {WebSocketTransport} from './transport/websocket';
+import {XdrPollingTransport} from './transport/xdr-polling';
+import {XhrPollingTransport} from './transport/xhr-polling';
+import {EventSourceTransport} from './transport/eventsource';
+import {iframeWrap} from './transport/lib/iframe-wrap';
+import {HtmlFileTransport} from './transport/htmlfile';
+import {JsonPTransport} from './transport/jsonp-polling';
 
-module.exports = [
+export let transportList = [
   // streaming transports
-  require('./transport/websocket')
-, require('./transport/xhr-streaming')
-, require('./transport/xdr-streaming')
-, require('./transport/eventsource')
-, require('./transport/lib/iframe-wrap')(require('./transport/eventsource'))
+  WebSocketTransport
+  , XhrStreamingTransport
+  , XdrStreamingTransport
+  , EventSourceTransport
+  , iframeWrap(EventSourceTransport)
 
   // polling transports
-, require('./transport/htmlfile')
-, require('./transport/lib/iframe-wrap')(require('./transport/htmlfile'))
-, require('./transport/xhr-polling')
-, require('./transport/xdr-polling')
-, require('./transport/lib/iframe-wrap')(require('./transport/xhr-polling'))
-, require('./transport/jsonp-polling')
+  , HtmlFileTransport
+  , iframeWrap(HtmlFileTransport)
+  , XhrPollingTransport
+  , XdrPollingTransport
+  , iframeWrap(XhrPollingTransport)
+  , JsonPTransport
 ];

@@ -3,7 +3,7 @@
 var sockjs = require('sockjs');
 var debug = require('debug')('sockjs-client:test-server:app');
 
-exports.install = function(opts, server) {
+export var install = function(opts, server) {
   var sjs_echo = sockjs.createServer(opts);
   sjs_echo.on('connection', function(conn) {
     debug('    [+] echo open    ' + conn);

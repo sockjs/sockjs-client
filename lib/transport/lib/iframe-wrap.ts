@@ -1,33 +1,28 @@
-'use strict';
+import {IframeTransport} from '../iframe';
+import objectUtils = require('../../utils/object');
 
-var inherits = require('inherits')
-  , IframeTransport = require('../iframe')
-  , objectUtils = require('../../utils/object')
-  ;
+export function iframeWrap(transport) {
 
-module.exports = function(transport) {
-
-  function IframeWrapTransport(transUrl, baseUrl) {
-    IframeTransport.call(this, transport.transportName, transUrl, baseUrl);
-  }
-
-  inherits(IframeWrapTransport, IframeTransport);
-
-  IframeWrapTransport.enabled = function(url, info) {
-    if (!global.document) {
-      return false;
+  class IframeWrapTransport extends IframeTransport {
+    constructor(transUrl, baseUrl) {
+      super(transport.transportName, transUrl, baseUrl);
     }
 
-    var iframeInfo = objectUtils.extend({}, info);
-    iframeInfo.sameOrigin = true;
-    return transport.enabled(iframeInfo) && IframeTransport.enabled();
-  };
+    static enabled(url?, info?) {
+      if (!(<any>global).document) {
+        return false;
+      }
 
-  IframeWrapTransport.transportName = 'iframe-' + transport.transportName;
-  IframeWrapTransport.needBody = true;
-  IframeWrapTransport.roundTrips = IframeTransport.roundTrips + transport.roundTrips - 1; // html, javascript (2) + transport - no CORS (1)
+      var iframeInfo = objectUtils.extend({}, info);
+      iframeInfo.sameOrigin = true;
+      return transport.enabled(iframeInfo) && IframeTransport.enabled();
+    };
 
-  IframeWrapTransport.facadeTransport = transport;
+    static transportName = 'iframe-' + transport.transportName;
+    static needBody = true;
+    static roundTrips = IframeTransport.roundTrips + transport.roundTrips - 1; // html, javascript (2) + transport - no CORS (1)
 
+    static facadeTransport = transport;
+  }
   return IframeWrapTransport;
-};
+}

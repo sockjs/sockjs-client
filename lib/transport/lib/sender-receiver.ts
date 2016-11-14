@@ -1,45 +1,42 @@
-'use strict';
+import urlUtils = require('../../utils/url');
+import {BufferedSender} from './buffered-sender';
+import {Polling} from './polling';
 
-var inherits = require('inherits')
-  , urlUtils = require('../../utils/url')
-  , BufferedSender = require('./buffered-sender')
-  , Polling = require('./polling')
-  ;
-
-var debug = function() {};
+var debug = function (..._) {
+};
 if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:sender-receiver');
 }
 
-function SenderReceiver(transUrl, urlSuffix, senderFunc, Receiver, AjaxObject) {
-  var pollUrl = urlUtils.addPath(transUrl, urlSuffix);
-  debug(pollUrl);
-  var self = this;
-  BufferedSender.call(this, transUrl, senderFunc);
+export class SenderReceiver extends BufferedSender {
+  poll;
 
-  this.poll = new Polling(Receiver, pollUrl, AjaxObject);
-  this.poll.on('message', function(msg) {
-    debug('poll message', msg);
-    self.emit('message', msg);
-  });
-  this.poll.once('close', function(code, reason) {
-    debug('poll close', code, reason);
-    self.poll = null;
-    self.emit('close', code, reason);
-    self.close();
-  });
-}
+  constructor(transUrl, urlSuffix, senderFunc, Receiver, AjaxObject?) {
+    var pollUrl = urlUtils.addPath(transUrl, urlSuffix);
+    debug(pollUrl);
+    super(transUrl, senderFunc);
+    var self = this;
 
-inherits(SenderReceiver, BufferedSender);
-
-SenderReceiver.prototype.close = function() {
-  debug('close');
-  this.removeAllListeners();
-  if (this.poll) {
-    this.poll.abort();
-    this.poll = null;
+    this.poll = new Polling(Receiver, pollUrl, AjaxObject);
+    this.poll.on('message', function (msg) {
+      debug('poll message', msg);
+      self.emit('message', msg);
+    });
+    this.poll.once('close', function (code, reason) {
+      debug('poll close', code, reason);
+      self.poll = null;
+      self.emit('close', code, reason);
+      self.close();
+    });
   }
-  this.stop();
-};
 
-module.exports = SenderReceiver;
+  close() {
+    debug('close');
+    this.removeAllListeners();
+    if (this.poll) {
+      this.poll.abort();
+      this.poll = null;
+    }
+    this.stop();
+  };
+}

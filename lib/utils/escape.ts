@@ -9,16 +9,16 @@ var extraEscapable = /[\x00-\x1f\ud800-\udfff\ufffe\uffff\u0300-\u0333\u033d-\u0
 
 // This may be quite slow, so let's delay until user actually uses bad
 // characters.
-var unrollLookup = function(escapable) {
+var unrollLookup = function (escapable) {
   var i;
   var unrolled = {};
   var c = [];
   for (i = 0; i < 65536; i++) {
-    c.push( String.fromCharCode(i) );
+    c.push(String.fromCharCode(i));
   }
   escapable.lastIndex = 0;
-  c.join('').replace(escapable, function(a) {
-    unrolled[ a ] = '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+  c.join('').replace(escapable, function (a) {
+    unrolled[a] = '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
     return '';
   });
   escapable.lastIndex = 0;
@@ -28,22 +28,20 @@ var unrollLookup = function(escapable) {
 // Quote string, also taking care of unicode characters that browsers
 // often break. Especially, take care of unicode surrogates:
 // http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates
-module.exports = {
-  quote: function(string) {
-    var quoted = JSON3.stringify(string);
+export function quote(string) {
+  var quoted = JSON3.stringify(string);
 
-    // In most cases this should be very fast and good enough.
-    extraEscapable.lastIndex = 0;
-    if (!extraEscapable.test(quoted)) {
-      return quoted;
-    }
-
-    if (!extraLookup) {
-      extraLookup = unrollLookup(extraEscapable);
-    }
-
-    return quoted.replace(extraEscapable, function(a) {
-      return extraLookup[a];
-    });
+  // In most cases this should be very fast and good enough.
+  extraEscapable.lastIndex = 0;
+  if (!extraEscapable.test(quoted)) {
+    return quoted;
   }
-};
+
+  if (!extraLookup) {
+    extraLookup = unrollLookup(extraEscapable);
+  }
+
+  return quoted.replace(extraEscapable, function (a) {
+    return extraLookup[a];
+  });
+}

@@ -1,13 +1,12 @@
 /* eslint camelcase: 0 */
 'use strict';
 
-var expect = require('expect.js')
-  , transportList = require('../../lib/transport-list')
-  , testUtils = require('./test-utils')
-  , echoTests = require('./echo-tests')
-  , batchTests = require('./batch-tests')
-  , SockJS = require('../../lib/entry')
-  ;
+var expect = require('expect.js');
+import {transportList} from '../../lib/transport-list';
+import testUtils = require('./test-utils');
+import echoTests = require('./echo-tests');
+import batchTests = require('./batch-tests.spec');
+import SockJS = require('../../lib/entry');
 
 function userClose(url, transport) {
   it('user close', function (done) {

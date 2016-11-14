@@ -1,8 +1,7 @@
 'use strict';
 
 var expect = require('expect.js')
-  , JSON3 = require('json3')
-  ;
+var JSON3 = require('json3');
 
 describe('utils', function () {
   describe('random', function () {

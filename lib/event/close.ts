@@ -1,17 +1,14 @@
-'use strict';
+import {Event} from './event';
 
-var inherits = require('inherits')
-  , Event = require('./event')
-  ;
+export class CloseEvent extends Event {
+  wasClean: boolean;
+  code: number;
+  reason: string;
 
-function CloseEvent() {
-  Event.call(this);
-  this.initEvent('close', false, false);
-  this.wasClean = false;
-  this.code = 0;
-  this.reason = '';
+  constructor() {
+    super('close', false, false);
+    this.wasClean = false;
+    this.code = 0;
+    this.reason = '';
+  }
 }
-
-inherits(CloseEvent, Event);
-
-module.exports = CloseEvent;

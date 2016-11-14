@@ -1,18 +1,17 @@
-'use strict';
-
-var logObject = {};
+var logObject: any = {};
 ['log', 'debug', 'warn'].forEach(function (level) {
   var levelExists;
 
   try {
-    levelExists = global.console && global.console[level] && global.console[level].apply;
-  } catch(e) {
+    levelExists = (<any>global).console && (<any>global).console[level] && (<any>global).console[level].apply;
+  } catch (e) {
     // do nothing
   }
 
   logObject[level] = levelExists ? function () {
-    return global.console[level].apply(global.console, arguments);
-  } : (level === 'log' ? function () {} : logObject.log);
+    return (<any>global).console[level].apply((<any>global).console, arguments);
+  } : (level === 'log' ? function () {
+  } : logObject.log);
 });
 
-module.exports = logObject;
+export = logObject;

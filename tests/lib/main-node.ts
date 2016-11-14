@@ -1,8 +1,7 @@
 'use strict';
 
-var expect = require('expect.js')
-  , proxyquire = require('proxyquire')
-  ;
+var expect = require('expect.js');
+var proxyquire = require('proxyquire');
 
 describe('SockJS', function() {
   describe('Constructor', function () {

@@ -1,8 +1,6 @@
-'use strict';
-var expect = require('expect.js')
-  , testUtils = require('./test-utils')
-  , debug = require('debug')('sockjs-client:tests:batch')
-  ;
+var expect = require('expect.js');
+import testUtils = require('./test-utils');
+var debug = require('debug')('sockjs-client:tests:batch');
 
 function batchFactory(transport, messages, url) {
   return function(done) {
@@ -49,7 +47,7 @@ function batchFactory(transport, messages, url) {
   };
 }
 
-module.exports.largeMessage = function(url, transport) {
+export var largeMessage = function(url, transport) {
   var messages = [new Array(Math.pow(2, 1)).join('x'), new Array(Math.pow(2, 2)).join('x'), new Array(Math.pow(2, 4)).join('x'), new Array(Math.pow(2, 8)).join('x'), new Array(Math.pow(2, 13)).join('x'), new Array(Math.pow(2, 13)).join('x')];
   it('large message (batch)', batchFactory(transport, messages, url));
 };
@@ -99,7 +97,7 @@ function amplifyFactory(transport, messages, url) {
   };
 }
 
-module.exports.largeDownload = function(url, transport) {
+export var largeDownload = function(url, transport) {
   var messages = [1, 2, 4, 8, 13, 15, 15];
   it('large download', amplifyFactory(transport, messages, url));
 };

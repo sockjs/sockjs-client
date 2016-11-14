@@ -1,11 +1,9 @@
-'use strict';
 
-var expect = require('expect.js')
-  , testUtils = require('./test-utils')
-  , XDR = require('../../lib/transport/sender/xdr')
-  , XHRCors = require('../../lib/transport/sender/xhr-cors')
-  , InfoIframe = require('../../lib/info-iframe')
-  ;
+var expect = require('expect.js');
+import testUtils = require('./test-utils');
+import {XDRObject as XDR} from '../../lib/transport/sender/xdr';
+import {XHRCorsObject as XHRCors} from '../../lib/transport/sender/xhr-cors';
+import {InfoIframe} from '../../lib/info-iframe';
 
 describe('End to End', function () {
   // selenium needs a long time to timeout
@@ -47,8 +45,8 @@ describe('End to End', function () {
       it('invalid url port', function (done) {
         var test = this.runnable();
         var badUrl;
-        if (global.location) {
-          badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
+        if ((<any>global).location) {
+          badUrl = (<any>global).location.protocol + '//' + (<any>global).location.hostname + ':1079';
         } else {
           badUrl = 'http://localhost:1079';
         }

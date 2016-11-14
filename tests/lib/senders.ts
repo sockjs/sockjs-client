@@ -1,11 +1,8 @@
-'use strict';
-
-var expect = require('expect.js')
-  , testUtils = require('./test-utils')
-  , XhrLocal = require('../../lib/transport/sender/xhr-local')
-  , XhrCors = require('../../lib/transport/sender/xhr-cors')
-  , Xdr = require('../../lib/transport/sender/xdr')
-  ;
+var expect = require('expect.js');
+import testUtils = require('./test-utils');
+import {XHRLocalObject} from '../../lib/transport/sender/xhr-local';
+import {XHRCorsObject as XhrCors} from '../../lib/transport/sender/xhr-cors';
+import {XDRObject as Xdr} from '../../lib/transport/sender/xdr';
 
 function ajaxSimple (Obj) {
   it('simple', function (done) {
@@ -93,8 +90,8 @@ function wrongUrl(Obj, url, statuses) {
 
 function wrongPort (Obj) {
   var badUrl;
-  if (global.location) {
-    badUrl = global.location.protocol + '//' + global.location.hostname + ':';
+  if ((<any>global).location) {
+    badUrl = (<any>global).location.protocol + '//' + (<any>global).location.hostname + ':';
   } else {
     badUrl = 'http://localhost:';
   }
@@ -108,12 +105,12 @@ function wrongPort (Obj) {
 
 describe('Senders', function () {
   describe('xhr-local', function () {
-    ajaxSimple(XhrLocal);
-    ajaxStreaming(XhrLocal);
+    ajaxSimple(XHRLocalObject);
+    ajaxStreaming(XHRLocalObject);
     // TODO senders don't have a timeouts so these tests can fail
     // BUT info-receiver has a timeout so they will never not-return
     // wrongPort(XhrLocal);
-    wrongUrl(XhrLocal, testUtils.getSameOriginUrl() + '/wrong_url_indeed.txt', [0, 404]);
+    wrongUrl(XHRLocalObject, testUtils.getSameOriginUrl() + '/wrong_url_indeed.txt', [0, 404]);
   });
 
   describe('xdr', function () {

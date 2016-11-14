@@ -1,57 +1,52 @@
-'use strict';
+import {EventTarget} from './eventtarget';
 
-var inherits = require('inherits')
-  , EventTarget = require('./eventtarget')
-  ;
-
-function EventEmitter() {
-  EventTarget.call(this);
-}
-
-inherits(EventEmitter, EventTarget);
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  if (type) {
-    delete this._listeners[type];
-  } else {
-    this._listeners = {};
+export class EventEmitter extends EventTarget {
+  constructor() {
+    super();
   }
-};
 
-EventEmitter.prototype.once = function(type, listener) {
-  var self = this
-    , fired = false;
-
-  function g() {
-    self.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
+  removeAllListeners(type) {
+    if (type) {
+      delete this._listeners[type];
+    } else {
+      this._listeners = {};
     }
   }
 
-  this.on(type, g);
-};
+  once(type, listener) {
+    var self = this
+      , fired = false;
 
-EventEmitter.prototype.emit = function() {
-  var type = arguments[0];
-  var listeners = this._listeners[type];
-  if (!listeners) {
-    return;
-  }
-  // equivalent of Array.prototype.slice.call(arguments, 1);
-  var l = arguments.length;
-  var args = new Array(l - 1);
-  for (var ai = 1; ai < l; ai++) {
-    args[ai - 1] = arguments[ai];
-  }
-  for (var i = 0; i < listeners.length; i++) {
-    listeners[i].apply(this, args);
-  }
-};
+    function g() {
+      self.removeListener(type, g);
 
-EventEmitter.prototype.on = EventEmitter.prototype.addListener = EventTarget.prototype.addEventListener;
-EventEmitter.prototype.removeListener = EventTarget.prototype.removeEventListener;
+      if (!fired) {
+        fired = true;
+        listener.apply(this, arguments);
+      }
+    }
 
-module.exports.EventEmitter = EventEmitter;
+    this.on(type, g);
+  }
+
+  emit() {
+    var type = arguments[0];
+    var listeners = this._listeners[type];
+    if (!listeners) {
+      return;
+    }
+    // equivalent of Array.prototype.slice.call(arguments, 1);
+    var l = arguments.length;
+    var args = new Array(l - 1);
+    for (var ai = 1; ai < l; ai++) {
+      args[ai - 1] = arguments[ai];
+    }
+    for (var i = 0; i < listeners.length; i++) {
+      listeners[i].apply(this, args);
+    }
+  }
+
+  addListener = super.addEventListener;
+  on = super.addEventListener;
+  removeListener = super.removeEventListener;
+}

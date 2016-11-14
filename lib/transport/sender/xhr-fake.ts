@@ -1,24 +1,20 @@
-'use strict';
+import {EventEmitter} from 'events';
 
-var EventEmitter = require('events').EventEmitter
-  , inherits = require('inherits')
-  ;
+export class XHRFake extends EventEmitter {
+  private to;
 
-function XHRFake(/* method, url, payload, opts */) {
-  var self = this;
-  EventEmitter.call(this);
+  constructor(/* method, url, payload, opts */) {
+    super();
+    var self = this;
 
-  this.to = setTimeout(function() {
-    self.emit('finish', 200, '{}');
-  }, XHRFake.timeout);
+    this.to = setTimeout(function () {
+      self.emit('finish', 200, '{}');
+    }, XHRFake.timeout);
+  }
+
+  close() {
+    clearTimeout(this.to);
+  }
+
+  static timeout = 2000;
 }
-
-inherits(XHRFake, EventEmitter);
-
-XHRFake.prototype.close = function() {
-  clearTimeout(this.to);
-};
-
-XHRFake.timeout = 2000;
-
-module.exports = XHRFake;
