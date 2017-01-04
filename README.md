@@ -26,7 +26,7 @@ SockJS-client does require a server counterpart:
 Philosophy:
 
  * The API should follow
-   [HTML5 Websockets API](http://dev.w3.org/html5/websockets/) as
+   [HTML5 Websockets API](https://html.spec.whatwg.org/multipage/comms.html#network) as
    closely as possible.
  * All the transports must support cross domain connections out of the
    box. It's possible and recommended to host a SockJS server on a
@@ -57,10 +57,10 @@ SockJS family:
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
   * [SockJS-aiohttp](https://github.com/aio-libs/sockjs/) Python/Aiohttp server
-  * [Spring Framework](http://projects.spring.io/spring-framework) Java [client](http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/websocket.html#websocket-fallback-sockjs-client) & server
+  * [Spring Framework](https://projects.spring.io/spring-framework) Java [client](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/websocket.html#websocket-fallback-sockjs-client) & server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
-  * [Xitrum](http://xitrum-framework.github.io/) Scala server
-  * [Atmosphere Framework](http://github.com/Atmosphere/atmosphere) JavaEE Server, Play Framework, Netty, Vert.x
+  * [Xitrum](https://xitrum-framework.github.io/) Scala server
+  * [Atmosphere Framework](https://github.com/Atmosphere/atmosphere) JavaEE Server, Play Framework, Netty, Vert.x
 
 Work in progress:
 
@@ -76,21 +76,21 @@ Work in progress:
 Getting Started
 -------
 
-SockJS mimics the [WebSockets API](http://dev.w3.org/html5/websockets/),
+SockJS mimics the [WebSockets API](https://html.spec.whatwg.org/multipage/comms.html#network),
 but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load the SockJS JavaScript library. For example, you can
 put that in your HTML head:
 
 ```html
-<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 ```
 
 After the script is loaded you can establish a connection with the
 SockJS server. Here's a simple example:
 
 ```javascript
- var sock = new SockJS('http://mydomain.com/my_prefix');
+ var sock = new SockJS('https://mydomain.com/my_prefix');
  sock.onopen = function() {
      console.log('open');
  };
@@ -148,7 +148,7 @@ important SockJS limitation is the fact that you're not allowed to
 open more than one SockJS connection to a single domain at a time.
 This limitation is caused by an in-browser limit of outgoing
 connections - usually [browsers don't allow opening more than two
-outgoing connections to a single domain](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser). A single SockJS session
+outgoing connections to a single domain](https://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser). A single SockJS session
 requires those two connections - one for downloading data, the other for
 sending messages.  Opening a second SockJS session at the same time
 would most likely block, and can result in both sessions timing out.
@@ -223,16 +223,16 @@ iframe-xhr-polling   | Long-polling using normal AJAX from an [iframe via postMe
 jsonp-polling        | Slow and old fashioned [JSONP polling][^6]. This transport will show "busy indicator" (aka: "spinning wheel") when sending data.
 
 
-[^1]: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
-[^2]: http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
+[^1]: https://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76
+[^2]: https://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
 [^3]: https://developer.mozilla.org/en/DOM/window.postMessage
 [^4]: https://html.spec.whatwg.org/multipage/comms.html#server-sent-events
 [^5]: https://secure.wikimedia.org/wikipedia/en/wiki/XMLHttpRequest#Cross-domain_requests
 [^6]: https://secure.wikimedia.org/wikipedia/en/wiki/JSONP
 [^7]: http://www.debugtheweb.com/test/teststreaming.aspx
 [^8]: http://cometdaily.com/2007/11/18/ie-activexhtmlfile-transport-part-ii/
-[^9]: http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
-[^10]: http://www.rfc-editor.org/rfc/rfc6455.txt
+[^9]: https://blogs.msdn.microsoft.com/ieinternals/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds/
+[^10]: https://www.rfc-editor.org/rfc/rfc6455.txt
 
 
 Connecting to SockJS without the client
@@ -259,7 +259,7 @@ You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
 ```html
-<script src="//cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 ```
 
 
@@ -271,7 +271,7 @@ session stickiness, take a look at the
 Development and testing
 -----------------------
 
-SockJS-client needs [node.js](http://nodejs.org/) for running a test
+SockJS-client needs [node.js](https://nodejs.org/) for running a test
 server and JavaScript minification. If you want to work on
 SockJS-client source code, checkout the git repo and follow these
 steps:
@@ -308,10 +308,10 @@ There are various browser quirks which we don't intend to address:
  * `jsonp-polling` transport will show a "spinning wheel" (aka. "busy indicator")
    when sending data.
  * You can't open more than one SockJS connection to one domain at the
-   same time due to [the browser's limit of concurrent connections](http://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser)
+   same time due to [the browser's limit of concurrent connections](https://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser)
    (this limit is not counting native WebSocket connections).
  * Although SockJS is trying to escape any strange Unicode characters
-   (even invalid ones - [like surrogates \xD800-\xDBFF](http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates) or [\xFFFE and \xFFFF](https://en.wikipedia.org/wiki/Unicode#Character_General_Category))
+   (even invalid ones - [like surrogates \xD800-\xDBFF](https://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates) or [\xFFFE and \xFFFF](https://en.wikipedia.org/wiki/Unicode#Character_General_Category))
    it's advisable to use only valid characters. Using invalid
    characters is a bit slower, and may not work with SockJS servers
    that have proper Unicode support.
@@ -333,5 +333,5 @@ There are various browser quirks which we don't intend to address:
    [workaround for SockJS is available](https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187).
  * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
    you're a serious SockJS user then consider using SSL
-   ([more info](http://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
+   ([more info](https://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
 
