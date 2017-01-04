@@ -56,6 +56,7 @@ SockJS family:
   * [SockJS-cyclone](https://github.com/flaviogrossi/sockjs-cyclone) Python/Cyclone/Twisted server
   * [SockJS-tornado](https://github.com/MrJoes/sockjs-tornado) Python/Tornado server
   * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/) Python/Twisted server
+  * [SockJS-aiohttp](https://github.com/aio-libs/sockjs/) Python/Aiohttp server
   * [Spring Framework](https://projects.spring.io/spring-framework) Java [client](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/websocket.html#websocket-fallback-sockjs-client) & server
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
   * [Xitrum](https://xitrum-framework.github.io/) Scala server
