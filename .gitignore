@@ -4,4 +4,12 @@ npm-debug.log
 sockjs.js
 sockjs.min.js
 build/
-tests/html/lib/sockjs.js.map
+/typings/
+/lib/**/*.js
+/lib/**/*.js.map
+/tests/**/*.js
+/tests/**/*.js.map
+!/tests/html/lib/worker.js
+!/tests/html/static/jquery.min.js
+/gulpfile.js.map
+/gulpfile.js
