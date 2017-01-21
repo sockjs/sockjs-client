@@ -1,5 +1,4 @@
 tests/
-dist/
 build/
 .travis.yml
 .zuul.yml
