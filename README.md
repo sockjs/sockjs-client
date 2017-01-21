@@ -26,7 +26,7 @@ SockJS-client does require a server counterpart:
 Philosophy:
 
  * The API should follow
-   [HTML5 Websockets API](https://html.spec.whatwg.org/multipage/comms.html#network) as
+   [HTML5 Websockets API](https://www.w3.org/TR/websockets/) as
    closely as possible.
  * All the transports must support cross domain connections out of the
    box. It's possible and recommended to host a SockJS server on a
@@ -76,7 +76,7 @@ Work in progress:
 Getting Started
 -------
 
-SockJS mimics the [WebSockets API](https://html.spec.whatwg.org/multipage/comms.html#network),
+SockJS mimics the [WebSockets API](https://www.w3.org/TR/websockets/),
 but instead of `WebSocket` there is a `SockJS` Javascript object.
 
 First, you need to load the SockJS JavaScript library. For example, you can
@@ -334,4 +334,3 @@ There are various browser quirks which we don't intend to address:
  * SockJS [websocket transport is more stable over SSL](https://github.com/sockjs/sockjs-client/issues/94). If
    you're a serious SockJS user then consider using SSL
    ([more info](https://www.ietf.org/mail-archive/web/hybi/current/msg01605.html)).
-
