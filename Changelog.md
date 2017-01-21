@@ -1,3 +1,11 @@
+1.1.2
+==
+
+ * Ensure both sender and receiver are cleaned upon close - #342
+ * Remove event listeners before calling `close` - #344
+ * Update documentation links - #351, #339
+ * Explicitly export `undefined` when `WebSocket` does not exist. Fixes Webpack. #321
+
 1.1.1
 ==
 
