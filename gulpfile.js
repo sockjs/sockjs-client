@@ -9,7 +9,6 @@ var util = require('util')
   , source = require('vinyl-source-stream')
   , buffer = require('vinyl-buffer')
   , envify = require('envify/custom')
-  , mocha = require('gulp-mocha')
   , rename = require('gulp-rename')
   , header = require('gulp-header')
   , pkg = require('./package.json')
@@ -29,15 +28,6 @@ var libName = 'sockjs-' + pkg.version
   ;
 
 var banner = '/* sockjs-client v<%= pkg.version %> | http://sockjs.org | MIT license */\n';
-
-gulp.task('test', function () {
-  gulp.src('tests/node.js', {read: false})
-    .pipe(mocha());
-});
-
-gulp.task('watch', function () {
-  gulp.watch('tests/*.js', ['test']);
-});
 
 gulp.task('write-version', function () {
   fs.writeFileSync('./lib/version.js', "module.exports = '" + pkg.version + "';\n");
