@@ -1,5 +1,4 @@
-/* eslint new-cap: 0, no-new: 0 */
-/* jshint ignore: start */
+/* eslint new-cap: "off", no-new: "off" */
 'use strict';
 
 var expect = require('expect.js')

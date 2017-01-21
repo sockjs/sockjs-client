@@ -1,4 +1,5 @@
-/* global importScripts, postMessage, onmessage: true, SockJS */
+/* eslint-env worker */
+/* global SockJS */
 'use strict';
 importScripts('sockjs.js');
 

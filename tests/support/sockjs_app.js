@@ -1,4 +1,4 @@
-/* eslint camelcase: 0 */
+/* eslint camelcase: "off" */
 'use strict';
 var sockjs = require('sockjs');
 var debug = require('debug')('sockjs-client:test-server:app');

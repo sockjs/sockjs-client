@@ -1,4 +1,4 @@
-/* eslint camelcase: 0 */
+/* eslint camelcase: "off", no-console: "off" */
 'use strict';
 
 var http = require('http');

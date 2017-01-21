@@ -1,4 +1,4 @@
-/* eslint camelcase: 0 */
+/* eslint camelcase: "off" */
 'use strict';
 
 var util = require('util')
@@ -10,7 +10,6 @@ var util = require('util')
   , buffer = require('vinyl-buffer')
   , envify = require('envify/custom')
   , mocha = require('gulp-mocha')
-  , eslint = require('gulp-eslint')
   , rename = require('gulp-rename')
   , header = require('gulp-header')
   , pkg = require('./package.json')
@@ -34,17 +33,6 @@ var banner = '/* sockjs-client v<%= pkg.version %> | http://sockjs.org | MIT lic
 gulp.task('test', function () {
   gulp.src('tests/node.js', {read: false})
     .pipe(mocha());
-});
-
-gulp.task('eslint', function () {
-  gulp.src([
-      'lib/**/*.js',
-      'tests/lib/**/*.js',
-      'tests/support/**/*.js',
-      'tests/*.js'
-    ])
-    .pipe(eslint())
-    .pipe(eslint.format());
 });
 
 gulp.task('watch', function () {

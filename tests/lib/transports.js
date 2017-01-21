@@ -1,4 +1,4 @@
-/* eslint camelcase: 0 */
+/* eslint camelcase: "off" */
 'use strict';
 
 var expect = require('expect.js')

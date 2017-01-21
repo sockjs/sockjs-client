@@ -5,7 +5,6 @@ build/
 .zuul.yml
 .eslintrc
 .jscsrc
-.jshintrc
 bower.json
 gulpfile.js
 Makefile
