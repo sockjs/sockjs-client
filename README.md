@@ -294,7 +294,7 @@ Both commands output into the `build` directory.
 Once you've compiled the SockJS-client you may want to check if your changes
 pass all the tests.
 
-    make test-local
+    npm run test:browser_local
 
 This will start [zuul](https://github.com/defunctzombie/zuul) and a test support server. Open the browser to [http://localhost:9090/_zuul](http://localhost:9090/_zuul) and watch the tests run.
 

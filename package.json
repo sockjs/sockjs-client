@@ -63,9 +63,10 @@
     "url": "https://github.com/sockjs/sockjs-client.git"
   },
   "scripts": {
-    "test": "make test",
-    "test_local": "zuul --local 9090 -- tests/browser.js",
-    "zuul": "zuul -- tests/browser.js",
+    "test": "mocha tests/node.js",
+    "test:bundle": "gulp testbundle",
+    "test:browser_local": "npm run test:bundle && zuul --local 9090 -- tests/browser.js",
+    "test:browser_remote": "npm run test:bundle && zuul -- tests/browser.js",
     "gulp": "gulp",
     "lint": "eslint .",
     "version": "gulp stable-release && git add -A dist lib/version.js",
