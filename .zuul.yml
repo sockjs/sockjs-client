@@ -3,7 +3,9 @@ scripts:
   - "/config.js"
   - "/domain.js"
 server: ./tests/support/sockjs_server.js
-tunnel_provider: ngrok
+tunnel:
+  type: ngrok
+  proto: tcp
 capabilities:
   record-video: false
   record-screenshots: false

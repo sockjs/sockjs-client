@@ -3,12 +3,12 @@ git:
   depth: 1
 before_install: npm install -g npm@latest
 script:
-  - ./build.sh
+- ./build.sh
 env:
   global:
   - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
   - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
-  - secure: V39QiKk9SMbu2T9Uytitc/d0iZcC2vLkXsP0lEOOhdH2TvwB2naIr62i0MG3/MSa54pjEp7X8db+lNBVQZ6dlfUMS0SJcybCbf4whmNyvdThuAkWS2pWkg3ZW7uT43XqXX2JXvKA3IXHWsBJUyrOn+GYTNN7OTw0fo/4GFDbsnE=
+  - secure: R1UPJgVqB3D25tOYVsE3aP3gzROaUQfkfmklz2c/NJ41bRKrrtnCw4fh0yf+38m0LPXdJMLHsyBXER8U9DYX4QkEqA11kOFCGeuENtMhK/fNKJrfA5BRFez7HHsy+KUrEFooJLan/qAcNDzMItOBie5LP/RODA7x67SItAHyjtI=
 matrix:
   include:
   - env: NODE_ENV=development
