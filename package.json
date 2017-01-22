@@ -39,6 +39,7 @@
     "gulp": "^3.9.1",
     "gulp-header": "^1.8.8",
     "gulp-rename": "~1.2.0",
+    "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^2.4.0",
     "gulp-uglify": "^2.0.0",
     "mocha": "^3.2.0",
@@ -67,7 +68,6 @@
     "zuul": "zuul -- tests/browser.js",
     "gulp": "gulp",
     "lint": "eslint .",
-    "preversion": "rm dist/sockjs-1.*",
     "version": "gulp stable-release && git add -A dist lib/version.js",
     "postversion": "npm publish",
     "postpublish": "git push origin --all && git push origin --tags"
