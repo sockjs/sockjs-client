@@ -5,6 +5,10 @@
  * Remove event listeners before calling `close` - #344
  * Update documentation links - #351, #339, #316
  * Explicitly export `undefined` when `WebSocket` does not exist. Fixes Webpack. #321
+ * Include `dist` folder on npm - #265
+ * Simplify build setup
+ * Update to Node.js 6.9
+ * Add sourcemap for minified version
 
 1.1.1
 ==
