@@ -1,6 +1,7 @@
 language: node_js
 git:
   depth: 1
+before_install: npm install -g npm@latest
 script:
   - ./build.sh
 env:
