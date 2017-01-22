@@ -1,8 +1,7 @@
 /* eslint camelcase: "off" */
 'use strict';
 
-var util = require('util')
-  , gulp = require('gulp')
+var gulp = require('gulp')
   , browserify = require('browserify')
   , uglify = require('gulp-uglify')
   , sourcemaps = require('gulp-sourcemaps')
@@ -13,12 +12,14 @@ var util = require('util')
   , header = require('gulp-header')
   , pkg = require('./package.json')
   , fs = require('fs')
+  , pump = require('pump')
   ;
 
 var libName = 'sockjs-' + pkg.version
   , browserifyOptions = {
       entries: './lib/entry.js'
     , standalone: 'SockJS'
+    , debug: true
     , insertGlobalVars: {
         process: function () {
           return '{ env: {} }';
@@ -34,8 +35,12 @@ gulp.task('write-version', function () {
 });
 
 gulp.task('testbundle', ['browserify:min'], function() {
-  return gulp.src('./build/' + libName + '.min.js')
+  gulp.src('./build/' + libName + '.min.js')
     .pipe(rename('sockjs.js'))
+    .pipe(gulp.dest('./tests/html/lib/'));
+
+  return gulp.src('./build/' + libName + '.min.js.map')
+    .pipe(rename('sockjs.js.map'))
     .pipe(gulp.dest('./tests/html/lib/'));
 });
 
@@ -49,43 +54,37 @@ gulp.task('testbundle-debug', ['browserify'], function() {
     .pipe(gulp.dest('./tests/html/lib/'));
 });
 
-gulp.task('browserify', ['write-version'], function () {
-  return browserify(util._extend({
-      debug: true
-    }, browserifyOptions))
-    .bundle()
-    .pipe(source('sockjs.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
-      .pipe(header(banner, { pkg: pkg }))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./build/'))
-    ;
+gulp.task('browserify', ['write-version'], function (cb) {
+  pump([
+    browserify(browserifyOptions).bundle(),
+    source('sockjs.js'),
+    buffer(),
+    sourcemaps.init({ loadMaps: true }),
+    header(banner, { pkg: pkg }),
+    sourcemaps.write('./'),
+    gulp.dest('./build/')
+  ], cb);
 });
 
-gulp.task('browserify:min', ['write-version'], function () {
-  return browserify(browserifyOptions)
-    .exclude('debug')
-    .transform(envify({
-      NODE_ENV: 'production'
-    }))
-    .bundle()
-    .pipe(source(libName + '.min.js'))
-    .pipe(buffer())
-    .pipe(uglify({
-      compress: {
-        // remove debug statements from output entirely
-        pure_funcs: ['debug']
-      }
-    }))
-    .pipe(header(banner, { pkg: pkg }))
-    .pipe(gulp.dest('./build/'))
-    ;
+gulp.task('browserify:min', ['write-version'], function (cb) {
+  pump([
+    browserify(browserifyOptions).exclude('debug').transform(envify({ NODE_ENV: 'production' })).bundle(),
+    source(libName + '.min.js'),
+    buffer(),
+    sourcemaps.init({ loadMaps: true }),
+    uglify({ compress: { pure_funcs: ['debug'] } }),
+    header(banner, { pkg: pkg }),
+    sourcemaps.write('./'),
+    gulp.dest('./build/')
+  ], cb);
 });
 
 gulp.task('release', ['browserify', 'browserify:min'], function () {
   // sockjs-{version}.min.js
   gulp.src('./build/' + libName + '.min.js')
+    .pipe(gulp.dest('./dist/'));
+
+  gulp.src('./build/' + libName + '.min.js.map')
     .pipe(gulp.dest('./dist/'));
 
   // sockjs-{version}.js
@@ -94,17 +93,24 @@ gulp.task('release', ['browserify', 'browserify:min'], function () {
     .pipe(gulp.dest('./dist/'));
 
   gulp.src('./build/sockjs.js.map')
+    .pipe(rename(libName + '.js.map'))
     .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('stable-release', ['release'], function () {
-  // sockjs.min.js
+  // sockjs.min.js + sockjs.min.js.map
   gulp.src('./build/' + libName + '.min.js')
     .pipe(rename('sockjs.min.js'))
     .pipe(gulp.dest('./dist/'));
+  gulp.src('./build/' + libName + '.min.js.map')
+    .pipe(rename('sockjs.min.js.map'))
+    .pipe(gulp.dest('./dist/'));
 
-  // sockjs.js
+  // sockjs.js + sockjs.js.map
   gulp.src('./build/sockjs.js')
     .pipe(rename('sockjs.js'))
+    .pipe(gulp.dest('./dist/'));
+  gulp.src('./build/sockjs.js.map')
+    .pipe(rename('sockjs.js.map'))
     .pipe(gulp.dest('./dist/'));
 });
