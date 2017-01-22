@@ -10,6 +10,7 @@ env:
   - secure: V39QiKk9SMbu2T9Uytitc/d0iZcC2vLkXsP0lEOOhdH2TvwB2naIr62i0MG3/MSa54pjEp7X8db+lNBVQZ6dlfUMS0SJcybCbf4whmNyvdThuAkWS2pWkg3ZW7uT43XqXX2JXvKA3IXHWsBJUyrOn+GYTNN7OTw0fo/4GFDbsnE=
 matrix:
   include:
+  - env: NODE_ENV=production
   - env: BROWSER_NAME=chrome BROWSER_VERSION=latest
   - env: BROWSER_NAME=firefox BROWSER_VERSION=latest
   #   env: BROWSER_NAME=safari BROWSER_VERSION=5
