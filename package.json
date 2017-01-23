@@ -70,7 +70,7 @@
     "test:browser_remote": "npm run test:bundle && zuul -- tests/browser.js",
     "gulp": "gulp",
     "lint": "eslint .",
-    "version": "gulp stable-release && git add -A dist lib/version.js",
+    "version": "gulp release && git add -A dist lib/version.js",
     "postversion": "npm publish",
     "postpublish": "git push origin --all && git push origin --tags"
   }
