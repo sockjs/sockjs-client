@@ -9,6 +9,7 @@
  * Simplify build setup
  * Update to Node.js 6.9
  * Add sourcemap for minified version
+ * Remove unused String.trim shim
 
 1.1.1
 ==
