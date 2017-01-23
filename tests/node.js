@@ -1,7 +1,6 @@
 'use strict';
 
 var server = require('./support/sockjs_server');
-require('./lib/test-utils').updateTestServerAddress(server);
 
 require('./lib/main');
 require('./lib/main-node');

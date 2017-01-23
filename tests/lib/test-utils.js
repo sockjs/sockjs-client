@@ -7,7 +7,6 @@ var SockJS = require('../../lib/entry')
   ;
 
 var MPrefix = '_sockjs_global';
-var localServerAddress = 'http://localhost:8081';
 
 module.exports = {
   getSameOriginUrl: function () {
@@ -15,14 +14,7 @@ module.exports = {
       return urlUtils.getOrigin(global.location.href);
     }
     // travis does not currently have IPv6 enabled for several envs
-    return localServerAddress;
-  }
-
-, updateTestServerAddress: function(server) {
-    var addr = server.address();
-    localServerAddress = addr.family === 'IPv6'
-      ? 'http://[::1]:' + addr.port
-      : 'http://localhost:' + addr.port;
+    return 'http://localhost:8081';
   }
 
 , getCrossOriginUrl: function () {
