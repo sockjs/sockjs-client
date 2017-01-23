@@ -13,9 +13,8 @@ module.exports = {
     if (global.location) {
       return urlUtils.getOrigin(global.location.href);
     }
-    return /^v0\.(?:8|10)/.test(process.version)
-      ? 'http://localhost:8081'
-      : 'http://[::1]:8081';
+    // travis does not currently have IPv6 enabled for several envs
+    return 'http://localhost:8081';
   }
 
 , getCrossOriginUrl: function () {
