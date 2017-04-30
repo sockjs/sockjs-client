@@ -1,3 +1,12 @@
+1.1.4
+==
+ * Upgrade `debug` and fix object key literal mangling, fixes regression in Opera 11.10 #359
+ * Trim descriptions in package.json and bower.json - #372
+
+1.1.3
+==
+  * Bad publish to NPM (removed)
+
 1.1.2
 ==
 
