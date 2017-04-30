@@ -73,7 +73,7 @@ gulp.task('browserify:min', ['write-version'], function (cb) {
     source('sockjs.min.js'),
     buffer(),
     sourcemaps.init({ loadMaps: true }),
-    uglify({ compress: { pure_funcs: ['debug'] } }),
+    uglify({ compress: { pure_funcs: ['debug'] }, output: { beautify: false, keep_quoted_props: true } }),
     header(banner, { pkg: pkg }),
     sourcemaps.write('./'),
     gulp.dest('./build/')

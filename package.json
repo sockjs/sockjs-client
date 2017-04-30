@@ -24,7 +24,7 @@
     }
   ],
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^2.6.6",
     "eventsource": "0.1.6",
     "faye-websocket": "~0.11.0",
     "inherits": "^2.0.1",
@@ -40,9 +40,9 @@
     "gulp-header": "^1.8.8",
     "gulp-rename": "~1.2.0",
     "gulp-replace": "^0.5.4",
-    "gulp-sourcemaps": "^2.4.0",
-    "gulp-uglify": "^2.0.0",
     "mocha": "^3.2.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^2.1.2",
     "node-static": "^0.7.6",
     "proxyquire": "^1.7.10",
     "pump": "^1.0.2",
