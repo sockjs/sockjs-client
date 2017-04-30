@@ -4,7 +4,7 @@
   "authors": [
     "Bryce Kahle <bkahle@gmail.com>"
   ],
-  "description": "Realtime library that provides a cross-browser, low latency, full duplex, cross-domain communication channel that behaves like a native WebSocket object.",
+  "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
   "main": "dist/sockjs.js",
   "keywords": [
     "realtime",
@@ -19,6 +19,8 @@
   "ignore": [
     "**/.*",
     "bin",
+    "build.sh",
+    "gulpfile.js",
     "lib",
     "node_modules",
     "bower_components",
