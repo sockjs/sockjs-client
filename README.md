@@ -107,6 +107,31 @@ SockJS server. Here's a simple example:
 
 ```
 
+SockJS node client proxy support
+-----------------
+```javascript
+ var sock = new SockJS('http://www.example.com/echo', null, {
+	//transports: ['xhr-pooling', 'xhr-streaming', 'websocket'],
+	//transports: 'xhr-polling',
+	transportOptions:{
+		'websocket': {proxy: 'http://192.168.95.10:8080'},
+		'xhr-polling': {proxy: 'http://192.168.95.10:8080'}
+		'xhr-streaming': {proxy: 'http://192.168.95.10:8080'}
+	}
+});
+
+ sock.onmessage = function(e) {
+     console.log('message', e.data);
+     sock.close();
+ };
+
+ sock.onclose = function() {
+     console.log('close');
+ };
+
+```
+
+
 SockJS-client API
 -----------------
 
