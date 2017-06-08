@@ -2,4 +2,8 @@
  * Created by RAPertsev on 08.06.2017.
  */
 
-export declare function SockJS(url: string): void;
+interface SockJSInterface {
+    new(url: string);
+}
+
+export declare var SockJS: SockJSInterface;
