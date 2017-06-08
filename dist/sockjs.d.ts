@@ -2,8 +2,6 @@
  * Created by RAPertsev on 08.06.2017.
  */
 
-interface SockJSInterface {
-    new(url: string);
+export declare interface SockJS {
+    new(url: string): SockJS;
 }
-
-export declare var SockJS: SockJSInterface;
