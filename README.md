@@ -261,7 +261,7 @@ You should use a version of sockjs-client
 that supports the protocol used by your server. For example:
 
 ```html
-<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 ```
 
 
