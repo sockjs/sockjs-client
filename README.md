@@ -61,6 +61,7 @@ SockJS family:
   * [vert.x](https://github.com/vert-x/vert.x) Java/vert.x server
   * [Xitrum](https://xitrum-framework.github.io/) Scala server
   * [Atmosphere Framework](https://github.com/Atmosphere/atmosphere) JavaEE Server, Play Framework, Netty, Vert.x
+  * [Actix SockJS](https://github.com/fafhrd91/actix-sockjs) Rust Server, Actix Framework
 
 Work in progress:
 
