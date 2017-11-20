@@ -658,6 +658,7 @@ function SockJS(url, protocols, options) {
   }
   this._transportsWhitelist = options.transports;
   this._transportOptions = options.transportOptions || {};
+  this._transportMinTimeout = options.transportMinTimeout || null;
 
   var sessionId = options.sessionId || 8;
   if (typeof sessionId === 'function') {
@@ -817,8 +818,10 @@ SockJS.prototype._connect = function() {
       }
     }
 
-    // calculate timeout based on RTO and round trips. Default to 5s
-    var timeoutMs = (this._rto * Transport.roundTrips) || 5000;
+    // calculate timeout based on RTO and round trips. Default to 5s. Min timeout is null, can be overridden
+    var timeoutMs = (
+        (this._rto > this._transportMinTimeout ? this._rto : this._transportMinTimeout) * Transport.roundTrips
+    ) || 5000;
     this._transportTimeoutId = setTimeout(this._transportTimeout.bind(this), timeoutMs);
     debug('using timeout', timeoutMs);
 
