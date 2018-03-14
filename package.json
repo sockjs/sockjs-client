@@ -4,6 +4,9 @@
   "version": "1.1.4",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
+  "publishConfig": {
+    "registry": "https://repository.mark43.io/artifactory/api/npm/Mark43-NPM"
+  },
   "browser": {
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
     "eventsource": "./lib/transport/browser/eventsource.js",
