@@ -9,7 +9,7 @@ describe('SockJS', function() {
 
     describe('WebSocket specification step #2', function () {
       var main = proxyquire('../../lib/main', { './location': {
-        protocol: 'https'
+        protocol: 'https:'
       }});
       var sjs = proxyquire('../../lib/entry', { './main': main });
 
