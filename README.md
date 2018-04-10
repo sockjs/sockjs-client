@@ -114,8 +114,13 @@ SockJS node client proxy support
 	//transports: ['xhr-pooling', 'xhr-streaming', 'websocket'],
 	//transports: 'xhr-polling',
 	transportOptions:{
-		'websocket': {proxy: 'http://192.168.95.10:8080'},
-		'xhr-polling': {proxy: 'http://192.168.95.10:8080'}
+		'websocket': {
+			proxy: {
+				origin:  'http://username:password@proxy.example.com',
+    				headers: {'User-Agent': 'node'}
+			}
+		},
+		'xhr-polling': {proxy: 'http://192.168.95.10:8080'},
 		'xhr-streaming': {proxy: 'http://192.168.95.10:8080'}
 	}
 });
