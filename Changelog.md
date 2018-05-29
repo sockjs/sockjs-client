@@ -1,3 +1,14 @@
+1.1.5
+==
+ * Wrap the the contentWindow access in a try/catch block when in setTimeout #363
+ * Revised example in README #356
+ * Fix connection close when Transport timeout #358
+ * Fixed crash with react-native@0.45.1 on Android #386
+ * Update jsDelivr link #404, #405
+ * Remove Sauce Labs unsupported browsers
+ * Add link to rust server implementation #411
+ * location.protocol should include final `:` #396
+
 1.1.4
 ==
  * Upgrade `debug` and fix object key literal mangling, fixes regression in Opera 11.10 #359
