@@ -30,7 +30,7 @@
     "faye-websocket": "~0.11.0",
     "inherits": "^2.0.1",
     "json3": "^3.3.2",
-    "url-parse": "^1.1.8"
+    "url-parse": "^1.4.3"
   },
   "devDependencies": {
     "browserify": "^13.3.0",
