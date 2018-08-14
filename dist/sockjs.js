@@ -3745,8 +3745,9 @@ exports.formatArgs = formatArgs;
 exports.save = save;
 exports.load = load;
 exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
+exports.storage = chrome !== null
+                && 'undefined' != typeof chrome
+                && 'undefined' != typeof chrome.storage
                   ? chrome.storage.local
                   : localstorage();
 
