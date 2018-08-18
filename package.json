@@ -12,7 +12,7 @@
     "events": "./lib/event/emitter.js"
   },
   "bugs": {
-    "url": "https://github.com/sockjs/sockjs-client/issues"
+    "url": "https://github.com/comlog-gmbh/sockjs-client/issues"
   },
   "contributors": [
     {
@@ -62,7 +62,7 @@
   "main": "./lib/entry.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sockjs/sockjs-client.git"
+    "url": "https://github.com/comlog-gmbh/sockjs-client.git"
   },
   "scripts": {
     "test": "mocha tests/node.js",
