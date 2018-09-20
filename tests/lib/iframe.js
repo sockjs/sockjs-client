@@ -11,7 +11,7 @@ var expect = require('expect.js')
   ;
 
 function onunloadTest (code, done) {
-  var hook = testUtils.createIframe();
+  var hook = testUtils.createIframe('/sockjs-test/iframe.html');
   var i = 0;
   hook.open = function () {
     i++;
@@ -72,7 +72,7 @@ describe('iframe', function () {
   }
 
   it('onmessage', function (done) {
-    var hook = testUtils.createIframe();
+    var hook = testUtils.createIframe('/sockjs-test/iframe.html');
     var i = 0;
     hook.open = function () {
       i++;

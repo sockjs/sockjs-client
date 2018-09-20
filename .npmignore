@@ -6,7 +6,6 @@ dist/
 !dist/sockjs.min.js.map
 build/
 .travis.yml
-.zuul.yml
 .eslintrc
 .jscsrc
 bower.json

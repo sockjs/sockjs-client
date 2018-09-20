@@ -11,7 +11,7 @@ var MPrefix = '_sockjs_global';
 module.exports = {
   getSameOriginUrl: function () {
     if (global.location) {
-      return urlUtils.getOrigin(global.location.href);
+      return urlUtils.getOrigin(global.location.href) + '/sockjs-test';
     }
     // travis does not currently have IPv6 enabled for several envs
     return 'http://localhost:8081';
@@ -54,8 +54,8 @@ module.exports = {
 , createIframe: function (path) {
     path = path || '/iframe.html';
     var hook = this.createHook();
-    hook.iobj = iframeUtils.createIframe(path + '?a=' + random.number(1000) + '#' + hook.id, function () {
-      throw new Error('iframe error');
+    hook.iobj = iframeUtils.createIframe(path + '?a=' + random.number(1000) + '#' + hook.id, function (err) {
+      throw (err || new Error('iframe error'));
     });
     return hook;
   }

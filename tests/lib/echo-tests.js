@@ -128,7 +128,7 @@ module.exports.echoFromChild = function echoFromChild(url, transport) {
     var test = this.runnable();
     var title = test.fullTitle();
     debug('start', title);
-    var hook = testUtils.createIframe('/sockjs-in-parent.html');
+    var hook = testUtils.createIframe('/sockjs-test/sockjs-in-parent.html');
     var sjs = testUtils.newSockJs(url + '/echo', transport);
     var code = 'hook.sjs.send("a"); hook.onsend();';
     var hookReady, sockJsReady, timeout, i = 0;

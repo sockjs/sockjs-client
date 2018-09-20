@@ -3,39 +3,12 @@ git:
   depth: 1
 before_install: npm install -g npm@latest
 script:
-- ./build.sh
+- "./build.sh"
 env:
   global:
-  - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
-  - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
-  - secure: R1UPJgVqB3D25tOYVsE3aP3gzROaUQfkfmklz2c/NJ41bRKrrtnCw4fh0yf+38m0LPXdJMLHsyBXER8U9DYX4QkEqA11kOFCGeuENtMhK/fNKJrfA5BRFez7HHsy+KUrEFooJLan/qAcNDzMItOBie5LP/RODA7x67SItAHyjtI=
+  - secure: GNUoX4+vkYOftjQ3IBZSYm+yRIo0y4tM9jCTKT4gWHUvDLr/U4K8GoYu5OHqQK6gvAM5RXmhvVFcEbVqZW3J11UbAFEwWEwjzZtxCaJPA0C/U0mcp1dUr0O5Cf/WT/OVyYKVG0+nLfJ4EWP1XKDQRTDtd7mNx66bRCzYmqb2vPo=
+  - secure: KPeveacugD2N5EDhmX1surPMoXtndyk/1ZWELgazA46y9yIi0g9fy+3290ORyIlzB64OBoZtb/U9Yb0CX5kewIsTifiqBto8tTPMH5gK7a/oYWedNlzRjLikuT1GaeL9p3gHc0HRKa359YYf0NObdoPr1+7hQ/PSdVwuk2mgua0=
 matrix:
   include:
   - env: NODE_ENV=development
   - env: BROWSER=true
-  #- env: BROWSER_NAME=chrome BROWSER_VERSION=latest
-  #- env: BROWSER_NAME=firefox BROWSER_VERSION=latest
-  #- env: BROWSER_NAME=microsoftedge BROWSER_VERSION=latest
-  #- env: BROWSER_NAME=safari BROWSER_VERSION=7
-  #- env: BROWSER_NAME=safari BROWSER_VERSION=8
-  #- env: BROWSER_NAME=safari BROWSER_VERSION=9
-  #- env: BROWSER_NAME=safari BROWSER_VERSION=10
-  #- env: BROWSER_NAME=ie BROWSER_VERSION=8 BROWSER_PLATFORM="Windows 7"
-  #- env: BROWSER_NAME=ie BROWSER_VERSION=9
-  #- env: BROWSER_NAME=ie BROWSER_VERSION=10 BROWSER_PLATFORM="Windows 2012"
-  #- env: BROWSER_NAME=ie BROWSER_VERSION=11 BROWSER_PLATFORM="Windows 2012"
-  #- env: BROWSER_NAME=iphone BROWSER_VERSION=8.4
-  #- env: BROWSER_NAME=iphone BROWSER_VERSION=9.3
-  #- env: BROWSER_NAME=iphone BROWSER_VERSION=10
-  # Android VMs on Sauce Labs don't seem to work correctly
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.1
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.2
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.3
-  #   env: BROWSER_NAME=android BROWSER_VERSION=4.4
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/be9ef89cdfc53fc9c60c
-    on_success: change
-    on_start: never
-    on_failure: change
