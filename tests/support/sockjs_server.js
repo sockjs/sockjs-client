@@ -11,7 +11,7 @@ var debug = require('debug')('sockjs-client:test-server:main');
 function startServer(port, config) {
   var clientOptions = {
     // Address of a sockjs test server.
-    url: `http://${config.listenAddress}:${config.port}`,
+    url: 'http://' + config.listenAddress + ':' + config.port,
     sockjs_opts: {
         // websocket:false
         info: {cookie_needed: false}
@@ -61,7 +61,7 @@ function startServer(port, config) {
   });
 
   sockjs.install({
-    sockjs_url: `http://${config.listenAddress}:${config.port}/sockjs-test/lib/sockjs.js`,
+    sockjs_url: 'http://' + config.listenAddress + ':' + config.port + '/sockjs-test/lib/sockjs.js',
     websocket: true,
     log: function (severity, message) {
       debug('[%s] %s', severity, message);

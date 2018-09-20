@@ -1,12 +1,12 @@
 // Karma configuration
 // Generated on Tue Aug 07 2018 16:41:49 GMT-0400 (EDT)
 
-const testServer = require('./tests/support/sockjs_server');
-const targets = require('./tests/browser_targets');
+var testServer = require('./tests/support/sockjs_server');
+var targets = require('./tests/browser_targets');
 
-const port = 9889;
+var port = 9889;
 var SockFrameworkFactory = function(config, logger) {
-  const log = logger.create('sockjs.server');
+  var log = logger.create('sockjs.server');
   log.info('Starting sockjs test server...');
   testServer(port, config);
 };
