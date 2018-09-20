@@ -294,6 +294,10 @@ Both commands output into the `build` directory.
 
 ### Testing
 
+Automated testing provided by:
+
+<a href="https://browserstack.com"><img src="img/Browserstack-logo@2x.png" height="50"></a>
+
 Once you've compiled the SockJS-client you may want to check if your changes
 pass all the tests.
 
