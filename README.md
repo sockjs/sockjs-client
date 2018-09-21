@@ -2,7 +2,7 @@
 # SockJS-client
 
 [![npm version](https://img.shields.io/npm/v/sockjs-client.svg?style=flat-square)](https://www.npmjs.com/package/sockjs-client)[![Build Status](https://img.shields.io/travis/sockjs/sockjs-client/master.svg?style=flat-square)](https://travis-ci.org/sockjs/sockjs-client)[![Dependencies](https://img.shields.io/david/sockjs/sockjs-client.svg?style=flat-square)](https://david-dm.org/sockjs/sockjs-client)[![Chat](https://img.shields.io/badge/Chat-gitter.im-blue.svg?style=flat-square)](https://gitter.im/sockjs/sockjs-client)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=eHZFNERhNUo5L1FDVDFkZFQ1c1N6ejY1M1NHc3Vla0VwMVhIK3JPZG1hVT0tLWVxS2VRUVpDUDQ1RG5CaVFFTHl1K3c9PQ==--51192740c73a49422b14f14fee810fb7a8506f1f)](https://www.browserstack.com/automate/public-build/eHZFNERhNUo5L1FDVDFkZFQ1c1N6ejY1M1NHc3Vla0VwMVhIK3JPZG1hVT0tLWVxS2VRUVpDUDQ1RG5CaVFFTHl1K3c9PQ==--51192740c73a49422b14f14fee810fb7a8506f1f)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=dW9YdlFsSEI5VzNBVVk5ZS9XT0xaTjJVQkhQMkRkNlZBQURiSWNWMC9jaz0tLXRJM05RbW1tTCt5TlhHaVgycFJUYmc9PQ==--e3ef9b9a9fa071084e6d87874b5fc65b71273821)](https://www.browserstack.com/automate/public-build/dW9YdlFsSEI5VzNBVVk5ZS9XT0xaTjJVQkhQMkRkNlZBQURiSWNWMC9jaz0tLXRJM05RbW1tTCt5TlhHaVgycFJUYmc9PQ==--e3ef9b9a9fa071084e6d87874b5fc65b71273821)
 
 SockJS is a browser JavaScript library that provides a WebSocket-like
 object. SockJS gives you a coherent, cross-browser, Javascript API
