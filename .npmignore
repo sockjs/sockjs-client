@@ -7,8 +7,12 @@ dist/
 build/
 .travis.yml
 .eslintrc
+.eslintignore
 .jscsrc
+.nvmrc
 bower.json
 gulpfile.js
 Makefile
 img/
+karma.conf.js
+build.sh
