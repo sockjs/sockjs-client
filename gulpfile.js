@@ -30,32 +30,11 @@ var browserifyOptions = {
 
 var banner = '/* sockjs-client v<%= pkg.version %> | http://sockjs.org | MIT license */\n';
 
-gulp.task('write-version', function () {
-  fs.writeFileSync('./lib/version.js', "module.exports = '" + pkg.version + "';\n");
+gulp.task('write-version', function (cb) {
+  fs.writeFile('./lib/version.js', "module.exports = '" + pkg.version + "';\n", cb);
 });
 
-gulp.task('testbundle', ['browserify:min'], function() {
-  gulp.src('./build/sockjs.min.js')
-    .pipe(rename('sockjs.js'))
-    .pipe(replace('sourceMappingURL=sockjs.min.js.map', 'sourceMappingURL=sockjs.js.map'))
-    .pipe(gulp.dest('./tests/html/lib/'));
-
-  return gulp.src('./build/sockjs.min.js.map')
-    .pipe(rename('sockjs.js.map'))
-    .pipe(gulp.dest('./tests/html/lib/'));
-});
-
-gulp.task('testbundle-debug', ['browserify'], function() {
-  gulp.src('./build/sockjs.js')
-    .pipe(rename('sockjs.js'))
-    .pipe(gulp.dest('./tests/html/lib/'));
-
-  return gulp.src('./build/sockjs.js.map')
-    .pipe(rename('sockjs.js.map'))
-    .pipe(gulp.dest('./tests/html/lib/'));
-});
-
-gulp.task('browserify', ['write-version'], function (cb) {
+gulp.task('browserify', gulp.series('write-version', function (cb) {
   pump([
     browserify(browserifyOptions).bundle(),
     source('sockjs.js'),
@@ -65,9 +44,9 @@ gulp.task('browserify', ['write-version'], function (cb) {
     sourcemaps.write('./'),
     gulp.dest('./build/')
   ], cb);
-});
+}));
 
-gulp.task('browserify:min', ['write-version'], function (cb) {
+gulp.task('browserify:min', gulp.series('write-version', function (cb) {
   pump([
     browserify(browserifyOptions).exclude('debug').transform(envify({ NODE_ENV: 'production' })).bundle(),
     source('sockjs.min.js'),
@@ -78,15 +57,36 @@ gulp.task('browserify:min', ['write-version'], function (cb) {
     sourcemaps.write('./'),
     gulp.dest('./build/')
   ], cb);
-});
+}));
 
-gulp.task('release', ['browserify', 'browserify:min'], function () {
-  gulp.src('./build/sockjs.js')
-    .pipe(gulp.dest('./dist/'));
-  gulp.src('./build/sockjs.js.map')
-    .pipe(gulp.dest('./dist/'));
-  gulp.src('./build/sockjs.min.js')
-    .pipe(gulp.dest('./dist/'));
-  gulp.src('./build/sockjs.min.js.map')
-    .pipe(gulp.dest('./dist/'));
-});
+gulp.task('testbundle', gulp.series('browserify:min', 
+  gulp.parallel(function() {
+    return gulp.src('./build/sockjs.min.js')
+      .pipe(rename('sockjs.js'))
+      .pipe(replace('sourceMappingURL=sockjs.min.js.map', 'sourceMappingURL=sockjs.js.map'))
+      .pipe(gulp.dest('./tests/html/lib/'));
+  }, function() {
+    return gulp.src('./build/sockjs.min.js.map')
+      .pipe(rename('sockjs.js.map'))
+      .pipe(gulp.dest('./tests/html/lib/'));
+  })
+));
+
+gulp.task('testbundle-debug', gulp.series('browserify',
+  gulp.parallel(function() {
+    return gulp.src('./build/sockjs.js')
+      .pipe(rename('sockjs.js'))
+      .pipe(gulp.dest('./tests/html/lib/'));
+  }, function() {
+    return gulp.src('./build/sockjs.js.map')
+      .pipe(rename('sockjs.js.map'))
+      .pipe(gulp.dest('./tests/html/lib/'));
+  })
+));
+
+gulp.task('release', gulp.series('browserify', 'browserify:min', gulp.parallel(
+  function () { return gulp.src('./build/sockjs.js').pipe(gulp.dest('./dist/')); },
+  function () { return gulp.src('./build/sockjs.js.map').pipe(gulp.dest('./dist/')); },
+  function () { return gulp.src('./build/sockjs.min.js').pipe(gulp.dest('./dist/')); },
+  function () { return gulp.src('./build/sockjs.min.js.map').pipe(gulp.dest('./dist/')); }
+)));
