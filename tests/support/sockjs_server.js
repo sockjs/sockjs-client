@@ -8,7 +8,7 @@ var url = require('url');
 var path = require('path');
 var debug = require('debug')('sockjs-client:test-server:main');
 
-function startServer(port, config) {
+function startServer(port, config, prefix) {
   var clientOptions = {
     // Address of a sockjs test server.
     url: 'http://' + config.listenAddress + ':' + config.port,
@@ -61,7 +61,7 @@ function startServer(port, config) {
   });
 
   sockjs.install({
-    sockjs_url: 'http://' + config.listenAddress + ':' + config.port + '/sockjs-test/lib/sockjs.js',
+    sockjs_url: 'http://' + config.listenAddress + ':' + config.port + (prefix || '') + '/lib/sockjs.js',
     websocket: true,
     log: function (severity, message) {
       debug('[%s] %s', severity, message);

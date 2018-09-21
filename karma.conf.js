@@ -8,7 +8,7 @@ var port = 9889;
 var SockFrameworkFactory = function(config, logger) {
   var log = logger.create('sockjs.server');
   log.info('Starting sockjs test server...');
-  testServer(port, config);
+  testServer(port, config, '/sockjs-test');
 };
 
 module.exports = function(config) {
