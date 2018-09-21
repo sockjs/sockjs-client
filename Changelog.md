@@ -1,3 +1,8 @@
+1.2.0
+==
+ * Update all outdated dependencies
+ * Switch to karma and browserstack for running automated browser tests
+
 1.1.5
 ==
  * Wrap the the contentWindow access in a try/catch block when in setTimeout #363
