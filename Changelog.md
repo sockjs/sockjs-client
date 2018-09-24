@@ -1,3 +1,7 @@
+1.3.0
+==
+ * Revert `debug` to `^3` because v4 starts using ES6. Fixes #457
+
 1.2.0
 ==
  * Update all outdated dependencies
