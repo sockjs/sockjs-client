@@ -33,7 +33,7 @@
     "url-parse": "^1.4.3"
   },
   "devDependencies": {
-    "browserify": "^16.2.2",
+    "browserify": "^16.2.3",
     "envify": "^4.0.0",
     "eslint": "^5.6.0",
     "expect.js": "~0.3.1",
