@@ -1,7 +1,7 @@
 {
   "name": "sockjs-client",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
   "browser": {
@@ -74,7 +74,7 @@
     "test:browser_remote": "npm run test:bundle && npx karma start",
     "gulp": "gulp",
     "lint": "eslint .",
-    "version": "gulp release && git add -A dist lib/version.js",
+    "version": "gulp release && git add -A dist lib/version.js Changelog.md",
     "postversion": "npm publish",
     "postpublish": "git push origin --all && git push origin --tags"
   }
