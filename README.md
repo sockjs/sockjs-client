@@ -152,6 +152,13 @@ Where `options` is a hash which can contain:
     If you don't specify this option, the default is to use the default random
     string generator to generate 8-character long session ids.
 
+  * **timeout (number)**
+
+    Specify a minimum timeout in milliseconds to use for the transport connections.
+    By default this is dynamically calculated based on the measured RTT and
+    the number of expected round trips. This setting will establish a minimum,
+    but if the calculated timeout is higher, that will be used.
+
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all of its features. An
 important SockJS limitation is the fact that you're not allowed to
