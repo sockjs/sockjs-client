@@ -2,7 +2,7 @@
 # SockJS-client
 
 [![npm version](https://img.shields.io/npm/v/sockjs-client.svg?style=flat-square)](https://www.npmjs.com/package/sockjs-client)[![Build Status](https://img.shields.io/travis/sockjs/sockjs-client/master.svg?style=flat-square)](https://travis-ci.org/sockjs/sockjs-client)[![Dependencies](https://img.shields.io/david/sockjs/sockjs-client.svg?style=flat-square)](https://david-dm.org/sockjs/sockjs-client)[![Chat](https://img.shields.io/badge/Chat-gitter.im-blue.svg?style=flat-square)](https://gitter.im/sockjs/sockjs-client)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=dW9YdlFsSEI5VzNBVVk5ZS9XT0xaTjJVQkhQMkRkNlZBQURiSWNWMC9jaz0tLXRJM05RbW1tTCt5TlhHaVgycFJUYmc9PQ==--e3ef9b9a9fa071084e6d87874b5fc65b71273821)](https://www.browserstack.com/automate/public-build/dW9YdlFsSEI5VzNBVVk5ZS9XT0xaTjJVQkhQMkRkNlZBQURiSWNWMC9jaz0tLXRJM05RbW1tTCt5TlhHaVgycFJUYmc9PQ==--e3ef9b9a9fa071084e6d87874b5fc65b71273821)
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=N3V0cStKM3RtUy9Bb2l2cHFhMVdobTZnUitBZ1lLcUkwYnl2TWgyMHppQT0tLWxncU5UeTdLb0Rqc1VQQTI5SklRelE9PQ==--596ccf9d3cd2f462f1043ee6803a9405e00446ac)](https://automate.browserstack.com/public-build/N3V0cStKM3RtUy9Bb2l2cHFhMVdobTZnUitBZ1lLcUkwYnl2TWgyMHppQT0tLWxncU5UeTdLb0Rqc1VQQTI5SklRelE9PQ==--596ccf9d3cd2f462f1043ee6803a9405e00446ac)
 
 # Supporting SockJS
 
