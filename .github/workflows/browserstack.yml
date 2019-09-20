@@ -13,7 +13,6 @@ jobs:
       with:
         node-version: 10.x
     - name: run Browserstack tests
-      if: secrets.BROWSERSTACK_ACCESS_KEY
       run: |
         npm install
         npm run test:browser_remote
