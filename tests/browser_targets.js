@@ -2,14 +2,12 @@ module.exports = {
   bs_chrome_windows: {
     base: 'BrowserStack',
     browser: 'chrome',
-    browser_version: '69.0',
     os: 'Windows',
     os_version: '10'
   },
   bs_edge_windows: {
     base: 'BrowserStack',
     browser: 'edge',
-    browser_version: '17.0',
     os: 'Windows',
     os_version: '10'
   },
@@ -44,16 +42,14 @@ module.exports = {
   bs_firefox_mac: {
     base: 'BrowserStack',
     browser: 'firefox',
-    browser_version: '62.0',
     os: 'OS X',
-    os_version: 'High Sierra'
+    os_version: 'Mojave'
   },
   bs_safari_11_mac: {
     base: 'BrowserStack',
     browser: 'safari',
-    browser_version: '11.1',
     os: 'OS X',
-    os_version: 'High Sierra'
+    os_version: 'Mojave'
   },
   // bs_safari_10_mac: {
   //   base: 'BrowserStack',
