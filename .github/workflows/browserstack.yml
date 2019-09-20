@@ -1,0 +1,22 @@
+name: Browserstack
+on: [push]
+
+jobs:
+  browserstack:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: run Browserstack tests
+      if: secrets.BROWSERSTACK_ACCESS_KEY
+      run: |
+        npm install
+        npm run test:browser_remote
+      env:
+        CI: true
+        BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
