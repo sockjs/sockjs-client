@@ -348,12 +348,12 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:info-ajax');
 }
 
-function InfoAjax(url, AjaxObject) {
+function InfoAjax(url, AjaxObject, options) {
   EventEmitter.call(this);
 
   var self = this;
   var t0 = +new Date();
-  this.xo = new AjaxObject('GET', url);
+  this.xo = new AjaxObject('GET', url, null, options);
 
   this.xo.once('finish', function(status, text) {
     var info, rtt;
@@ -516,13 +516,13 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:info-receiver');
 }
 
-function InfoReceiver(baseUrl, urlInfo) {
+function InfoReceiver(baseUrl, urlInfo, options) {
   debug(baseUrl);
   var self = this;
   EventEmitter.call(this);
 
   setTimeout(function() {
-    self.doXhr(baseUrl, urlInfo);
+    self.doXhr(baseUrl, urlInfo, options);
   }, 0);
 }
 
@@ -530,30 +530,30 @@ inherits(InfoReceiver, EventEmitter);
 
 // TODO this is currently ignoring the list of available transports and the whitelist
 
-InfoReceiver._getReceiver = function(baseUrl, url, urlInfo) {
+InfoReceiver._getReceiver = function(baseUrl, url, urlInfo, options) {
   // determine method of CORS support (if needed)
   if (urlInfo.sameOrigin) {
-    return new InfoAjax(url, XHRLocal);
+    return new InfoAjax(url, XHRLocal, options);
   }
   if (XHRCors.enabled) {
-    return new InfoAjax(url, XHRCors);
+    return new InfoAjax(url, XHRCors, options);
   }
   if (XDR.enabled && urlInfo.sameScheme) {
-    return new InfoAjax(url, XDR);
+    return new InfoAjax(url, XDR, options);
   }
   if (InfoIframe.enabled()) {
     return new InfoIframe(baseUrl, url);
   }
-  return new InfoAjax(url, XHRFake);
+  return new InfoAjax(url, XHRFake, options);
 };
 
-InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo) {
+InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo, options) {
   var self = this
     , url = urlUtils.addPath(baseUrl, '/info')
     ;
   debug('doXhr', url);
 
-  this.xo = InfoReceiver._getReceiver(baseUrl, url, urlInfo);
+  this.xo = InfoReceiver._getReceiver(baseUrl, url, urlInfo, options);
 
   this.timeoutRef = setTimeout(function() {
     debug('timeout');
@@ -731,7 +731,7 @@ function SockJS(url, protocols, options) {
   , sameScheme: urlUtils.isSchemeEqual(this.url, loc.href)
   };
 
-  this._ir = new InfoReceiver(this.url, this._urlInfo);
+  this._ir = new InfoReceiver(this.url, this._urlInfo, options);
   this._ir.once('finish', this._receiveInfo.bind(this));
 }
 
