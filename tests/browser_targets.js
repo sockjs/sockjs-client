@@ -3,21 +3,21 @@ module.exports = {
     base: 'BrowserStack',
     browser: 'chrome',
     os: 'Windows',
-    os_version: '10'
+    os_version: '10',
   },
   bs_edge_windows: {
     base: 'BrowserStack',
     browser: 'edge',
     os: 'Windows',
-    os_version: '10'
+    os_version: '10',
   },
-  bs_ie_11_windows: {
-    base: 'BrowserStack',
-    browser: 'ie',
-    browser_version: '11.0',
-    os: 'Windows',
-    os_version: '10'
-  },
+  // bs_ie_11_windows: {
+  //   base: 'BrowserStack',
+  //   browser: 'ie',
+  //   browser_version: '11.0',
+  //   os: 'Windows',
+  //   os_version: '10',
+  // },
   // bs_ie_10_windows: {
   //   base: 'BrowserStack',
   //   browser: 'ie',
@@ -43,13 +43,13 @@ module.exports = {
     base: 'BrowserStack',
     browser: 'firefox',
     os: 'OS X',
-    os_version: 'Mojave'
+    os_version: 'Catalina',
   },
   bs_safari_11_mac: {
     base: 'BrowserStack',
     browser: 'safari',
     os: 'OS X',
-    os_version: 'Mojave'
+    os_version: 'Catalina',
   },
   // bs_safari_10_mac: {
   //   base: 'BrowserStack',
@@ -91,9 +91,9 @@ module.exports = {
     browser: 'iphone',
     browser_version: null,
     os: 'ios',
-    os_version: '11.4',
-    device: 'iPhone 6S',
-    real_mobile: true
+    os_version: '13',
+    device: 'iPhone 11',
+    real_mobile: true,
   },
   // bs_ios_10: {
   //   base: 'BrowserStack',
@@ -109,9 +109,9 @@ module.exports = {
     browser: 'android',
     browser_version: null,
     os: 'android',
-    os_version: '9.0',
-    device: 'Google Pixel 2',
-    real_mobile: true
+    os_version: '10.0',
+    device: 'Google Pixel 4',
+    real_mobile: true,
   },
   // bs_android_8: {
   //   base: 'BrowserStack',
