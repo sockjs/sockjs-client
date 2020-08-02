@@ -3,7 +3,6 @@
 
 var http = require('http');
 var serveStatic = require('serve-static');
-var finalhandler = require('finalhandler');
 var sockjs = require('./sockjs_app');
 var url = require('url');
 var path = require('path');
@@ -19,7 +18,7 @@ function startServer(port, config, prefix) {
     }
   };
 
-  var serve = serveStatic(path.join(__dirname, '../html'));
+  var serve = serveStatic(path.join(__dirname, '../html'), { fallthrough: false });
 
   var server = http.createServer();
   server.addListener('request', function(req, res) {
@@ -53,7 +52,10 @@ function startServer(port, config, prefix) {
       res.end('var clientOptions = ' +
               JSON.stringify(clientOptions) + ';');
     } else {
-      serve(req, res, finalhandler(req, res));
+      serve(req, res, function(err) {
+        var status = err ? err.statusCode : 404;
+        return res.writeHead(status).end();
+      });
     }
   });
   server.addListener('upgrade', function(req, res){
