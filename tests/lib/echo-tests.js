@@ -83,7 +83,7 @@ module.exports.echoUnicode = function echoUnicode(url, transport) {
 };
 
 module.exports.echoSpecialChars = function echoSpecialChars(url, transport) {
-  var messages = [" ", "\u0000", "\xff", "\xff\x00", "\x00\xff", " \r ", " \n ", " \r\n ", "\r\n", "", "message\t", "\tmessage", "message ", " message", "message\r", "\rmessage", "message\n", "\nmessage", "message\xff", "\xffmessage", "A", "b", "c", "d", "e", "\ufffd", "\ufffd\u0000", "message\ufffd", "\ufffdmessage"];
+  var messages = [" ", "\u0000", "\xff", "\xff\x00", "\x00\xff", " \r ", " \n ", " \r\n ", "\r\n", "", "message\t", "\tmessage", "message ", " message", "message\r", "\rmessage", "message\n", "\nmessage", "message\xff", "\xffmessage", "A", "b", "c", "d", "e", "\ufffd", "\ufffd\u0000", "message\ufffd", "\ufffdmessage", "%20"];
   it('special chars', echoFactory(transport, messages, url + '/echo'));
 };
 /* eslint-enable quotes */
