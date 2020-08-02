@@ -25,11 +25,11 @@
     }
   ],
   "dependencies": {
-    "debug": "^3.2.5",
+    "debug": "^3.2.6",
     "eventsource": "^1.0.7",
-    "faye-websocket": "~0.11.1",
-    "inherits": "^2.0.3",
-    "json3": "^3.3.2",
+    "faye-websocket": "^0.11.3",
+    "inherits": "^2.0.4",
+    "json3": "^3.3.3",
     "url-parse": "^1.4.7"
   },
   "devDependencies": {
