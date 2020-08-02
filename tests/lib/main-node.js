@@ -31,7 +31,7 @@ describe('SockJS', function() {
 
       it('should NOT throw SecurityError for ::1 url from a secure page', function () {
         expect(function () {
-          sjs('http://::1');
+          sjs('http://[::1]');
         }).to.not.throwException();
       });
 
