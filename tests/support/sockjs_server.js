@@ -2,7 +2,8 @@
 'use strict';
 
 var http = require('http');
-var nodeStatic = require('node-static');
+var serveStatic = require('serve-static');
+var finalhandler = require('finalhandler');
 var sockjs = require('./sockjs_app');
 var url = require('url');
 var path = require('path');
@@ -18,7 +19,7 @@ function startServer(port, config, prefix) {
     }
   };
 
-  var staticDir = new nodeStatic.Server(path.join(__dirname, '../html'), { cache: 0 });
+  var serve = serveStatic(path.join(__dirname, '../html'));
 
   var server = http.createServer();
   server.addListener('request', function(req, res) {
@@ -52,7 +53,7 @@ function startServer(port, config, prefix) {
       res.end('var clientOptions = ' +
               JSON.stringify(clientOptions) + ';');
     } else {
-      staticDir.serve(req, res);
+      serve(req, res, finalhandler(req, res));
     }
   });
   server.addListener('upgrade', function(req, res){
