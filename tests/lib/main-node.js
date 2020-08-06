@@ -22,6 +22,19 @@ describe('SockJS', function() {
         });
       });
 
+      // https://www.w3.org/TR/secure-contexts/#is-origin-trustworthy
+      it('should NOT throw SecurityError for 127.0.0.1/8 url from a secure page', function () {
+        expect(function () {
+          sjs('http://127.0.0.1');
+        }).to.not.throwException();
+      });
+
+      it('should NOT throw SecurityError for ::1 url from a secure page', function () {
+        expect(function () {
+          sjs('http://[::1]');
+        }).to.not.throwException();
+      });
+
       it('should throw SyntaxError for an invalid url', function () {
         expect(function () {
           sjs('//localhost');

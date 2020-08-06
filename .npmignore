@@ -16,3 +16,4 @@ Makefile
 img/
 karma.conf.js
 build.sh
+.github/

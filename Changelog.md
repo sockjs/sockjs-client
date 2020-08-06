@@ -1,3 +1,10 @@
+1.5.0
+==
+ * Update `url-parse`, `kind-of`, `minimist`, `websocket-extensions` due to security vulnerabilies.
+ * Update dev dependencies.
+ * Allow loopback address hostnames on a secure page. Fixes #486
+ * Enable eventsource transport for node.js clients.
+
 1.4.0
 ==
  * Add `timeout` option to set a minimum transport timeout. Fixes #403
