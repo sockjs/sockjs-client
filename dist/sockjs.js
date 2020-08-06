@@ -2243,8 +2243,8 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:receiver:eventsource');
 }
 
-function decodeURIComponentSafe(s) {
-  return decodeURIComponent(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, '%25'));
+function decodeURSafeI(s) {
+  return decodeURI(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, '%25'));
 }
 
 function EventSourceReceiver(url) {
@@ -2255,7 +2255,7 @@ function EventSourceReceiver(url) {
   var es = this.es = new EventSourceDriver(url);
   es.onmessage = function(e) {
     debug('message', e.data);
-    self.emit('message', decodeURIComponentSafe(e.data));
+    self.emit('message', decodeURISafe(e.data));
   };
   es.onerror = function(e) {
     debug('error', es.readyState, e);
