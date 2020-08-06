@@ -1,4 +1,5 @@
-.idea
+.idea/
+sockjs-client.iml
 .pidfile.pid
 node_modules
 npm-debug.log
