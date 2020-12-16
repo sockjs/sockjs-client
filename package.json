@@ -29,7 +29,6 @@
     "eventsource": "^1.0.7",
     "faye-websocket": "^0.11.3",
     "inherits": "^2.0.4",
-    "json3": "^3.3.3",
     "url-parse": "^1.4.7"
   },
   "devDependencies": {
