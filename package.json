@@ -1,5 +1,5 @@
 {
-  "name": "testable-sockjs-client",
+  "name": "sockjs-client",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
   "version": "1.5.0",
   "author": "Bryce Kahle",
