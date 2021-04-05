@@ -353,7 +353,7 @@ function InfoAjax(url, AjaxObject) {
 
   var self = this;
   var t0 = +new Date();
-  this.xo = new AjaxObject('GET', url);
+  this.xo = new AjaxObject('GET', url, null, { headers: { 'Accept': 'application/json' } });
 
   this.xo.once('finish', function(status, text) {
     var info, rtt;
@@ -1950,9 +1950,9 @@ if (process.env.NODE_ENV !== 'production') {
 function createAjaxSender(AjaxObject) {
   return function(url, payload, callback) {
     debug('create ajax sender', url, payload);
-    var opt = {};
+    var opt = { headers: { 'Accept': 'text/plain' } };
     if (typeof payload === 'string') {
-      opt.headers = {'Content-type': 'text/plain'};
+      opt.headers['Content-type'] = 'text/plain';
     }
     var ajaxUrl = urlUtils.addPath(url, '/xhr_send');
     var xo = new AjaxObject('POST', ajaxUrl, payload, opt);
@@ -2597,7 +2597,7 @@ function XhrReceiver(url, AjaxObject) {
 
   this.bufferPosition = 0;
 
-  this.xo = new AjaxObject('POST', url, null);
+  this.xo = new AjaxObject('POST', url, null, { headers: { 'Accept': 'text/plain' } });
   this.xo.on('chunk', this._chunkHandler.bind(this));
   this.xo.once('finish', function(status, text) {
     debug('finish', status, text);
@@ -2914,10 +2914,10 @@ var inherits = require('inherits')
   , XhrDriver = require('../driver/xhr')
   ;
 
-function XHRLocalObject(method, url, payload /*, opts */) {
-  XhrDriver.call(this, method, url, payload, {
-    noCredentials: true
-  });
+function XHRLocalObject(method, url, payload, opts) {
+  opts = opts || {};
+  opts.noCredentials = true;
+  XhrDriver.call(this, method, url, payload, opts);
 }
 
 inherits(XHRLocalObject, XhrDriver);
