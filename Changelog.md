@@ -1,3 +1,7 @@
+1.5.1
+==
+ * Update `url-parse` due to CVE-2021-27515.
+
 1.5.0
 ==
  * Update `url-parse`, `kind-of`, `minimist`, `websocket-extensions` due to security vulnerabilies.
