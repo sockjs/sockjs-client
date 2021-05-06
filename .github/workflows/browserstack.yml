@@ -23,6 +23,7 @@ jobs:
         local-testing: start
         local-logging-level: all-logs
         local-identifier: random
+        local-args: '--force-local'
     - name: run Browserstack tests
       run: |
         npm install
