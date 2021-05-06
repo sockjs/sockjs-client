@@ -12,10 +12,24 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
+    - name: 'Browserstack Env Setup'
+      uses: 'browserstack/github-actions/setup-env@master'
+      with:
+        username: ${{ secrets.BROWSERSTACK_USERNAME }}
+        access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    - name: 'Browserstack Local Setup'
+      uses: 'browserstack/github-actions/setup-local@master'
+      with:
+        local-testing: start
+        local-logging-level: all-logs
+        local-identifier: random
     - name: run Browserstack tests
       run: |
         npm install
         npm run test:browser_remote
       env:
         CI: true
-        BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    - name: 'Stop BrowserStack Local'
+      uses: 'browserstack/github-actions/setup-local@master'
+      with:
+        local-testing: stop

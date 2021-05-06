@@ -5,24 +5,24 @@ var testServer = require('./tests/support/sockjs_server');
 var targets = require('./tests/browser_targets');
 
 var port = 9889;
-var SockFrameworkFactory = function(config, logger) {
+var SockFrameworkFactory = function (config, logger) {
   var log = logger.create('sockjs.server');
   log.info('Starting sockjs test server...');
   testServer(port, config, '/sockjs-test');
 };
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     // necessary to have karma proxy websockets correctly
     urlRoot: '/karma/',
     client: {
       useIframe: false,
-      runInParent: true
+      runInParent: true,
     },
 
     plugins: [
-      {'framework:sock': ['factory', SockFrameworkFactory]},
-      'karma-*'
+      { 'framework:sock': ['factory', SockFrameworkFactory] },
+      'karma-*',
     ],
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -35,25 +35,24 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       { pattern: 'tests/support/domain.js', watched: false, nocache: true },
-      { pattern: 'tests/browser.js', watched: false }
+      { pattern: 'tests/browser.js', watched: false },
     ],
 
     // list of files / patterns to exclude
-    exclude: [
-    ],
+    exclude: [],
 
     proxies: {
-      '/sockjs-test/': 'http://localhost:' + port + '/'
+      '/sockjs-test/': 'http://localhost:' + port + '/',
     },
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'tests/browser.js': ['browserify']
+      'tests/browser.js': ['browserify'],
     },
 
     browserify: {
-      debug: true
+      debug: true,
     },
 
     // test results reporter to use
@@ -87,13 +86,16 @@ module.exports = function(config) {
     concurrency: 5,
 
     browserStack: {
-      username: 'brycekahle2',
+      username: process.env.BROWSERSTACK_USERNAME,
       accessKey: process.env.BROWSERSTACK_ACCESS_KEY,
       forcelocal: true,
       video: false,
-      project: 'sockjs-client'
+      project: 'sockjs-client',
+      startTunnel: !process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
+      localIdentifer: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
+      build: process.env.BROWSERSTACK_BUILD_NAME,
     },
 
     customLaunchers: targets,
-  })
-}
+  });
+};
