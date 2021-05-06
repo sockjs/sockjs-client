@@ -96,6 +96,12 @@ module.exports = function (config) {
       build: process.env.BROWSERSTACK_BUILD_NAME,
     },
 
+    captureTimeout: 3e5,
+    browserDisconnectTolerance: 0,
+    browserDisconnectTimeout: 3e5,
+    browserSocketTimeout: 1.2e5,
+    browserNoActivityTimeout: 3e5,
+
     customLaunchers: targets,
   });
 };
