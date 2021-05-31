@@ -6,6 +6,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        target-browser: [chrome_windows, edge_windows, firefox_windows, safari_11_mac, ios_14, android_11]
+
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js 12
@@ -17,9 +21,10 @@ jobs:
       with:
         username: ${{ secrets.BROWSERSTACK_USERNAME }}
         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-    - name: run Browserstack tests
+    - name: run Browserstack tests - ${{ matrix.target-browser }}
       run: |
         npm install
         npm run test:browser_remote
       env:
         CI: true
+        TARGET_BROWSER: ${{ matrix.target-browser }}
