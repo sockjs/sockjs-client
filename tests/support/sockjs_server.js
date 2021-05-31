@@ -64,7 +64,7 @@ function startServer(port, config, prefix) {
   });
 
   sockjs.install({
-    sockjs_url: 'http://' + config.listenAddress + ':' + config.port + (prefix || '') + '/lib/sockjs.js',
+    sockjs_url: (prefix || '') + '/lib/sockjs.js',
     websocket: true,
     log: function (severity, message) {
       debug('[%s] %s', severity, message);
