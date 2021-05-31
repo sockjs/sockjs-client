@@ -1,5 +1,6 @@
-// Karma configuration
-// Generated on Tue Aug 07 2018 16:41:49 GMT-0400 (EDT)
+if (!process.env.BROWSERSTACK_LOCAL_IDENTIFIER) {
+  process.env.CHROME_BIN = require('puppeteer').executablePath();
+}
 
 var testServer = require('./tests/support/sockjs_server');
 var targets = require('./tests/browser_targets');
@@ -58,7 +59,11 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'BrowserStack'],
+    reporters: ['progress', 'summary', 'BrowserStack'],
+    summaryReporter: {
+      show: 'failed',
+      overviewColumn: true,
+    },
 
     // web server port
     port: 9876,
