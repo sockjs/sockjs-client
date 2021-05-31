@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        target-browser: [chrome_windows, edge_windows, firefox_windows, safari_11_mac, ios_14, android_11]
+        target-browser: [chrome_windows, edge_windows, firefox_windows, safari_14_mac, ios_14, android_11]
 
     steps:
     - uses: actions/checkout@v1
