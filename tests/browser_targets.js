@@ -17,11 +17,11 @@ module.exports = {
     os: 'Windows',
     os_version: '10',
   },
-  safari_11_mac: {
+  safari_14_mac: {
     base: 'BrowserStack',
     browser: 'safari',
     os: 'OS X',
-    os_version: 'Catalina',
+    os_version: 'Big Sur',
   },
   ios_14: {
     base: 'BrowserStack',
