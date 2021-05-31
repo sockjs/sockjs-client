@@ -183,7 +183,7 @@ module.exports.echoFromChild = function echoFromChild(url, transport) {
       try {
         expect(e.code).to.equal(1000);
       } catch (err) {
-        done(e);
+        done(err);
         return;
       }
       debug('hook sjs close');
