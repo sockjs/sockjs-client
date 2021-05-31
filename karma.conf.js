@@ -96,8 +96,6 @@ module.exports = function (config) {
       forcelocal: true,
       video: false,
       project: 'sockjs-client',
-      startTunnel: !process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
-      localIdentifer: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
       build: process.env.BROWSERSTACK_BUILD_NAME,
     },
 

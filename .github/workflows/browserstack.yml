@@ -17,21 +17,9 @@ jobs:
       with:
         username: ${{ secrets.BROWSERSTACK_USERNAME }}
         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-    - name: 'Browserstack Local Setup'
-      uses: 'browserstack/github-actions/setup-local@master'
-      with:
-        local-testing: start
-        local-logging-level: all-logs
-        local-identifier: random
-        local-args: '--force-local'
     - name: run Browserstack tests
       run: |
         npm install
         npm run test:browser_remote
       env:
         CI: true
-    - name: 'Stop BrowserStack Local'
-      if: ${{ always() }}
-      uses: 'browserstack/github-actions/setup-local@master'
-      with:
-        local-testing: stop
