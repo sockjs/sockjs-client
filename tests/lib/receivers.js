@@ -56,6 +56,32 @@ describe('Receivers', function () {
       });
     });
 
+    it('survives errors in handlers', function (done) {
+      var test = this.runnable();
+      JsonpReceiver.prototype._createScript = function () {
+        var self = this;
+        setTimeout(function () {
+          try {
+            global[utils.WPrefix][self.id]('datadata');
+          } catch (e) {
+            if (!(test.timedOut || test.duration)) {
+              done(new Error('close event not fired'));
+            }
+          }
+        }, 5);
+      };
+      var jpr = new JsonpReceiver('test');
+      jpr.on('close', function () {
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        done();
+      });
+      jpr.on('message', function () {
+        throw new Error('boom');
+      });
+    });
+
     it('will timeout', function (done) {
       this.timeout(500);
       var test = this.runnable();
