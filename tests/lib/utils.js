@@ -1,8 +1,6 @@
 'use strict';
 
-var expect = require('expect.js')
-  , JSON3 = require('json3')
-  ;
+var expect = require('expect.js');
 
 describe('utils', function () {
   describe('random', function () {
@@ -95,7 +93,7 @@ describe('utils', function () {
           c.push(String.fromCharCode(i));
         }
         var allChars = c.join('');
-        expect(JSON3.parse(escape.quote(allChars))).to.equal(allChars);
+        expect(JSON.parse(escape.quote(allChars))).to.equal(allChars);
       });
     });
   });
