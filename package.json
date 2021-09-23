@@ -4,6 +4,10 @@
   "version": "1.5.2",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "funding": "https://tidelift.com/funding/github/npm/sockjs-client",
   "browser": {
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
     "eventsource": "./lib/transport/browser/eventsource.js",
