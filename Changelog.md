@@ -1,3 +1,7 @@
+1.5.2
+==
+ * Update `url-parse` due to CVE-2021-3664.
+
 1.5.1
 ==
  * Update `url-parse` due to CVE-2021-27515.
