@@ -1,7 +1,7 @@
 {
   "name": "@ziflow/sockjs-client",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
   "engines": {
