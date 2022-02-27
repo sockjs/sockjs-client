@@ -3,9 +3,10 @@
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
   "version": "1.6.0",
   "author": "Bryce Kahle",
+  "type": "module",
   "jsdelivr": "dist/sockjs.min.js",
   "engines": {
-    "node": ">=12"
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "funding": "https://tidelift.com/funding/github/npm/sockjs-client",
   "browser": {
@@ -57,7 +58,8 @@
     "serve-static": "^1.14.2",
     "sockjs": "^0.3.24",
     "vinyl-buffer": "~1.0.0",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "xo": "^0.48.0"
   },
   "homepage": "http://sockjs.org",
   "keywords": [
@@ -65,7 +67,7 @@
     "websocket"
   ],
   "license": "MIT",
-  "main": "./lib/entry.js",
+  "exports": "./lib/entry.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/sockjs/sockjs-client.git"
@@ -80,5 +82,15 @@
     "version": "gulp release && git add -A dist lib/version.js Changelog.md",
     "postversion": "npm publish",
     "postpublish": "git push origin --all && git push origin --tags"
+  },
+  "xo": {
+    "space": true,
+    "ignores": [
+      "tests/**",
+      "dist/**",
+      "build/**",
+      "karma.conf.js",
+      "gulpfile.js"
+    ]
   }
 }
