@@ -1,7 +1,7 @@
 {
   "name": "@ziflow/sockjs-client",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
   "engines": {
@@ -33,7 +33,7 @@
     "eventsource": "^1.1.0",
     "faye-websocket": "^0.11.4",
     "inherits": "^2.0.4",
-    "url-parse": "^1.5.3"
+    "url-parse": "^1.5.10"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
@@ -46,16 +46,16 @@
     "gulp-replace": "^1.1.3",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
-    "karma": "^6.3.4",
+    "karma": "^6.3.17",
     "karma-browserify": "^8.1.0",
     "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-mocha": "^2.0.1",
-    "mocha": "^9.1.1",
+    "mocha": "^9.2.1",
     "proxyquire": "^2.1.3",
     "pump": "^3.0.0",
-    "serve-static": "^1.14.1",
-    "sockjs": "^0.3.21",
+    "serve-static": "^1.14.2",
+    "sockjs": "^0.3.24",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "^2.0.0"
   },
