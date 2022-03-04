@@ -1,4 +1,4 @@
-/* sockjs-client v1.5.3 | http://sockjs.org | MIT license */
+/* sockjs-client v1.5.4 | http://sockjs.org | MIT license */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SockJS = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
@@ -3730,7 +3730,7 @@ module.exports = {
 }).call(this)}).call(this,{ env: {} })
 
 },{"debug":55,"url-parse":60}],53:[function(require,module,exports){
-module.exports = '1.5.3';
+module.exports = '1.5.4';
 
 },{}],54:[function(require,module,exports){
 /**
@@ -4405,7 +4405,7 @@ function encode(input) {
  * @api public
  */
 function querystring(query) {
-  var parser = /([^=?&]+)=?([^&]*)/g
+  var parser = /([^=?#&]+)=?([^&]*)/g
     , result = {}
     , part;
 
@@ -4460,8 +4460,8 @@ function querystringify(obj, prefix) {
         value = '';
       }
 
-      key = encodeURIComponent(key);
-      value = encodeURIComponent(value);
+      key = encode(key);
+      value = encode(value);
 
       //
       // If we failed to encode the strings, we should bail out as we don't
@@ -4527,20 +4527,23 @@ module.exports = function required(port, protocol) {
 
 var required = require('requires-port')
   , qs = require('querystringify')
+  , controlOrWhitespace = /^[\x00-\x20\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/
+  , CRHTLF = /[\n\r\t]/g
   , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
+  , port = /:\d+$/
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\\/]+)?([\S\s]*)/i
-  , windowsDriveLetter = /^[a-zA-Z]:/
-  , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
-  , left = new RegExp('^'+ whitespace +'+');
+  , windowsDriveLetter = /^[a-zA-Z]:/;
 
 /**
- * Trim a given string.
+ * Remove control characters and whitespace from the beginning of a string.
  *
- * @param {String} str String to trim.
+ * @param {Object|String} str String to trim.
+ * @returns {String} A new string representing `str` stripped of control
+ *     characters and whitespace from its beginning.
  * @public
  */
 function trimLeft(str) {
-  return (str ? str : '').toString().replace(left, '');
+  return (str ? str : '').toString().replace(controlOrWhitespace, '');
 }
 
 /**
@@ -4564,7 +4567,7 @@ var rules = [
   ['/', 'pathname'],                    // Extract from the back.
   ['@', 'auth', 1],                     // Extract from the front.
   [NaN, 'host', undefined, 1, 1],       // Set left over value.
-  [/:(\d+)$/, 'port', undefined, 1],    // RegExp the back.
+  [/:(\d*)$/, 'port', undefined, 1],    // RegExp the back.
   [NaN, 'hostname', undefined, 1, 1]    // Set left over.
 ];
 
@@ -4660,6 +4663,7 @@ function isSpecial(scheme) {
  */
 function extractProtocol(address, location) {
   address = trimLeft(address);
+  address = address.replace(CRHTLF, '');
   location = location || {};
 
   var match = protocolre.exec(address);
@@ -4760,6 +4764,7 @@ function resolve(relative, base) {
  */
 function Url(address, location, parser) {
   address = trimLeft(address);
+  address = address.replace(CRHTLF, '');
 
   if (!(this instanceof Url)) {
     return new Url(address, location, parser);
@@ -4829,7 +4834,11 @@ function Url(address, location, parser) {
     if (parse !== parse) {
       url[key] = address;
     } else if ('string' === typeof parse) {
-      if (~(index = address.indexOf(parse))) {
+      index = parse === '@'
+        ? address.lastIndexOf(parse)
+        : address.indexOf(parse);
+
+      if (~index) {
         if ('number' === typeof instruction[2]) {
           url[key] = address.slice(0, index);
           address = address.slice(index + instruction[2]);
@@ -4895,10 +4904,21 @@ function Url(address, location, parser) {
   // Parse down the `auth` for the username and password.
   //
   url.username = url.password = '';
+
   if (url.auth) {
-    instruction = url.auth.split(':');
-    url.username = instruction[0] || '';
-    url.password = instruction[1] || '';
+    index = url.auth.indexOf(':');
+
+    if (~index) {
+      url.username = url.auth.slice(0, index);
+      url.username = encodeURIComponent(decodeURIComponent(url.username));
+
+      url.password = url.auth.slice(index + 1);
+      url.password = encodeURIComponent(decodeURIComponent(url.password))
+    } else {
+      url.username = encodeURIComponent(decodeURIComponent(url.auth));
+    }
+
+    url.auth = url.password ? url.username +':'+ url.password : url.username;
   }
 
   url.origin = url.protocol !== 'file:' && isSpecial(url.protocol) && url.host
@@ -4958,7 +4978,7 @@ function set(part, value, fn) {
     case 'host':
       url[part] = value;
 
-      if (/:\d+$/.test(value)) {
+      if (port.test(value)) {
         value = value.split(':');
         url.port = value.pop();
         url.hostname = value.join(':');
@@ -4984,8 +5004,23 @@ function set(part, value, fn) {
       }
       break;
 
-    default:
-      url[part] = value;
+    case 'username':
+    case 'password':
+      url[part] = encodeURIComponent(value);
+      break;
+
+    case 'auth':
+      var index = value.indexOf(':');
+
+      if (~index) {
+        url.username = value.slice(0, index);
+        url.username = encodeURIComponent(decodeURIComponent(url.username));
+
+        url.password = value.slice(index + 1);
+        url.password = encodeURIComponent(decodeURIComponent(url.password));
+      } else {
+        url.username = encodeURIComponent(decodeURIComponent(value));
+      }
   }
 
   for (var i = 0; i < rules.length; i++) {
@@ -4993,6 +5028,8 @@ function set(part, value, fn) {
 
     if (ins[4]) url[ins[1]] = url[ins[1]].toLowerCase();
   }
+
+  url.auth = url.password ? url.username +':'+ url.password : url.username;
 
   url.origin = url.protocol !== 'file:' && isSpecial(url.protocol) && url.host
     ? url.protocol +'//'+ url.host
@@ -5015,19 +5052,45 @@ function toString(stringify) {
 
   var query
     , url = this
+    , host = url.host
     , protocol = url.protocol;
 
   if (protocol && protocol.charAt(protocol.length - 1) !== ':') protocol += ':';
 
-  var result = protocol + (url.slashes || isSpecial(url.protocol) ? '//' : '');
+  var result =
+    protocol +
+    ((url.protocol && url.slashes) || isSpecial(url.protocol) ? '//' : '');
 
   if (url.username) {
     result += url.username;
     if (url.password) result += ':'+ url.password;
     result += '@';
+  } else if (url.password) {
+    result += ':'+ url.password;
+    result += '@';
+  } else if (
+    url.protocol !== 'file:' &&
+    isSpecial(url.protocol) &&
+    !host &&
+    url.pathname !== '/'
+  ) {
+    //
+    // Add back the empty userinfo, otherwise the original invalid URL
+    // might be transformed into a valid one with `url.pathname` as host.
+    //
+    result += '@';
   }
 
-  result += url.host + url.pathname;
+  //
+  // Trailing colon is removed from `url.host` when it is parsed. If it still
+  // ends with a colon, then add back the trailing colon that was removed. This
+  // prevents an invalid URL from being transformed into a valid one.
+  //
+  if (host[host.length - 1] === ':' || (port.test(url.hostname) && !url.port)) {
+    host += ':';
+  }
+
+  result += host + url.pathname;
 
   query = 'object' === typeof url.query ? stringify(url.query) : url.query;
   if (query) result += '?' !== query.charAt(0) ? '?'+ query : query;
