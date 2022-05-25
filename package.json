@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "debug": "^3.2.7",
-    "eventsource": "^1.1.0",
+    "eventsource": "^2.0.2",
     "faye-websocket": "^0.11.4",
     "inherits": "^2.0.4",
     "url-parse": "^1.5.10"
