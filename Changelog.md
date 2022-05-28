@@ -1,3 +1,9 @@
+1.6.1
+==
+Fixes
+ * Update `eventsource` to `2.0.2` due to CVE-2022-1650. Fixes #590
+ * Update `minimist` to `1.2.6`. Fixes #585
+
 1.6.0
 ==
 Fixes
