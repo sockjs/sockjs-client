@@ -16,3 +16,4 @@ img/
 karma.conf.js
 build.sh
 .github/
+local.log
