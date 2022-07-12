@@ -5,7 +5,8 @@ var expect = require('expect.js')
   , XhrReceiver = require('../../lib/transport/receiver/xhr')
   , XhrFake = require('../../lib/transport/sender/xhr-fake')
   , utils = require('../../lib/utils/iframe')
-  ;
+  , InfoAjax = require('../../lib/info-ajax')
+  , InfoReceiver = require('../../lib/info-receiver');
 
 describe('Receivers', function () {
   describe('jsonp', function () {
@@ -286,6 +287,45 @@ describe('Receivers', function () {
         done();
       });
       xhr.abort();
+    });
+  });
+  describe('info', function () {
+    it('will timeout - default timeout', function (done) {
+      this.timeout(10000);
+      InfoReceiver.prototype._getReceiver = function(baseUrl, url) {
+        return new InfoAjax(url, XhrFake);
+      };
+
+      var expectedWasClean = true;
+      InfoReceiver.prototype._cleanup = function(wasClean) {
+        expect(wasClean).to.equal(expectedWasClean);
+        if (expectedWasClean === false) {
+          // Cleanup was called because of a timeout
+          done();
+        }
+        expectedWasClean = false;
+      };
+
+      new InfoReceiver('test', {}, 4000);
+    });
+
+    it('will timeout - configured timeout', function (done) {
+      this.timeout(5000);
+      InfoReceiver.prototype._getReceiver = function(baseUrl, url) {
+        return new InfoAjax(url, XhrFake);
+      };
+
+      var expectedWasClean = true;
+      InfoReceiver.prototype._cleanup = function(wasClean) {
+        expect(wasClean).to.equal(expectedWasClean);
+        if (expectedWasClean === false) {
+          // Cleanup was called because of a timeout
+          done();
+        }
+        expectedWasClean = false;
+      };
+
+      new InfoReceiver('test', {}, 4000);
     });
   });
 });
