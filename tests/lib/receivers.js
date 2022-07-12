@@ -306,11 +306,11 @@ describe('Receivers', function () {
         expectedWasClean = false;
       };
 
-      new InfoReceiver('test', {}, 4000);
+      new InfoReceiver('test', {});
     });
 
     it('will timeout - configured timeout', function (done) {
-      this.timeout(5000);
+      this.timeout(2000);
       InfoReceiver.prototype._getReceiver = function(baseUrl, url) {
         return new InfoAjax(url, XhrFake);
       };
@@ -325,7 +325,7 @@ describe('Receivers', function () {
         expectedWasClean = false;
       };
 
-      new InfoReceiver('test', {}, 4000);
+      new InfoReceiver('test', {}, 1000);
     });
   });
 });
