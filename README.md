@@ -124,7 +124,7 @@ SockJS server. Here's a simple example:
 
 ## SockJS class
 
-Similar to the 'WebSocket' API, the 'SockJS' constructor takes one, or more arguments:
+Similar to the 'WebSocket' API, the 'SockJS' constructor takes one or more arguments:
 
 ```javascript
 var sockjs = new SockJS(url, _reserved, options);
