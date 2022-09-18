@@ -5,7 +5,6 @@ dist/
 !dist/sockjs.min.js
 !dist/sockjs.min.js.map
 build/
-.travis.yml
 .eslintrc
 .eslintignore
 .jscsrc
@@ -17,3 +16,4 @@ img/
 karma.conf.js
 build.sh
 .github/
+local.log

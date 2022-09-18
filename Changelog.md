@@ -1,3 +1,45 @@
+1.6.1
+==
+Fixes
+ * Update `eventsource` to `2.0.2` due to CVE-2022-1650. Fixes #590
+ * Update `minimist` to `1.2.6`. Fixes #585
+
+1.6.0
+==
+Fixes
+ * Remove `agent: false` to allow usage of `globalAgent`. Fixes #421
+
+dependencies
+ * Update `url-parse` due to CVE-2022-0686, CVE-2022-0639, and CVE-2022-0512. Fixes #576
+ * Remove `json3` dependency. Fixes #476
+ * Update `eventsource` to `1.1.0`
+ * Update `faye-websocket` to `0.11.4`
+ * Update `debug` to `3.2.7`
+
+devDependencies
+ * Update `follow-redirects` (devDep) due to CVE-2022-0536 and CVE-2022-0155
+ * Update `karma` (devDep) due to CVE-2022-0437
+ * Update `cached-path-relative` (devDep) due to CVE-2021-23518
+ * Update `fsevents` (devDep) to fix:
+   * `ini` CVE-2020-7788
+   * `minimist` CVE-2020-7598
+   * `tar` CVE-2021-37713, CVE-2021-37701, CVE-2021-32804, CVE-2021-32803
+ * Update `copy-props` (devDep) due to CVE-2020-28503
+ * Update `eslint`, `mocha`, `gulp-replace`, `karma-browserify`, `gulp-sourcemaps`, and `browserify`
+
+Other Changes
+ * Remove bower
+ * Remove Travis CI
+ * Require Node.js 12
+
+1.5.2
+==
+ * Update `url-parse` due to CVE-2021-3664.
+
+1.5.1
+==
+ * Update `url-parse` due to CVE-2021-27515.
+
 1.5.0
 ==
  * Update `url-parse`, `kind-of`, `minimist`, `websocket-extensions` due to security vulnerabilies.

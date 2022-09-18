@@ -13,7 +13,6 @@ module.exports = {
     if (global.location) {
       return urlUtils.getOrigin(global.location.href) + '/sockjs-test';
     }
-    // travis does not currently have IPv6 enabled for several envs
     return 'http://localhost:8081';
   }
 
