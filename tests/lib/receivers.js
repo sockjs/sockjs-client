@@ -2,6 +2,7 @@
 
 var expect = require('expect.js')
   , JsonpReceiver = require('../../lib/transport/receiver/jsonp')
+  , EventSourceReceiver = require('../../lib/transport/receiver/eventsource')
   , XhrReceiver = require('../../lib/transport/receiver/xhr')
   , XhrFake = require('../../lib/transport/sender/xhr-fake')
   , utils = require('../../lib/utils/iframe')
@@ -286,6 +287,42 @@ describe('Receivers', function () {
         done();
       });
       xhr.abort();
+    });
+  });
+
+  describe('eventsource', function () {
+    it('receives data', function(done) {
+      var eventSourceReceiver = new EventSourceReceiver('test');
+
+      eventSourceReceiver.on('message', function(msg) {
+        try {
+          expect(msg).to.equal('datadataaa');
+        } catch (e) {}
+        eventSourceReceiver.abort();
+        done();
+      });
+
+      eventSourceReceiver.es.dispatchEvent({
+        type: 'message',
+        detail: { data:  'datadataaa' }
+      })
+    });
+
+    it('correctly escapes characters', function(done) {
+      var eventSourceReceiver = new EventSourceReceiver('test');
+
+      eventSourceReceiver.on('message', function(msg) {
+        try {
+          expect(msg).to.equal('{ \\"lastName\\":\\"#@%!~`%^&*()\\" }');
+        } catch (e) {}
+        eventSourceReceiver.abort();
+        done();
+      });
+
+      eventSourceReceiver.es.dispatchEvent({
+        type: 'message',
+        detail: { data:  '{ \\"lastName\\":\\"#@%!~`%^&*()\\" }' }
+      })
     });
   });
 });
