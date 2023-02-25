@@ -17,4 +17,4 @@ jobs:
         days-before-close: 5
         stale-issue-message: 'This issue has been inactive for 30 days. It will be in closed in 5 days without any new activity.'
         stale-issue-label: 'no-issue-activity'
-        exempt-issue-labels: 'discussion,work-in-progress'
+        any-of-labels: 'inactive'
