@@ -4,7 +4,7 @@
 var http = require('http');
 var serveStatic = require('serve-static');
 var sockjs = require('./sockjs_app');
-var url = require('url');
+var URL = require('url').URL;
 var path = require('path');
 var debug = require('debug')('sockjs-client:test-server:main');
 
@@ -44,7 +44,7 @@ function startServer(port, config, prefix) {
       res.end(new Array(2049).join('a') + '\nb\n');
     } else if (req.url === '/config.js') {
       if (req.headers.referer) {
-        var parsedOrigin = url.parse(req.headers.referer);
+        var parsedOrigin = new URL(req.headers.referer);
         clientOptions.url = parsedOrigin.protocol + '//' + parsedOrigin.hostname + ':' + config.port;
       }
       res.setHeader('content-type', 'application/javascript');
