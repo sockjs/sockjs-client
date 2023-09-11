@@ -33,9 +33,9 @@ module.exports = {
 
 , createHook: function () {
     var windowId = 'a' + random.string(8);
-    if (!global[MPrefix]) {
+    if (!globalThis[MPrefix]) {
       var map = {};
-      global[MPrefix] = function(id) {
+      globalThis[MPrefix] = function(id) {
         if (!(id in map)) {
           map[id] = {
             id: id,
@@ -47,7 +47,7 @@ module.exports = {
         return map[id];
       };
     }
-    return global[MPrefix](windowId);
+    return globalThis[MPrefix](windowId);
   }
 
 , createIframe: function (path) {
