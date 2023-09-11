@@ -47,8 +47,8 @@ describe('End to End', function () {
       it('invalid url port', function (done) {
         var test = this.runnable();
         var badUrl;
-        if (global.location) {
-          badUrl = global.location.protocol + '//' + global.location.hostname + ':1079';
+        if (globalThis.location) {
+          badUrl = globalThis.location.protocol + '//' + globalThis.location.hostname + ':1079';
         } else {
           badUrl = 'http://localhost:1079';
         }

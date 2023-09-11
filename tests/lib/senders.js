@@ -93,8 +93,8 @@ function wrongUrl(Obj, url, statuses) {
 
 function wrongPort (Obj) {
   var badUrl;
-  if (global.location) {
-    badUrl = global.location.protocol + '//' + global.location.hostname + ':';
+  if (globalThis.location) {
+    badUrl = globalThis.location.protocol + '//' + globalThis.location.hostname + ':';
   } else {
     badUrl = 'http://localhost:';
   }

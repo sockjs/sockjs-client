@@ -10,15 +10,15 @@ var MPrefix = '_sockjs_global';
 
 module.exports = {
   getSameOriginUrl: function () {
-    if (global.location) {
-      return urlUtils.getOrigin(global.location.href) + '/sockjs-test';
+    if (globalThis.location) {
+      return urlUtils.getOrigin(globalThis.location.href) + '/sockjs-test';
     }
     return 'http://localhost:8081';
   }
 
 , getCrossOriginUrl: function () {
-    if (global.clientOptions) {
-      return global.clientOptions.url;
+    if (globalThis.clientOptions) {
+      return globalThis.clientOptions.url;
     }
     return null;
   }
