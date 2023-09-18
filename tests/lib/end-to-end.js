@@ -26,7 +26,7 @@ describe('End to End', function () {
         }
 
         try {
-          expect(e.code).to.equal(1002);
+          expect(e.code).to.equal(404);
           expect(e.reason).to.equal('Cannot connect to server');
           expect(e.wasClean).to.equal(false);
         } catch (err) {
