@@ -1,3 +1,7 @@
+1.6.2
+==
+ * Added ES build
+
 1.6.1
 ==
 Fixes
