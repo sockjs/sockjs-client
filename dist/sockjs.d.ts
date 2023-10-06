@@ -1,5 +1,5 @@
 // index.d.ts
-declare module "@tr0n0s/sockjs-client" {
+declare module "sockjs-client" {
   const SockJS: {
       new(url: string, _reserved?: any, options?: SockJS.Options): WebSocket;
       (url: string, _reserved?: any, options?: SockJS.Options): WebSocket;
