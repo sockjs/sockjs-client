@@ -1,6 +1,6 @@
 1.6.2
 ==
- * Added ES build
+ * Added ECMAScript build with TypeScript types.
 
 1.6.1
 ==
