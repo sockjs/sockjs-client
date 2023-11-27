@@ -3,6 +3,7 @@
 
 var expect = require('expect.js')
   , SockJS = require('../../lib/entry')
+  , random = require('../../lib/utils/random')
   ;
 
 describe('SockJS', function() {
@@ -102,3 +103,13 @@ describe('SockJS', function() {
     });
   });
 });
+
+describe("moving from global to globalThis", function () {
+  it("should contain the same value in global as in globalThis", function () {
+    const key = random.string(10);
+    const value = random.string(10);
+    global[key] = value;
+    expect(global[key]).to.equal(value);
+    expect(globalThis[key]).to.equal(value);
+  })
+})
