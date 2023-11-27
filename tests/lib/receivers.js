@@ -28,7 +28,7 @@ describe('Receivers', function () {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
-          global[utils.WPrefix][self.id]('datadata');
+          globalThis[utils.WPrefix][self.id]('datadata');
         }, 5);
       };
       var jpr = new JsonpReceiver('test');
@@ -62,8 +62,8 @@ describe('Receivers', function () {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
-          if (global[utils.WPrefix][self.id]) {
-            global[utils.WPrefix][self.id]('datadata');
+          if (globalThis[utils.WPrefix][self.id]) {
+            globalThis[utils.WPrefix][self.id]('datadata');
           }
         }, 400);
       };
@@ -93,8 +93,8 @@ describe('Receivers', function () {
       JsonpReceiver.prototype._createScript = function () {
         var self = this;
         setTimeout(function () {
-          if (global[utils.WPrefix][self.id]) {
-            global[utils.WPrefix][self.id]('datadata');
+          if (globalThis[utils.WPrefix][self.id]) {
+            globalThis[utils.WPrefix][self.id]('datadata');
           }
         }, 200);
       };
@@ -127,7 +127,7 @@ describe('Receivers', function () {
         // simulate a normal JSONP response
         setTimeout(function () {
           self.loadedOkay = true;
-          global[utils.WPrefix][self.id]('datadata');
+          globalThis[utils.WPrefix][self.id]('datadata');
         }, 200);
       };
 
@@ -165,7 +165,7 @@ describe('Receivers', function () {
         // simulate a normal JSONP response
         setTimeout(function () {
           self.loadedOkay = true;
-          global[utils.WPrefix][self.id]('datadata');
+          globalThis[utils.WPrefix][self.id]('datadata');
         }, 100);
       };
 
