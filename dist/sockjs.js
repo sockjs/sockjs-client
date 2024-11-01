@@ -1,4 +1,4 @@
-/* sockjs-client v1.6.1 | http://sockjs.org | MIT license */
+/* sockjs-client v0.0.3 | http://sockjs.org | MIT license */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SockJS = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
@@ -14,7 +14,7 @@ if ('_sockjs_onload' in global) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./main":14,"./transport-list":16}],2:[function(require,module,exports){
+},{"./main":15,"./transport-list":17}],2:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -187,6 +187,25 @@ var inherits = require('inherits')
   , Event = require('./event')
   ;
 
+function InfoEvent(info, rtt, headers) {
+  Event.call(this);
+  this.initEvent('info', false, false);
+  this.info = info;
+  this.rtt = rtt;
+  this.headers = headers;
+}
+
+inherits(InfoEvent, Event);
+
+module.exports = InfoEvent;
+
+},{"./event":4,"inherits":57}],7:[function(require,module,exports){
+'use strict';
+
+var inherits = require('inherits')
+  , Event = require('./event')
+  ;
+
 function TransportMessageEvent(data) {
   Event.call(this);
   this.initEvent('message', false, false);
@@ -197,7 +216,7 @@ inherits(TransportMessageEvent, Event);
 
 module.exports = TransportMessageEvent;
 
-},{"./event":4,"inherits":57}],7:[function(require,module,exports){
+},{"./event":4,"inherits":57}],8:[function(require,module,exports){
 'use strict';
 
 var iframeUtils = require('./utils/iframe')
@@ -225,7 +244,7 @@ FacadeJS.prototype._close = function() {
 
 module.exports = FacadeJS;
 
-},{"./utils/iframe":47}],8:[function(require,module,exports){
+},{"./utils/iframe":48}],9:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -331,7 +350,7 @@ module.exports = function(SockJS, availableTransports) {
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"./facade":7,"./info-iframe-receiver":10,"./location":13,"./utils/event":46,"./utils/iframe":47,"./utils/url":52,"debug":55}],9:[function(require,module,exports){
+},{"./facade":8,"./info-iframe-receiver":11,"./location":14,"./utils/event":47,"./utils/iframe":48,"./utils/url":53,"debug":55}],10:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -345,14 +364,14 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:info-ajax');
 }
 
-function InfoAjax(url, AjaxObject) {
+function InfoAjax(url, AjaxObject, opts) {
   EventEmitter.call(this);
 
   var self = this;
   var t0 = +new Date();
-  this.xo = new AjaxObject('GET', url);
+  this.xo = new AjaxObject('GET', url, null, opts);
 
-  this.xo.once('finish', function(status, text) {
+  this.xo.once('finish', function(status, text, headers) {
     var info, rtt;
     if (status === 200) {
       rtt = (+new Date()) - t0;
@@ -368,7 +387,7 @@ function InfoAjax(url, AjaxObject) {
         info = {};
       }
     }
-    self.emit('finish', info, rtt);
+    self.emit('finish', info, rtt, status, headers);
     self.removeAllListeners();
   });
 }
@@ -384,7 +403,7 @@ module.exports = InfoAjax;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"./utils/object":49,"debug":55,"events":3,"inherits":57}],10:[function(require,module,exports){
+},{"./utils/object":50,"debug":55,"events":3,"inherits":57}],11:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -393,11 +412,11 @@ var inherits = require('inherits')
   , InfoAjax = require('./info-ajax')
   ;
 
-function InfoReceiverIframe(transUrl) {
+function InfoReceiverIframe(transUrl, ignore, opts) {
   var self = this;
   EventEmitter.call(this);
 
-  this.ir = new InfoAjax(transUrl, XHRLocalObject);
+  this.ir = new InfoAjax(transUrl, XHRLocalObject, opts);
   this.ir.once('finish', function(info, rtt) {
     self.ir = null;
     self.emit('message', JSON.stringify([info, rtt]));
@@ -418,7 +437,7 @@ InfoReceiverIframe.prototype.close = function() {
 
 module.exports = InfoReceiverIframe;
 
-},{"./info-ajax":9,"./transport/sender/xhr-local":37,"events":3,"inherits":57}],11:[function(require,module,exports){
+},{"./info-ajax":10,"./transport/sender/xhr-local":38,"events":3,"inherits":57}],12:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -491,7 +510,7 @@ module.exports = InfoIframe;
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./info-iframe-receiver":10,"./transport/iframe":22,"./utils/event":46,"debug":55,"events":3,"inherits":57}],12:[function(require,module,exports){
+},{"./info-iframe-receiver":11,"./transport/iframe":23,"./utils/event":47,"debug":55,"events":3,"inherits":57}],13:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -511,13 +530,13 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:info-receiver');
 }
 
-function InfoReceiver(baseUrl, urlInfo) {
+function InfoReceiver(baseUrl, urlInfo, transportOptions) {
   debug(baseUrl);
   var self = this;
   EventEmitter.call(this);
 
   setTimeout(function() {
-    self.doXhr(baseUrl, urlInfo);
+    self.doXhr(baseUrl, urlInfo, transportOptions);
   }, 0);
 }
 
@@ -525,30 +544,30 @@ inherits(InfoReceiver, EventEmitter);
 
 // TODO this is currently ignoring the list of available transports and the whitelist
 
-InfoReceiver._getReceiver = function(baseUrl, url, urlInfo) {
+InfoReceiver._getReceiver = function(baseUrl, url, urlInfo, transportOptions) {
   // determine method of CORS support (if needed)
   if (urlInfo.sameOrigin) {
-    return new InfoAjax(url, XHRLocal);
+    return new InfoAjax(url, XHRLocal, transportOptions['xhr-streaming'] || transportOptions['xhr-polling']);
   }
   if (XHRCors.enabled) {
-    return new InfoAjax(url, XHRCors);
+    return new InfoAjax(url, XHRCors, transportOptions['xhr-streaming'] || transportOptions['xhr-polling']);
   }
   if (XDR.enabled && urlInfo.sameScheme) {
-    return new InfoAjax(url, XDR);
+    return new InfoAjax(url, XDR, transportOptions['xdr-streaming'] || transportOptions['xdr-polling']);
   }
   if (InfoIframe.enabled()) {
-    return new InfoIframe(baseUrl, url);
+    return new InfoIframe(baseUrl, url, transportOptions['iframe']);
   }
   return new InfoAjax(url, XHRFake);
 };
 
-InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo) {
+InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo, transportOptions) {
   var self = this
     , url = urlUtils.addPath(baseUrl, '/info')
     ;
   debug('doXhr', url);
 
-  this.xo = InfoReceiver._getReceiver(baseUrl, url, urlInfo);
+  this.xo = InfoReceiver._getReceiver(baseUrl, url, urlInfo, transportOptions);
 
   this.timeoutRef = setTimeout(function() {
     debug('timeout');
@@ -556,10 +575,10 @@ InfoReceiver.prototype.doXhr = function(baseUrl, urlInfo) {
     self.emit('finish');
   }, InfoReceiver.timeout);
 
-  this.xo.once('finish', function(info, rtt) {
-    debug('finish', info, rtt);
+  this.xo.once('finish', function(info, rtt, status, headers) {
+    debug('finish', info, rtt, status, headers);
     self._cleanup(true);
-    self.emit('finish', info, rtt);
+    self.emit('finish', info, rtt, status, headers || {});
   });
 };
 
@@ -585,7 +604,7 @@ module.exports = InfoReceiver;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"./info-ajax":9,"./info-iframe":11,"./transport/sender/xdr":34,"./transport/sender/xhr-cors":35,"./transport/sender/xhr-fake":36,"./transport/sender/xhr-local":37,"./utils/url":52,"debug":55,"events":3,"inherits":57}],13:[function(require,module,exports){
+},{"./info-ajax":10,"./info-iframe":12,"./transport/sender/xdr":35,"./transport/sender/xhr-cors":36,"./transport/sender/xhr-fake":37,"./transport/sender/xhr-local":38,"./utils/url":53,"debug":55,"events":3,"inherits":57}],14:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -600,7 +619,7 @@ module.exports = global.location || {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -621,6 +640,7 @@ var URL = require('url-parse')
   , loc = require('./location')
   , CloseEvent = require('./event/close')
   , TransportMessageEvent = require('./event/trans-message')
+  , InfoEvent = require('./event/info')
   , InfoReceiver = require('./info-receiver')
   ;
 
@@ -725,7 +745,7 @@ function SockJS(url, protocols, options) {
   , sameScheme: urlUtils.isSchemeEqual(this.url, loc.href)
   };
 
-  this._ir = new InfoReceiver(this.url, this._urlInfo);
+  this._ir = new InfoReceiver(this.url, this._urlInfo, this._transportOptions);
   this._ir.once('finish', this._receiveInfo.bind(this));
 }
 
@@ -767,7 +787,7 @@ SockJS.prototype.send = function(data) {
   if (this.readyState !== SockJS.OPEN) {
     return;
   }
-  this._transport.send(escape.quote(data));
+  return this._transport.send(escape.quote(data));
 };
 
 SockJS.version = require('./version');
@@ -777,11 +797,12 @@ SockJS.OPEN = 1;
 SockJS.CLOSING = 2;
 SockJS.CLOSED = 3;
 
-SockJS.prototype._receiveInfo = function(info, rtt) {
+SockJS.prototype._receiveInfo = function(info, rtt, status, headers) {
   debug('_receiveInfo', rtt);
+  this.dispatchEvent(new InfoEvent(info, rtt, headers));
   this._ir = null;
   if (!info) {
-    this._close(1002, 'Cannot connect to server');
+    this._close(status || 1002, 'Cannot connect to server');
     return;
   }
 
@@ -901,9 +922,11 @@ SockJS.prototype._transportMessage = function(msg) {
 SockJS.prototype._transportClose = function(code, reason) {
   debug('_transportClose', this.transport, code, reason);
   if (this._transport) {
+    clearTimeout(this._transportTimeoutId);
     this._transport.removeAllListeners();
     this._transport = null;
     this.transport = null;
+    this._transportTimeoutId = null;
   }
 
   if (!userSetCode(code) && code !== 2000 && this.readyState === SockJS.CONNECTING) {
@@ -993,7 +1016,7 @@ module.exports = function(availableTransports) {
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/trans-message":6,"./iframe-bootstrap":8,"./info-receiver":12,"./location":13,"./shims":15,"./utils/browser":44,"./utils/escape":45,"./utils/event":46,"./utils/log":48,"./utils/object":49,"./utils/random":50,"./utils/transport":51,"./utils/url":52,"./version":53,"debug":55,"inherits":57,"url-parse":60}],15:[function(require,module,exports){
+},{"./event/close":2,"./event/event":4,"./event/eventtarget":5,"./event/info":6,"./event/trans-message":7,"./iframe-bootstrap":9,"./info-receiver":13,"./location":14,"./shims":16,"./utils/browser":45,"./utils/escape":46,"./utils/event":47,"./utils/log":49,"./utils/object":50,"./utils/random":51,"./utils/transport":52,"./utils/url":53,"./version":54,"debug":55,"inherits":57,"url-parse":61}],16:[function(require,module,exports){
 /* eslint-disable */
 /* jscs: disable */
 'use strict';
@@ -1447,7 +1470,7 @@ defineProperties(StringPrototype, {
     }
 }, hasNegativeSubstrBug);
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = [
@@ -1467,7 +1490,7 @@ module.exports = [
 , require('./transport/jsonp-polling')
 ];
 
-},{"./transport/eventsource":20,"./transport/htmlfile":21,"./transport/jsonp-polling":23,"./transport/lib/iframe-wrap":26,"./transport/websocket":38,"./transport/xdr-polling":39,"./transport/xdr-streaming":40,"./transport/xhr-polling":41,"./transport/xhr-streaming":42}],17:[function(require,module,exports){
+},{"./transport/eventsource":21,"./transport/htmlfile":22,"./transport/jsonp-polling":24,"./transport/lib/iframe-wrap":27,"./transport/websocket":39,"./transport/xdr-polling":40,"./transport/xdr-streaming":41,"./transport/xhr-polling":42,"./transport/xhr-streaming":43}],18:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -1665,13 +1688,13 @@ module.exports = AbstractXHRObject;
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/event":46,"../../utils/url":52,"debug":55,"events":3,"inherits":57}],18:[function(require,module,exports){
+},{"../../utils/event":47,"../../utils/url":53,"debug":55,"events":3,"inherits":57}],19:[function(require,module,exports){
 (function (global){(function (){
 module.exports = global.EventSource;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -1686,7 +1709,7 @@ if (Driver) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -1696,12 +1719,12 @@ var inherits = require('inherits')
   , EventSourceDriver = require('eventsource')
   ;
 
-function EventSourceTransport(transUrl) {
+function EventSourceTransport(transUrl, ignore, opts) {
   if (!EventSourceTransport.enabled()) {
     throw new Error('Transport created when disabled');
   }
 
-  AjaxBasedTransport.call(this, transUrl, '/eventsource', EventSourceReceiver, XHRCorsObject);
+  AjaxBasedTransport.call(this, transUrl, '/eventsource', EventSourceReceiver, XHRCorsObject, opts);
 }
 
 inherits(EventSourceTransport, AjaxBasedTransport);
@@ -1715,7 +1738,7 @@ EventSourceTransport.roundTrips = 2;
 
 module.exports = EventSourceTransport;
 
-},{"./lib/ajax-based":24,"./receiver/eventsource":29,"./sender/xhr-cors":35,"eventsource":18,"inherits":57}],21:[function(require,module,exports){
+},{"./lib/ajax-based":25,"./receiver/eventsource":30,"./sender/xhr-cors":36,"eventsource":19,"inherits":57}],22:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -1724,11 +1747,11 @@ var inherits = require('inherits')
   , AjaxBasedTransport = require('./lib/ajax-based')
   ;
 
-function HtmlFileTransport(transUrl) {
+function HtmlFileTransport(transUrl, ignore, opts) {
   if (!HtmlfileReceiver.enabled) {
     throw new Error('Transport created when disabled');
   }
-  AjaxBasedTransport.call(this, transUrl, '/htmlfile', HtmlfileReceiver, XHRLocalObject);
+  AjaxBasedTransport.call(this, transUrl, '/htmlfile', HtmlfileReceiver, XHRLocalObject, opts);
 }
 
 inherits(HtmlFileTransport, AjaxBasedTransport);
@@ -1742,7 +1765,7 @@ HtmlFileTransport.roundTrips = 2;
 
 module.exports = HtmlFileTransport;
 
-},{"./lib/ajax-based":24,"./receiver/htmlfile":30,"./sender/xhr-local":37,"inherits":57}],22:[function(require,module,exports){
+},{"./lib/ajax-based":25,"./receiver/htmlfile":31,"./sender/xhr-local":38,"inherits":57}],23:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -1874,6 +1897,7 @@ IframeTransport.prototype.postMessage = function(type, data) {
 IframeTransport.prototype.send = function(message) {
   debug('send', message);
   this.postMessage('m', message);
+  return true;
 };
 
 IframeTransport.enabled = function() {
@@ -1887,7 +1911,7 @@ module.exports = IframeTransport;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"../utils/event":46,"../utils/iframe":47,"../utils/random":50,"../utils/url":52,"../version":53,"debug":55,"events":3,"inherits":57}],23:[function(require,module,exports){
+},{"../utils/event":47,"../utils/iframe":48,"../utils/random":51,"../utils/url":53,"../version":54,"debug":55,"events":3,"inherits":57}],24:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -1926,7 +1950,7 @@ module.exports = JsonPTransport;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./lib/sender-receiver":28,"./receiver/jsonp":31,"./sender/jsonp":33,"inherits":57}],24:[function(require,module,exports){
+},{"./lib/sender-receiver":29,"./receiver/jsonp":32,"./sender/jsonp":34,"inherits":57}],25:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -1940,15 +1964,16 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:ajax-based');
 }
 
-function createAjaxSender(AjaxObject) {
+function createAjaxSender(AjaxObject, opts) {
   return function(url, payload, callback) {
     debug('create ajax sender', url, payload);
-    var opt = {};
+    opts = opts || {};
     if (typeof payload === 'string') {
-      opt.headers = {'Content-type': 'text/plain'};
+      opts.headers = opts.headers || {};
+      opts.headers['Content-type'] = 'text/plain';
     }
     var ajaxUrl = urlUtils.addPath(url, '/xhr_send');
-    var xo = new AjaxObject('POST', ajaxUrl, payload, opt);
+    var xo = new AjaxObject('POST', ajaxUrl, payload, opts);
     xo.once('finish', function(status) {
       debug('finish', status);
       xo = null;
@@ -1970,8 +1995,8 @@ function createAjaxSender(AjaxObject) {
   };
 }
 
-function AjaxBasedTransport(transUrl, urlSuffix, Receiver, AjaxObject) {
-  SenderReceiver.call(this, transUrl, urlSuffix, createAjaxSender(AjaxObject), Receiver, AjaxObject);
+function AjaxBasedTransport(transUrl, urlSuffix, Receiver, AjaxObject, opts) {
+  SenderReceiver.call(this, transUrl, urlSuffix, createAjaxSender(AjaxObject, opts), Receiver, AjaxObject, opts);
 }
 
 inherits(AjaxBasedTransport, SenderReceiver);
@@ -1980,7 +2005,7 @@ module.exports = AjaxBasedTransport;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"../../utils/url":52,"./sender-receiver":28,"debug":55,"inherits":57}],25:[function(require,module,exports){
+},{"../../utils/url":53,"./sender-receiver":29,"debug":55,"inherits":57}],26:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2009,6 +2034,7 @@ BufferedSender.prototype.send = function(message) {
   if (!this.sendStop) {
     this.sendSchedule();
   }
+  return true;
 };
 
 // For polling transports in a situation when in the message callback,
@@ -2072,7 +2098,7 @@ module.exports = BufferedSender;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55,"events":3,"inherits":57}],26:[function(require,module,exports){
+},{"debug":55,"events":3,"inherits":57}],27:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -2110,7 +2136,7 @@ module.exports = function(transport) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/object":49,"../iframe":22,"inherits":57}],27:[function(require,module,exports){
+},{"../../utils/object":50,"../iframe":23,"inherits":57}],28:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2123,12 +2149,13 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:polling');
 }
 
-function Polling(Receiver, receiveUrl, AjaxObject) {
+function Polling(Receiver, receiveUrl, AjaxObject, opts) {
   debug(receiveUrl);
   EventEmitter.call(this);
   this.Receiver = Receiver;
   this.receiveUrl = receiveUrl;
   this.AjaxObject = AjaxObject;
+  this.opts = opts;
   this._scheduleReceiver();
 }
 
@@ -2137,7 +2164,7 @@ inherits(Polling, EventEmitter);
 Polling.prototype._scheduleReceiver = function() {
   debug('_scheduleReceiver');
   var self = this;
-  var poll = this.poll = new this.Receiver(this.receiveUrl, this.AjaxObject);
+  var poll = this.poll = new this.Receiver(this.receiveUrl, this.AjaxObject, this.opts);
 
   poll.on('message', function(msg) {
     debug('message', msg);
@@ -2172,7 +2199,7 @@ module.exports = Polling;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55,"events":3,"inherits":57}],28:[function(require,module,exports){
+},{"debug":55,"events":3,"inherits":57}],29:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2187,13 +2214,13 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:sender-receiver');
 }
 
-function SenderReceiver(transUrl, urlSuffix, senderFunc, Receiver, AjaxObject) {
+function SenderReceiver(transUrl, urlSuffix, senderFunc, Receiver, AjaxObject, opts) {
   var pollUrl = urlUtils.addPath(transUrl, urlSuffix);
   debug(pollUrl);
   var self = this;
   BufferedSender.call(this, transUrl, senderFunc);
 
-  this.poll = new Polling(Receiver, pollUrl, AjaxObject);
+  this.poll = new Polling(Receiver, pollUrl, AjaxObject, opts);
   this.poll.on('message', function(msg) {
     debug('poll message', msg);
     self.emit('message', msg);
@@ -2222,7 +2249,7 @@ module.exports = SenderReceiver;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"../../utils/url":52,"./buffered-sender":25,"./polling":27,"debug":55,"inherits":57}],29:[function(require,module,exports){
+},{"../../utils/url":53,"./buffered-sender":26,"./polling":28,"debug":55,"inherits":57}],30:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2236,6 +2263,10 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:receiver:eventsource');
 }
 
+function decodeURISafe(s) {
+    return decodeURI(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, '%25'));
+}
+
 function EventSourceReceiver(url) {
   debug(url);
   EventEmitter.call(this);
@@ -2244,7 +2275,7 @@ function EventSourceReceiver(url) {
   var es = this.es = new EventSourceDriver(url);
   es.onmessage = function(e) {
     debug('message', e.data);
-    self.emit('message', decodeURI(e.data));
+    self.emit('message', decodeURISafe(e.data));
   };
   es.onerror = function(e) {
     debug('error', es.readyState, e);
@@ -2290,7 +2321,7 @@ module.exports = EventSourceReceiver;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55,"events":3,"eventsource":18,"inherits":57}],30:[function(require,module,exports){
+},{"debug":55,"events":3,"eventsource":19,"inherits":57}],31:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -2382,7 +2413,7 @@ module.exports = HtmlfileReceiver;
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/iframe":47,"../../utils/random":50,"../../utils/url":52,"debug":55,"events":3,"inherits":57}],31:[function(require,module,exports){
+},{"../../utils/iframe":48,"../../utils/random":51,"../../utils/url":53,"debug":55,"events":3,"inherits":57}],32:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -2570,7 +2601,7 @@ module.exports = JsonpReceiver;
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/browser":44,"../../utils/iframe":47,"../../utils/random":50,"../../utils/url":52,"debug":55,"events":3,"inherits":57}],32:[function(require,module,exports){
+},{"../../utils/browser":45,"../../utils/iframe":48,"../../utils/random":51,"../../utils/url":53,"debug":55,"events":3,"inherits":57}],33:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2583,14 +2614,15 @@ if (process.env.NODE_ENV !== 'production') {
   debug = require('debug')('sockjs-client:receiver:xhr');
 }
 
-function XhrReceiver(url, AjaxObject) {
+function XhrReceiver(url, AjaxObject, opts) {
   debug(url);
   EventEmitter.call(this);
   var self = this;
 
   this.bufferPosition = 0;
 
-  this.xo = new AjaxObject('POST', url, null);
+  this.opts = opts;
+  this.xo = new AjaxObject('POST', url, null, opts);
   this.xo.on('chunk', this._chunkHandler.bind(this));
   this.xo.once('finish', function(status, text) {
     debug('finish', status, text);
@@ -2645,7 +2677,7 @@ module.exports = XhrReceiver;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55,"events":3,"inherits":57}],33:[function(require,module,exports){
+},{"debug":55,"events":3,"inherits":57}],34:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -2749,7 +2781,7 @@ module.exports = function(url, payload, callback) {
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/random":50,"../../utils/url":52,"debug":55}],34:[function(require,module,exports){
+},{"../../utils/random":51,"../../utils/url":53,"debug":55}],35:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -2857,7 +2889,7 @@ module.exports = XDRObject;
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../../utils/browser":44,"../../utils/event":46,"../../utils/url":52,"debug":55,"events":3,"inherits":57}],35:[function(require,module,exports){
+},{"../../utils/browser":45,"../../utils/event":47,"../../utils/url":53,"debug":55,"events":3,"inherits":57}],36:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -2874,7 +2906,7 @@ XHRCorsObject.enabled = XhrDriver.enabled && XhrDriver.supportsCORS;
 
 module.exports = XHRCorsObject;
 
-},{"../driver/xhr":17,"inherits":57}],36:[function(require,module,exports){
+},{"../driver/xhr":18,"inherits":57}],37:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter
@@ -2900,17 +2932,17 @@ XHRFake.timeout = 2000;
 
 module.exports = XHRFake;
 
-},{"events":3,"inherits":57}],37:[function(require,module,exports){
+},{"events":3,"inherits":57}],38:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
   , XhrDriver = require('../driver/xhr')
   ;
 
-function XHRLocalObject(method, url, payload /*, opts */) {
-  XhrDriver.call(this, method, url, payload, {
-    noCredentials: true
-  });
+function XHRLocalObject(method, url, payload, opts) {
+  opts = opts || {};
+  opts.noCredentials = true;
+  XhrDriver.call(this, method, url, payload, opts);
 }
 
 inherits(XHRLocalObject, XhrDriver);
@@ -2919,7 +2951,7 @@ XHRLocalObject.enabled = XhrDriver.enabled;
 
 module.exports = XHRLocalObject;
 
-},{"../driver/xhr":17,"inherits":57}],38:[function(require,module,exports){
+},{"../driver/xhr":18,"inherits":57}],39:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2977,6 +3009,9 @@ function WebSocketTransport(transUrl, ignore, options) {
     self.emit('close', 1006, 'WebSocket connection broken');
     self._cleanup();
   };
+  this.ws.on('drain', function() {
+    self.emit('drain');
+  })
 }
 
 inherits(WebSocketTransport, EventEmitter);
@@ -2984,7 +3019,7 @@ inherits(WebSocketTransport, EventEmitter);
 WebSocketTransport.prototype.send = function(data) {
   var msg = '[' + data + ']';
   debug('send', msg);
-  this.ws.send(msg);
+  return this.ws.send(msg);
 };
 
 WebSocketTransport.prototype.close = function() {
@@ -3023,7 +3058,7 @@ module.exports = WebSocketTransport;
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"../utils/event":46,"../utils/url":52,"./driver/websocket":19,"debug":55,"events":3,"inherits":57}],39:[function(require,module,exports){
+},{"../utils/event":47,"../utils/url":53,"./driver/websocket":20,"debug":55,"events":3,"inherits":57}],40:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3033,11 +3068,11 @@ var inherits = require('inherits')
   , XDRObject = require('./sender/xdr')
   ;
 
-function XdrPollingTransport(transUrl) {
+function XdrPollingTransport(transUrl, ignore, opts) {
   if (!XDRObject.enabled) {
     throw new Error('Transport created when disabled');
   }
-  AjaxBasedTransport.call(this, transUrl, '/xhr', XhrReceiver, XDRObject);
+  AjaxBasedTransport.call(this, transUrl, '/xhr', XhrReceiver, XDRObject, opts);
 }
 
 inherits(XdrPollingTransport, AjaxBasedTransport);
@@ -3048,7 +3083,7 @@ XdrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"./xdr-streaming":40,"inherits":57}],40:[function(require,module,exports){
+},{"./lib/ajax-based":25,"./receiver/xhr":33,"./sender/xdr":35,"./xdr-streaming":41,"inherits":57}],41:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3061,11 +3096,11 @@ var inherits = require('inherits')
 //   http://stackoverflow.com/questions/1641507/detect-browser-support-for-cross-domain-xmlhttprequests
 //   http://hacks.mozilla.org/2009/07/cross-site-xmlhttprequest-with-cors/
 
-function XdrStreamingTransport(transUrl) {
+function XdrStreamingTransport(transUrl, ignore, opts) {
   if (!XDRObject.enabled) {
     throw new Error('Transport created when disabled');
   }
-  AjaxBasedTransport.call(this, transUrl, '/xhr_streaming', XhrReceiver, XDRObject);
+  AjaxBasedTransport.call(this, transUrl, '/xhr_streaming', XhrReceiver, XDRObject, opts);
 }
 
 inherits(XdrStreamingTransport, AjaxBasedTransport);
@@ -3082,7 +3117,7 @@ XdrStreamingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XdrStreamingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xdr":34,"inherits":57}],41:[function(require,module,exports){
+},{"./lib/ajax-based":25,"./receiver/xhr":33,"./sender/xdr":35,"inherits":57}],42:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits')
@@ -3092,11 +3127,11 @@ var inherits = require('inherits')
   , XHRLocalObject = require('./sender/xhr-local')
   ;
 
-function XhrPollingTransport(transUrl) {
+function XhrPollingTransport(transUrl, ignore, opts) {
   if (!XHRLocalObject.enabled && !XHRCorsObject.enabled) {
     throw new Error('Transport created when disabled');
   }
-  AjaxBasedTransport.call(this, transUrl, '/xhr', XhrReceiver, XHRCorsObject);
+  AjaxBasedTransport.call(this, transUrl, '/xhr', XhrReceiver, XHRCorsObject, opts);
 }
 
 inherits(XhrPollingTransport, AjaxBasedTransport);
@@ -3117,7 +3152,7 @@ XhrPollingTransport.roundTrips = 2; // preflight, ajax
 
 module.exports = XhrPollingTransport;
 
-},{"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],42:[function(require,module,exports){
+},{"./lib/ajax-based":25,"./receiver/xhr":33,"./sender/xhr-cors":36,"./sender/xhr-local":38,"inherits":57}],43:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -3129,11 +3164,11 @@ var inherits = require('inherits')
   , browser = require('../utils/browser')
   ;
 
-function XhrStreamingTransport(transUrl) {
+function XhrStreamingTransport(transUrl, ignore, opts) {
   if (!XHRLocalObject.enabled && !XHRCorsObject.enabled) {
     throw new Error('Transport created when disabled');
   }
-  AjaxBasedTransport.call(this, transUrl, '/xhr_streaming', XhrReceiver, XHRCorsObject);
+  AjaxBasedTransport.call(this, transUrl, '/xhr_streaming', XhrReceiver, XHRCorsObject, opts);
 }
 
 inherits(XhrStreamingTransport, AjaxBasedTransport);
@@ -3163,7 +3198,7 @@ module.exports = XhrStreamingTransport;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../utils/browser":44,"./lib/ajax-based":24,"./receiver/xhr":32,"./sender/xhr-cors":35,"./sender/xhr-local":37,"inherits":57}],43:[function(require,module,exports){
+},{"../utils/browser":45,"./lib/ajax-based":25,"./receiver/xhr":33,"./sender/xhr-cors":36,"./sender/xhr-local":38,"inherits":57}],44:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -3185,7 +3220,7 @@ if (global.crypto && global.crypto.getRandomValues) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -3217,7 +3252,7 @@ module.exports = {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 // Some extra characters that Chrome gets wrong, and substitutes with
@@ -3267,7 +3302,7 @@ module.exports = {
   }
 };
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -3345,7 +3380,7 @@ if (!isChromePackagedApp) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./random":50}],47:[function(require,module,exports){
+},{"./random":51}],48:[function(require,module,exports){
 (function (process,global){(function (){
 'use strict';
 
@@ -3535,7 +3570,7 @@ if (global.document) {
 
 }).call(this)}).call(this,{ env: {} },typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./browser":44,"./event":46,"debug":55}],48:[function(require,module,exports){
+},{"./browser":45,"./event":47,"debug":55}],49:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -3558,7 +3593,7 @@ module.exports = logObject;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -3584,7 +3619,7 @@ module.exports = {
   }
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 var crypto = require('crypto');
@@ -3614,7 +3649,7 @@ module.exports = {
   }
 };
 
-},{"crypto":43}],51:[function(require,module,exports){
+},{"crypto":44}],52:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -3669,7 +3704,7 @@ module.exports = function(availableTransports) {
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55}],52:[function(require,module,exports){
+},{"debug":55}],53:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -3725,10 +3760,475 @@ module.exports = {
 
 }).call(this)}).call(this,{ env: {} })
 
-},{"debug":55,"url-parse":60}],53:[function(require,module,exports){
-module.exports = '1.6.1';
+},{"debug":55,"url-parse":61}],54:[function(require,module,exports){
+module.exports = '0.0.3';
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+/**
+ * Colors.
+ */
+
+exports.colors = ['#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC', '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF', '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC', '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF', '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC', '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366', '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933', '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC', '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF', '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'];
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+// eslint-disable-next-line complexity
+
+function useColors() {
+  // NB: In an Electron preload script, document will be defined but not fully
+  // initialized. Since we know we're in Chrome, we'll just detect this case
+  // explicitly
+  if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+    return true;
+  } // Internet Explorer and Edge do not support colors.
+
+
+  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+    return false;
+  } // Is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+
+
+  return typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
+  typeof window !== 'undefined' && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
+  // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
+}
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+
+function formatArgs(args) {
+  args[0] = (this.useColors ? '%c' : '') + this.namespace + (this.useColors ? ' %c' : ' ') + args[0] + (this.useColors ? '%c ' : ' ') + '+' + module.exports.humanize(this.diff);
+
+  if (!this.useColors) {
+    return;
+  }
+
+  var c = 'color: ' + this.color;
+  args.splice(1, 0, c, 'color: inherit'); // The final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-zA-Z%]/g, function (match) {
+    if (match === '%%') {
+      return;
+    }
+
+    index++;
+
+    if (match === '%c') {
+      // We only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+  args.splice(lastC, 0, c);
+}
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+
+function log() {
+  var _console;
+
+  // This hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return (typeof console === "undefined" ? "undefined" : _typeof(console)) === 'object' && console.log && (_console = console).log.apply(_console, arguments);
+}
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+
+function save(namespaces) {
+  try {
+    if (namespaces) {
+      exports.storage.setItem('debug', namespaces);
+    } else {
+      exports.storage.removeItem('debug');
+    }
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
+}
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+
+function load() {
+  var r;
+
+  try {
+    r = exports.storage.getItem('debug');
+  } catch (error) {} // Swallow
+  // XXX (@Qix-) should we be logging these?
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+
+
+  if (!r && typeof process !== 'undefined' && 'env' in process) {
+    r = process.env.DEBUG;
+  }
+
+  return r;
+}
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+
+function localstorage() {
+  try {
+    // TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+    // The Browser also has localStorage in the global context.
+    return localStorage;
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
+}
+
+module.exports = require('./common')(exports);
+var formatters = module.exports.formatters;
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+  try {
+    return JSON.stringify(v);
+  } catch (error) {
+    return '[UnexpectedJSONParseError]: ' + error.message;
+  }
+};
+
+
+}).call(this)}).call(this,{ env: {} })
+
+},{"./common":56}],56:[function(require,module,exports){
+"use strict";
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ */
+function setup(env) {
+  createDebug.debug = createDebug;
+  createDebug.default = createDebug;
+  createDebug.coerce = coerce;
+  createDebug.disable = disable;
+  createDebug.enable = enable;
+  createDebug.enabled = enabled;
+  createDebug.humanize = require('ms');
+  Object.keys(env).forEach(function (key) {
+    createDebug[key] = env[key];
+  });
+  /**
+  * Active `debug` instances.
+  */
+
+  createDebug.instances = [];
+  /**
+  * The currently active debug mode names, and names to skip.
+  */
+
+  createDebug.names = [];
+  createDebug.skips = [];
+  /**
+  * Map of special "%n" handling functions, for the debug "format" argument.
+  *
+  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+  */
+
+  createDebug.formatters = {};
+  /**
+  * Selects a color for a debug namespace
+  * @param {String} namespace The namespace string for the for the debug instance to be colored
+  * @return {Number|String} An ANSI color code for the given namespace
+  * @api private
+  */
+
+  function selectColor(namespace) {
+    var hash = 0;
+
+    for (var i = 0; i < namespace.length; i++) {
+      hash = (hash << 5) - hash + namespace.charCodeAt(i);
+      hash |= 0; // Convert to 32bit integer
+    }
+
+    return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+  }
+
+  createDebug.selectColor = selectColor;
+  /**
+  * Create a debugger with the given `namespace`.
+  *
+  * @param {String} namespace
+  * @return {Function}
+  * @api public
+  */
+
+  function createDebug(namespace) {
+    var prevTime;
+
+    function debug() {
+      // Disabled?
+      if (!debug.enabled) {
+        return;
+      }
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var self = debug; // Set `diff` timestamp
+
+      var curr = Number(new Date());
+      var ms = curr - (prevTime || curr);
+      self.diff = ms;
+      self.prev = prevTime;
+      self.curr = curr;
+      prevTime = curr;
+      args[0] = createDebug.coerce(args[0]);
+
+      if (typeof args[0] !== 'string') {
+        // Anything else let's inspect with %O
+        args.unshift('%O');
+      } // Apply any `formatters` transformations
+
+
+      var index = 0;
+      args[0] = args[0].replace(/%([a-zA-Z%])/g, function (match, format) {
+        // If we encounter an escaped % then don't increase the array index
+        if (match === '%%') {
+          return match;
+        }
+
+        index++;
+        var formatter = createDebug.formatters[format];
+
+        if (typeof formatter === 'function') {
+          var val = args[index];
+          match = formatter.call(self, val); // Now we need to remove `args[index]` since it's inlined in the `format`
+
+          args.splice(index, 1);
+          index--;
+        }
+
+        return match;
+      }); // Apply env-specific formatting (colors, etc.)
+
+      createDebug.formatArgs.call(self, args);
+      var logFn = self.log || createDebug.log;
+      logFn.apply(self, args);
+    }
+
+    debug.namespace = namespace;
+    debug.enabled = createDebug.enabled(namespace);
+    debug.useColors = createDebug.useColors();
+    debug.color = selectColor(namespace);
+    debug.destroy = destroy;
+    debug.extend = extend; // Debug.formatArgs = formatArgs;
+    // debug.rawLog = rawLog;
+    // env-specific initialization logic for debug instances
+
+    if (typeof createDebug.init === 'function') {
+      createDebug.init(debug);
+    }
+
+    createDebug.instances.push(debug);
+    return debug;
+  }
+
+  function destroy() {
+    var index = createDebug.instances.indexOf(this);
+
+    if (index !== -1) {
+      createDebug.instances.splice(index, 1);
+      return true;
+    }
+
+    return false;
+  }
+
+  function extend(namespace, delimiter) {
+    return createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+  }
+  /**
+  * Enables a debug mode by namespaces. This can include modes
+  * separated by a colon and wildcards.
+  *
+  * @param {String} namespaces
+  * @api public
+  */
+
+
+  function enable(namespaces) {
+    createDebug.save(namespaces);
+    createDebug.names = [];
+    createDebug.skips = [];
+    var i;
+    var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+    var len = split.length;
+
+    for (i = 0; i < len; i++) {
+      if (!split[i]) {
+        // ignore empty strings
+        continue;
+      }
+
+      namespaces = split[i].replace(/\*/g, '.*?');
+
+      if (namespaces[0] === '-') {
+        createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+      } else {
+        createDebug.names.push(new RegExp('^' + namespaces + '$'));
+      }
+    }
+
+    for (i = 0; i < createDebug.instances.length; i++) {
+      var instance = createDebug.instances[i];
+      instance.enabled = createDebug.enabled(instance.namespace);
+    }
+  }
+  /**
+  * Disable debug output.
+  *
+  * @api public
+  */
+
+
+  function disable() {
+    createDebug.enable('');
+  }
+  /**
+  * Returns true if the given mode name is enabled, false otherwise.
+  *
+  * @param {String} name
+  * @return {Boolean}
+  * @api public
+  */
+
+
+  function enabled(name) {
+    if (name[name.length - 1] === '*') {
+      return true;
+    }
+
+    var i;
+    var len;
+
+    for (i = 0, len = createDebug.skips.length; i < len; i++) {
+      if (createDebug.skips[i].test(name)) {
+        return false;
+      }
+    }
+
+    for (i = 0, len = createDebug.names.length; i < len; i++) {
+      if (createDebug.names[i].test(name)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+  /**
+  * Coerce `val`.
+  *
+  * @param {Mixed} val
+  * @return {Mixed}
+  * @api private
+  */
+
+
+  function coerce(val) {
+    if (val instanceof Error) {
+      return val.stack || val.message;
+    }
+
+    return val;
+  }
+
+  createDebug.enable(createDebug.load());
+  return createDebug;
+}
+
+module.exports = setup;
+
+
+},{"ms":58}],57:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      })
+    }
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
+    }
+  }
+}
+
+},{}],58:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -3754,7 +4254,7 @@ var y = d * 365.25;
  * @api public
  */
 
-module.exports = function(val, options) {
+module.exports = function (val, options) {
   options = options || {};
   var type = typeof val;
   if (type === 'string' && val.length > 0) {
@@ -3892,586 +4392,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],55:[function(require,module,exports){
-(function (process){(function (){
-/* eslint-env browser */
-
-/**
- * This is the web browser implementation of `debug()`.
- */
-
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = localstorage();
-exports.destroy = (() => {
-	let warned = false;
-
-	return () => {
-		if (!warned) {
-			warned = true;
-			console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
-		}
-	};
-})();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-	'#0000CC',
-	'#0000FF',
-	'#0033CC',
-	'#0033FF',
-	'#0066CC',
-	'#0066FF',
-	'#0099CC',
-	'#0099FF',
-	'#00CC00',
-	'#00CC33',
-	'#00CC66',
-	'#00CC99',
-	'#00CCCC',
-	'#00CCFF',
-	'#3300CC',
-	'#3300FF',
-	'#3333CC',
-	'#3333FF',
-	'#3366CC',
-	'#3366FF',
-	'#3399CC',
-	'#3399FF',
-	'#33CC00',
-	'#33CC33',
-	'#33CC66',
-	'#33CC99',
-	'#33CCCC',
-	'#33CCFF',
-	'#6600CC',
-	'#6600FF',
-	'#6633CC',
-	'#6633FF',
-	'#66CC00',
-	'#66CC33',
-	'#9900CC',
-	'#9900FF',
-	'#9933CC',
-	'#9933FF',
-	'#99CC00',
-	'#99CC33',
-	'#CC0000',
-	'#CC0033',
-	'#CC0066',
-	'#CC0099',
-	'#CC00CC',
-	'#CC00FF',
-	'#CC3300',
-	'#CC3333',
-	'#CC3366',
-	'#CC3399',
-	'#CC33CC',
-	'#CC33FF',
-	'#CC6600',
-	'#CC6633',
-	'#CC9900',
-	'#CC9933',
-	'#CCCC00',
-	'#CCCC33',
-	'#FF0000',
-	'#FF0033',
-	'#FF0066',
-	'#FF0099',
-	'#FF00CC',
-	'#FF00FF',
-	'#FF3300',
-	'#FF3333',
-	'#FF3366',
-	'#FF3399',
-	'#FF33CC',
-	'#FF33FF',
-	'#FF6600',
-	'#FF6633',
-	'#FF9900',
-	'#FF9933',
-	'#FFCC00',
-	'#FFCC33'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-// eslint-disable-next-line complexity
-function useColors() {
-	// NB: In an Electron preload script, document will be defined but not fully
-	// initialized. Since we know we're in Chrome, we'll just detect this case
-	// explicitly
-	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
-		return true;
-	}
-
-	// Internet Explorer and Edge do not support colors.
-	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-		return false;
-	}
-
-	// Is webkit? http://stackoverflow.com/a/16459606/376773
-	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-		// Is firebug? http://stackoverflow.com/a/398120/376773
-		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-		// Is firefox >= v31?
-		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-		// Double check webkit in userAgent just in case we are in a worker
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-	args[0] = (this.useColors ? '%c' : '') +
-		this.namespace +
-		(this.useColors ? ' %c' : ' ') +
-		args[0] +
-		(this.useColors ? '%c ' : ' ') +
-		'+' + module.exports.humanize(this.diff);
-
-	if (!this.useColors) {
-		return;
-	}
-
-	const c = 'color: ' + this.color;
-	args.splice(1, 0, c, 'color: inherit');
-
-	// The final "%c" is somewhat tricky, because there could be other
-	// arguments passed either before or after the %c, so we need to
-	// figure out the correct index to insert the CSS into
-	let index = 0;
-	let lastC = 0;
-	args[0].replace(/%[a-zA-Z%]/g, match => {
-		if (match === '%%') {
-			return;
-		}
-		index++;
-		if (match === '%c') {
-			// We only are interested in the *last* %c
-			// (the user may have provided their own)
-			lastC = index;
-		}
-	});
-
-	args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.debug()` when available.
- * No-op when `console.debug` is not a "function".
- * If `console.debug` is not available, falls back
- * to `console.log`.
- *
- * @api public
- */
-exports.log = console.debug || console.log || (() => {});
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-function save(namespaces) {
-	try {
-		if (namespaces) {
-			exports.storage.setItem('debug', namespaces);
-		} else {
-			exports.storage.removeItem('debug');
-		}
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-function load() {
-	let r;
-	try {
-		r = exports.storage.getItem('debug');
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-
-	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-	if (!r && typeof process !== 'undefined' && 'env' in process) {
-		r = process.env.DEBUG;
-	}
-
-	return r;
-}
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-	try {
-		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
-		// The Browser also has localStorage in the global context.
-		return localStorage;
-	} catch (error) {
-		// Swallow
-		// XXX (@Qix-) should we be logging these?
-	}
-}
-
-module.exports = require('./common')(exports);
-
-const {formatters} = module.exports;
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-formatters.j = function (v) {
-	try {
-		return JSON.stringify(v);
-	} catch (error) {
-		return '[UnexpectedJSONParseError]: ' + error.message;
-	}
-};
-
-}).call(this)}).call(this,{ env: {} })
-
-},{"./common":56}],56:[function(require,module,exports){
-
-/**
- * This is the common logic for both the Node.js and web browser
- * implementations of `debug()`.
- */
-
-function setup(env) {
-	createDebug.debug = createDebug;
-	createDebug.default = createDebug;
-	createDebug.coerce = coerce;
-	createDebug.disable = disable;
-	createDebug.enable = enable;
-	createDebug.enabled = enabled;
-	createDebug.humanize = require('ms');
-	createDebug.destroy = destroy;
-
-	Object.keys(env).forEach(key => {
-		createDebug[key] = env[key];
-	});
-
-	/**
-	* The currently active debug mode names, and names to skip.
-	*/
-
-	createDebug.names = [];
-	createDebug.skips = [];
-
-	/**
-	* Map of special "%n" handling functions, for the debug "format" argument.
-	*
-	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
-	*/
-	createDebug.formatters = {};
-
-	/**
-	* Selects a color for a debug namespace
-	* @param {String} namespace The namespace string for the debug instance to be colored
-	* @return {Number|String} An ANSI color code for the given namespace
-	* @api private
-	*/
-	function selectColor(namespace) {
-		let hash = 0;
-
-		for (let i = 0; i < namespace.length; i++) {
-			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
-			hash |= 0; // Convert to 32bit integer
-		}
-
-		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
-	}
-	createDebug.selectColor = selectColor;
-
-	/**
-	* Create a debugger with the given `namespace`.
-	*
-	* @param {String} namespace
-	* @return {Function}
-	* @api public
-	*/
-	function createDebug(namespace) {
-		let prevTime;
-		let enableOverride = null;
-		let namespacesCache;
-		let enabledCache;
-
-		function debug(...args) {
-			// Disabled?
-			if (!debug.enabled) {
-				return;
-			}
-
-			const self = debug;
-
-			// Set `diff` timestamp
-			const curr = Number(new Date());
-			const ms = curr - (prevTime || curr);
-			self.diff = ms;
-			self.prev = prevTime;
-			self.curr = curr;
-			prevTime = curr;
-
-			args[0] = createDebug.coerce(args[0]);
-
-			if (typeof args[0] !== 'string') {
-				// Anything else let's inspect with %O
-				args.unshift('%O');
-			}
-
-			// Apply any `formatters` transformations
-			let index = 0;
-			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
-				// If we encounter an escaped % then don't increase the array index
-				if (match === '%%') {
-					return '%';
-				}
-				index++;
-				const formatter = createDebug.formatters[format];
-				if (typeof formatter === 'function') {
-					const val = args[index];
-					match = formatter.call(self, val);
-
-					// Now we need to remove `args[index]` since it's inlined in the `format`
-					args.splice(index, 1);
-					index--;
-				}
-				return match;
-			});
-
-			// Apply env-specific formatting (colors, etc.)
-			createDebug.formatArgs.call(self, args);
-
-			const logFn = self.log || createDebug.log;
-			logFn.apply(self, args);
-		}
-
-		debug.namespace = namespace;
-		debug.useColors = createDebug.useColors();
-		debug.color = createDebug.selectColor(namespace);
-		debug.extend = extend;
-		debug.destroy = createDebug.destroy; // XXX Temporary. Will be removed in the next major release.
-
-		Object.defineProperty(debug, 'enabled', {
-			enumerable: true,
-			configurable: false,
-			get: () => {
-				if (enableOverride !== null) {
-					return enableOverride;
-				}
-				if (namespacesCache !== createDebug.namespaces) {
-					namespacesCache = createDebug.namespaces;
-					enabledCache = createDebug.enabled(namespace);
-				}
-
-				return enabledCache;
-			},
-			set: v => {
-				enableOverride = v;
-			}
-		});
-
-		// Env-specific initialization logic for debug instances
-		if (typeof createDebug.init === 'function') {
-			createDebug.init(debug);
-		}
-
-		return debug;
-	}
-
-	function extend(namespace, delimiter) {
-		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
-		newDebug.log = this.log;
-		return newDebug;
-	}
-
-	/**
-	* Enables a debug mode by namespaces. This can include modes
-	* separated by a colon and wildcards.
-	*
-	* @param {String} namespaces
-	* @api public
-	*/
-	function enable(namespaces) {
-		createDebug.save(namespaces);
-		createDebug.namespaces = namespaces;
-
-		createDebug.names = [];
-		createDebug.skips = [];
-
-		let i;
-		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-		const len = split.length;
-
-		for (i = 0; i < len; i++) {
-			if (!split[i]) {
-				// ignore empty strings
-				continue;
-			}
-
-			namespaces = split[i].replace(/\*/g, '.*?');
-
-			if (namespaces[0] === '-') {
-				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-			} else {
-				createDebug.names.push(new RegExp('^' + namespaces + '$'));
-			}
-		}
-	}
-
-	/**
-	* Disable debug output.
-	*
-	* @return {String} namespaces
-	* @api public
-	*/
-	function disable() {
-		const namespaces = [
-			...createDebug.names.map(toNamespace),
-			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
-		].join(',');
-		createDebug.enable('');
-		return namespaces;
-	}
-
-	/**
-	* Returns true if the given mode name is enabled, false otherwise.
-	*
-	* @param {String} name
-	* @return {Boolean}
-	* @api public
-	*/
-	function enabled(name) {
-		if (name[name.length - 1] === '*') {
-			return true;
-		}
-
-		let i;
-		let len;
-
-		for (i = 0, len = createDebug.skips.length; i < len; i++) {
-			if (createDebug.skips[i].test(name)) {
-				return false;
-			}
-		}
-
-		for (i = 0, len = createDebug.names.length; i < len; i++) {
-			if (createDebug.names[i].test(name)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	* Convert regexp to namespace
-	*
-	* @param {RegExp} regxep
-	* @return {String} namespace
-	* @api private
-	*/
-	function toNamespace(regexp) {
-		return regexp.toString()
-			.substring(2, regexp.toString().length - 2)
-			.replace(/\.\*\?$/, '*');
-	}
-
-	/**
-	* Coerce `val`.
-	*
-	* @param {Mixed} val
-	* @return {Mixed}
-	* @api private
-	*/
-	function coerce(val) {
-		if (val instanceof Error) {
-			return val.stack || val.message;
-		}
-		return val;
-	}
-
-	/**
-	* XXX DO NOT USE. This is a temporary stub function.
-	* XXX It WILL be removed in the next major release.
-	*/
-	function destroy() {
-		console.warn('Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.');
-	}
-
-	createDebug.enable(createDebug.load());
-
-	return createDebug;
-}
-
-module.exports = setup;
-
-},{"ms":54}],57:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      })
-    }
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      var TempCtor = function () {}
-      TempCtor.prototype = superCtor.prototype
-      ctor.prototype = new TempCtor()
-      ctor.prototype.constructor = ctor
-    }
-  }
-}
-
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -4515,7 +4436,7 @@ function encode(input) {
  * @api public
  */
 function querystring(query) {
-  var parser = /([^=?&]+)=?([^&]*)/g
+  var parser = /([^=?#&]+)=?([^&]*)/g
     , result = {}
     , part;
 
@@ -4570,8 +4491,8 @@ function querystringify(obj, prefix) {
         value = '';
       }
 
-      key = encodeURIComponent(key);
-      value = encodeURIComponent(value);
+      key = encode(key);
+      value = encode(value);
 
       //
       // If we failed to encode the strings, we should bail out as we don't
@@ -4591,7 +4512,7 @@ function querystringify(obj, prefix) {
 exports.stringify = querystringify;
 exports.parse = querystring;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4631,7 +4552,7 @@ module.exports = function required(port, protocol) {
   return port !== 0;
 };
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -5225,7 +5146,7 @@ module.exports = Url;
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"querystringify":58,"requires-port":59}]},{},[1])(1)
+},{"querystringify":59,"requires-port":60}]},{},[1])(1)
 });
 
 

@@ -1,13 +1,12 @@
 {
-  "name": "sockjs-client",
+  "name": "sockjs-client-testable",
   "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
-  "version": "1.6.2",
+  "version": "0.0.4",
   "author": "Bryce Kahle",
   "jsdelivr": "dist/sockjs.min.js",
   "engines": {
     "node": ">=12"
   },
-  "funding": "https://tidelift.com/funding/github/npm/sockjs-client",
   "browser": {
     "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
     "eventsource": "./lib/transport/browser/eventsource.js",
@@ -70,7 +69,7 @@
   "types": "./dist/sockjs.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sockjs/sockjs-client.git"
+    "url": "https://github.com/testable/sockjs-client.git"
   },
   "scripts": {
     "test": "mocha tests/node.js",
