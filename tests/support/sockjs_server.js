@@ -54,7 +54,8 @@ function startServer(port, config, prefix) {
     } else {
       serve(req, res, function(err) {
         var status = err ? err.statusCode : 404;
-        return res.writeHead(status).end();
+        res.writeHead(status);
+        res.end();
       });
     }
   });
