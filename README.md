@@ -163,6 +163,11 @@ Where `options` is a hash which can contain:
     the number of expected round trips. This setting will establish a minimum,
     but if the calculated timeout is higher, that will be used.
 
+  * **transportOptions (object)**
+
+    Additional options to pass per transport, keyed on transport name. For example:
+    ```{ 'xhr-streaming': { headers: { Authorization: 'xxx' } } }```
+
 Although the 'SockJS' object tries to emulate the 'WebSocket'
 behaviour, it's impossible to support all of its features. An
 important SockJS limitation is the fact that you're not allowed to
