@@ -38,7 +38,7 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "envify": "^4.0.0",
-    "esbuild": "^0.19.4",
+    "esbuild": "^0.25.0",
     "eslint": "^8.10.0",
     "expect.js": "~0.3.1",
     "gulp": "^5.0.0",
