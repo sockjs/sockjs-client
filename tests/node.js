@@ -5,6 +5,9 @@ var server = require('./support/sockjs_server')(8081, {
 	port: 8081
 });
 
+// Load utils-event tests early to avoid global side-effects from other modules
+require('./lib/utils-event');
+
 require('./lib/main');
 require('./lib/main-node');
 require('./lib/utils');
