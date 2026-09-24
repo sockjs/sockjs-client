@@ -1,4 +1,3 @@
-/* eslint no-unused-vars: "off" */
 'use strict';
 
 var expect = require('expect.js')
@@ -12,6 +11,11 @@ var expect = require('expect.js')
 // A minimal stand-in for the Node WebSocket driver (faye-websocket), which is
 // the only driver reporting backpressure today: `send()` returns a boolean and
 // a `drain` event is emitted once the socket buffer has been flushed.
+//
+// Note that this fake only models the EventEmitter side of the driver (the one
+// used for `drain`). It deliberately does not implement the
+// `onmessage`/`onclose`/`onerror` property side that `WebSocketTransport` uses
+// for messages and closes, so it is not a general-purpose driver fake.
 function FakeDriver(url) {
   EventEmitter.call(this);
   this.url = url;
@@ -85,16 +89,49 @@ describe('backpressure', function() {
       expect(sjs.send('nope')).to.equal(false);
     });
 
-    it('send() returns the value reported by the transport', function() {
-      var sjs = SockJS(testUtils.getSameOriginUrl());
-      sjs.readyState = SockJS.OPEN;
-      sjs._transport = { send: function() { return false; }, close: function() {} };
-      expect(sjs.send('nope')).to.equal(false);
+    it('send() normalizes the transport reply to a boolean', function(done) {
+      // Use a real connection so that the transport below is a real one, and
+      // put it back before close() so the connection is actually torn down.
+      var sjs = testUtils.newSockJs('/echo', 'websocket');
 
-      sjs._transport = { send: function() { return true; }, close: function() {} };
-      expect(sjs.send('yep')).to.equal(true);
+      sjs.onopen = function() {
+        var transport = sjs._transport;
 
-      sjs.close();
+        function stub(result) {
+          return { send: function() { return result; }, close: function() {} };
+        }
+
+        try {
+          // The transport reports backpressure: `send()` says "back off".
+          sjs._transport = stub(false);
+          expect(sjs.send('nope')).to.equal(false);
+
+          // The transport accepted the message.
+          sjs._transport = stub(true);
+          expect(sjs.send('yep')).to.equal(true);
+
+          // Transports with no backpressure signal return `undefined` (the
+          // native browser WebSocket, BufferedSender, ...). They did accept the
+          // message, so `send()` must report `true` and not the falsy
+          // `undefined` - the documented `if (!sock.send(chunk))` idiom would
+          // otherwise stall them.
+          sjs._transport = stub(undefined);
+          expect(sjs.send('maybe')).to.equal(true);
+        } catch (e) {
+          sjs._transport = transport;
+          sjs.close();
+          done(e);
+          return;
+        }
+
+        sjs._transport = transport;
+        sjs.close();
+        done();
+      };
+
+      sjs.onerror = function() {
+        done(new Error('connection failed'));
+      };
     });
 
     it('dispatches drain events coming from the transport', function(done) {
@@ -115,23 +152,74 @@ describe('backpressure', function() {
       };
     });
 
-    it('reports websocket backpressure through send()', function(done) {
-      var sjs = new SockJS(testUtils.getSameOriginUrl() + '/echo', null, { transports: ['websocket'] });
-      sjs.onopen = function() {
-        var result = sjs.send('hello');
-        sjs.close();
+    // The synthetic tests above prove the wiring. This one proves the premise:
+    // that a real faye-websocket client ever returns `false`, that a real
+    // `drain` follows it, and that sends are accepted again afterwards. It is
+    // also the test that would catch faye-websocket quietly changing this.
+    //
+    // `faye-websocket`'s `send()` returns the result of `messages.write()` and
+    // re-emits the `drain` produced by the same stream, so this is not two
+    // buffers that can diverge: `websocket-driver` sets `messages._paused` to
+    // `true` only from `IO#pause()` (i.e. the socket pipe backed up) and emits
+    // `drain` from `IO#resume()`, which clears that same flag. A `false` is
+    // therefore always followed by a `drain`.
+    it('reports real backpressure from the underlying socket, then drains', function(done) {
+      this.timeout(10000);
 
-        try {
-          expect(typeof result).to.equal('boolean');
-          expect(result).to.equal(true);
-        } catch (e) {
-          done(e);
+      var sjs = new SockJS(testUtils.getSameOriginUrl() + '/echo', null, { transports: ['websocket'] });
+      var payload = new Array(65537).join('x'); // 64 KiB per message
+      var maxSends = 500; // ~32 MiB; a cap so a regression fails instead of hanging
+      var sent = 0;
+      var sawBackpressure = false;
+      var drainTimer;
+
+      function fail(err) {
+        clearTimeout(drainTimer);
+        sjs.close();
+        done(err);
+      }
+
+      sjs.onopen = function() {
+        // Send synchronously, without ever yielding to the event loop, so the
+        // socket write buffer fills up and the transport has to report
+        // backpressure.
+        for (; sent < maxSends; sent++) {
+          if (sjs.send(payload) === false) {
+            sawBackpressure = true;
+            break;
+          }
+        }
+
+        if (!sawBackpressure) {
+          fail(new Error('send() never reported backpressure after ' + sent + ' sends'));
           return;
         }
-        done();
+
+        // Only the Node websocket transport emits `drain`, so guard the wait:
+        // if the signal stops being forwarded the test should fail, not hang.
+        drainTimer = setTimeout(function() {
+          fail(new Error('no drain event after backpressure'));
+        }, 5000);
+
+        sjs.addEventListener('drain', function onDrain() {
+          sjs.removeEventListener('drain', onDrain);
+          clearTimeout(drainTimer);
+
+          try {
+            expect(sawBackpressure).to.equal(true);
+            // The buffer has been flushed: sending is accepted again.
+            expect(sjs.send('after-drain')).to.equal(true);
+          } catch (e) {
+            fail(e);
+            return;
+          }
+          sjs.close();
+          done();
+        });
       };
+
       sjs.onerror = function() {
-        done(new Error('connection failed'));
+        fail(new Error('connection failed'));
       };
     });
   });
