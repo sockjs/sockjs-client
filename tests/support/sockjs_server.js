@@ -42,6 +42,11 @@ function startServer(port, config, prefix) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.writeHead(200);
       res.end(new Array(2049).join('a') + '\nb\n');
+    } else if ( /\/echo-custom-data-header.txt/.test(req.url) ) {
+      res.setHeader('content-type', 'text/plain');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.writeHead(200);
+      res.end(req.headers['x-custom-data'] || '');
     } else if (req.url === '/config.js') {
       if (req.headers.referer) {
         var parsedOrigin = new URL(req.headers.referer);

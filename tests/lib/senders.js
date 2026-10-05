@@ -63,6 +63,22 @@ function ajaxStreaming (Obj) {
   });
 }
 
+function ajaxCustomHeaders (Obj) {
+  it('simple', function (done) {
+    var x = new Obj('GET', testUtils.getSameOriginUrl() + '/echo-custom-data-header.txt', null, 
+      { headers: { 'X-Custom-Data': 'abc' }});
+    x.on('finish', function (status, text) {
+      try {
+        expect(text).to.equal('abc');
+      } catch (e) {
+        done(e);
+        return;
+      }
+      done();
+    });
+  });
+}
+
 function wrongUrl(Obj, url, statuses) {
   it('wrong url ' + url, function (done) {
     var test = this.runnable();
@@ -110,6 +126,7 @@ describe('Senders', function () {
   describe('xhr-local', function () {
     ajaxSimple(XhrLocal);
     ajaxStreaming(XhrLocal);
+    ajaxCustomHeaders(XhrLocal);
     // TODO senders don't have a timeouts so these tests can fail
     // BUT info-receiver has a timeout so they will never not-return
     // wrongPort(XhrLocal);
@@ -123,6 +140,7 @@ describe('Senders', function () {
     }
     ajaxSimple(Xdr);
     ajaxStreaming(Xdr);
+    ajaxCustomHeaders(Xdr);
     wrongPort(Xdr);
     wrongUrl(Xdr, testUtils.getSameOriginUrl() + '/wrong_url_indeed.txt', [0, 400]);
   });
