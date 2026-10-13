@@ -15,6 +15,7 @@ require('./lib/receivers');
 require('./lib/senders');
 require('./lib/end-to-end');
 require('./lib/transports');
+require('./lib/backpressure');
 
 after(function() {
 	server.close();

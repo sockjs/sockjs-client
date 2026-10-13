@@ -179,6 +179,66 @@ bad practice. If you absolutely must do it, you can use
 multiple subdomains, using a different subdomain for every
 SockJS connection.
 
+## Sending data and backpressure
+
+`sock.send(data)` returns a boolean:
+
+ * `true` - the message was accepted by the transport;
+ * `false` - it was not, and the application should stop sending for now.
+
+A `false` is returned for two different reasons, and only one of them is
+followed by a `drain` event:
+
+ * the connection is not open (`readyState` is `CLOSING` or `CLOSED`) - the
+   connection is gone and **no `drain` event will ever be dispatched**;
+ * the transport is applying backpressure, i.e. its write buffer is full - a
+   `drain` event is dispatched on the `SockJS` object once more data can be
+   accepted.
+
+This mirrors the contract of Node's `Writable#write` / `faye-websocket`'s
+`send`, and makes it possible to pipe a producer into a SockJS connection
+without buffering an unbounded amount of data in memory:
+
+```javascript
+var stream = fs.createReadStream('huge-file');
+
+function resume() {
+  stream.resume();
+}
+
+stream.on('data', function(chunk) {
+  if (!sock.send(chunk)) {
+    // The transport can't take any more right now: stop producing.
+    stream.pause();
+  }
+});
+
+sock.addEventListener('drain', resume);
+sock.ondrain = resume;                 // same thing, both forms work
+sock.addEventListener('close', function() {
+  // `false` can also mean "the connection is gone", in which case no `drain`
+  // will ever arrive - handling `close` is required, not optional.
+  stream.destroy();
+});
+```
+
+`drain` is not the only resume signal: `close` (and `onclose`) must be handled
+as well, because a `false` caused by a closed connection will never be followed
+by a `drain`. In other words, `false` means "buffer full **or** not open", and
+both cases have to be dealt with by the caller.
+
+Only the Node `websocket` transport reports backpressure today, because it is
+the only one whose underlying socket exposes it. Every other transport reports
+`true` unconditionally, which means "accepted", not "delivered". In particular
+the browser `websocket` transport hands off to the native WebSocket (which
+buffers internally), and the polling/streaming transports queue messages in an
+unbounded JavaScript array - so they can lose data in exactly the same way when
+the connection goes away with a backlog still pending.
+
+Note that this is a deliberate deviation from the WebSocket API, where `send()`
+returns `undefined` and backpressure is signalled through `bufferedAmount`
+instead of a return value plus a `drain` event.
+
 # Supported transports, by browser (html served from http:// or https://)
 
 _Browser_       | _Websockets_     | _Streaming_ | _Polling_
