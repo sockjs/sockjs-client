@@ -56,6 +56,32 @@ describe('Receivers', function () {
       });
     });
 
+    it('survives errors in handlers', function (done) {
+      var test = this.runnable();
+      JsonpReceiver.prototype._createScript = function () {
+        var self = this;
+        setTimeout(function () {
+          try {
+            global[utils.WPrefix][self.id]('datadata');
+          } catch (e) {
+            if (!(test.timedOut || test.duration)) {
+              done(new Error('close event not fired'));
+            }
+          }
+        }, 5);
+      };
+      var jpr = new JsonpReceiver('test');
+      jpr.on('close', function () {
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        done();
+      });
+      jpr.on('message', function () {
+        throw new Error('boom');
+      });
+    });
+
     it('will timeout', function (done) {
       this.timeout(500);
       var test = this.runnable();
@@ -227,6 +253,7 @@ describe('Receivers', function () {
           return;
         }
         try {
+          expect(i).to.equal(3);
           expect(reason).to.equal('network');
         } catch (e) {
           done(e);
@@ -234,7 +261,7 @@ describe('Receivers', function () {
         }
         done();
       });
-      xhr._chunkHandler(200, 'test\nmultiple\nlines');
+      xhr._chunkHandler(200, 'test\nmultiple\nlines\n');
     });
 
     it('emits no messages for an empty string response', function (done) {
@@ -286,6 +313,42 @@ describe('Receivers', function () {
         }
         done();
       });
+      xhr.abort();
+    });
+
+    it('survives errors in message handlers', function (done) {
+      var test = this.runnable();
+      var xhr = new XhrReceiver('test', XhrFake);
+      var messages = [];
+      xhr.on('message', function (msg) {
+        messages.push(msg);
+        if (msg === 'one') {
+          throw new Error('boom');
+        }
+      });
+      xhr.on('close', function (code, reason) {
+        if (test.timedOut || test.duration) {
+          return;
+        }
+        try {
+          expect(messages).to.eql(['one', 'two', 'three']);
+        } catch (e) {
+          done(e);
+          return;
+        }
+        done();
+      });
+      try {
+        xhr._chunkHandler(200, 'one\n');
+      } catch (e) {
+        // This is expected
+      }
+      try {
+        xhr._chunkHandler(200, 'one\ntwo\nthree\n');
+      } catch (e) {
+        // This is NOT expected, but let the error be reported in the close handler
+        // instead of here
+      }
       xhr.abort();
     });
   });
