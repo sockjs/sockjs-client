@@ -101,4 +101,19 @@ describe('SockJS', function() {
         });
     });
   });
+
+  describe('close', function () {
+    it('should not start the info request when called in the same tick as the constructor', function (done) {
+      var s = new SockJS('http://localhost');
+      var started = false;
+      s._ir.doXhr = function () {
+        started = true;
+      };
+      s.close();
+      setTimeout(function () {
+        expect(started).to.be(false);
+        done();
+      }, 10);
+    });
+  });
 });
