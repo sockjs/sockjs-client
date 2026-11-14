@@ -101,4 +101,25 @@ describe('SockJS', function() {
         });
     });
   });
+
+  describe('Messages', function () {
+    it('should not dispatch the rest of a frame after close()', function (done) {
+      var s = new SockJS('http://localhost');
+      // an open socket, with a stub transport
+      s._transport = { transportName: 'stub', close: function () {} };
+      s._transportMessage('o');
+      expect(s.readyState).to.be(SockJS.OPEN);
+
+      var received = [];
+      s.onmessage = function (e) {
+        received.push(e.data);
+        s.close();
+      };
+      s.onclose = function () {
+        expect(received).to.eql(['1']);
+        done();
+      };
+      s._transportMessage('a["1","2","3"]');
+    });
+  });
 });
