@@ -101,6 +101,33 @@ function runTests(url, transport) {
   serverClose(url, transport);
 }
 
+describe('The transport timer', function () {
+  it('should be cleared by close() while a transport connects', function () {
+    var s = new SockJS('http://localhost');
+    // The info request is done, and a stub transport connects with its timer.
+    s._ir.close();
+    s._ir = null;
+    s._transport = { transportName: 'stub', close: function () {} };
+    var timer = setTimeout(function () {}, 60000);
+    s._transportTimeoutId = timer;
+
+    var originalClearTimeout = global.clearTimeout;
+    var cleared = [];
+    global.clearTimeout = function (id) {
+      cleared.push(id);
+      return originalClearTimeout(id);
+    };
+    try {
+      s.close();
+    } finally {
+      global.clearTimeout = originalClearTimeout;
+      originalClearTimeout(timer);
+    }
+    expect(cleared).to.contain(timer);
+    expect(s._transportTimeoutId).to.be(null);
+  });
+});
+
 describe('Transports', function () {
   transportList.forEach(function (Trans) {
     describe(Trans.transportName, function () {
