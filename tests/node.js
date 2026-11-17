@@ -10,6 +10,7 @@ require('./lib/utils-event');
 
 require('./lib/main');
 require('./lib/main-node');
+require('./lib/main-page-load');
 require('./lib/utils');
 require('./lib/receivers');
 require('./lib/senders');
