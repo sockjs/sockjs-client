@@ -53,4 +53,38 @@ describe('SockJS', function() {
     });
 
   });
+
+  describe('close while CONNECTING', function () {
+    var SockJS = require('../../lib/entry');
+
+    function expectFailedClose(s, done) {
+      var events = [];
+      s.onerror = function () {
+        events.push('error');
+      };
+      s.onclose = function (e) {
+        try {
+          expect(events).to.eql(['error']);
+          expect(e.code).to.be(1006);
+          expect(e.wasClean).to.be(false);
+          done();
+        } catch (err) {
+          done(err);
+        }
+      };
+      s.close();
+    }
+
+    it('should fail the connection while the info request is pending', function (done) {
+      expectFailedClose(new SockJS('http://localhost'), done);
+    });
+
+    it('should fail the connection while a transport connects', function (done) {
+      var s = new SockJS('http://localhost');
+      // The info request is done, so _close() has no InfoReceiver to close.
+      s._ir.close();
+      s._ir = null;
+      expectFailedClose(s, done);
+    });
+  });
 });
