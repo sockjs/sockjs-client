@@ -15,7 +15,7 @@ describe('SockJS', function() {
 
       it('should throw SecurityError for an insecure url from a secure page', function () {
         expect(function () {
-          sjs('http://localhost');
+          sjs('http://example.com');
         }).to.throwException(function (e) {
           expect(e).to.be.a(Error);
           expect(e.message).to.contain('SecurityError');
@@ -33,6 +33,24 @@ describe('SockJS', function() {
         expect(function () {
           sjs('http://[::1]');
         }).to.not.throwException();
+      });
+
+      it('should NOT throw SecurityError for localhost and *.localhost urls from a secure page', function () {
+        ['http://localhost', 'http://localhost:3008', 'http://LOCALHOST', 'http://localhost.', 'http://app.localhost', 'http://a.b.localhost:8080'].forEach(function (url) {
+          expect(function () {
+            sjs(url);
+          }).to.not.throwException();
+        });
+      });
+
+      it('should throw SecurityError for a host that only contains localhost', function () {
+        ['http://notlocalhost', 'http://localhost.example.com', 'http://localhostx'].forEach(function (url) {
+          expect(function () {
+            sjs(url);
+          }).to.throwException(function (e) {
+            expect(e.message).to.contain('SecurityError');
+          });
+        });
       });
 
       it('should throw SyntaxError for an invalid url', function () {
