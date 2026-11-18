@@ -63,6 +63,14 @@ describe('utils', function () {
       expect(urlUtils.isSchemeEqual('http://localhost', 'https://localhost/')).to.not.be.ok();
       expect(urlUtils.isSchemeEqual('http://localhost', 'file://localhost/')).to.not.be.ok();
     });
+
+    it('addPath keeps each part of the query', function () {
+      expect(urlUtils.addPath('http://a.b/echo', '/info')).to.equal('http://a.b/echo/info');
+      expect(urlUtils.addPath('http://a.b/echo?t=1', '/info')).to.equal('http://a.b/echo/info?t=1');
+      expect(urlUtils.addPath('http://a.b/echo?', '/info')).to.equal('http://a.b/echo/info');
+      expect(urlUtils.addPath('http://a.b/echo?next=/home?tab=2&token=abc', '/info'))
+        .to.equal('http://a.b/echo/info?next=/home?tab=2&token=abc');
+    });
   });
 
   describe('escape', function () {
