@@ -6,6 +6,21 @@ var expect = require('expect.js')
   ;
 
 describe('SockJS', function() {
+  describe('close code', function () {
+    it('should throw InvalidAccessError for the code 0 and the code NaN', function () {
+      var s = new SockJS('http://localhost');
+      [0, NaN].forEach(function (code) {
+        expect(function () {
+          s.close(code);
+        }).to.throwException(function (e) {
+          expect(e.message).to.match(/InvalidAccessError/);
+        });
+      });
+      expect(s.readyState).to.be(SockJS.CONNECTING);
+      s.close();
+    });
+  });
+
   describe('Constructor', function () {
     it('should support construction without new', function () {
       var s = SockJS('http://localhost');
