@@ -12,6 +12,7 @@ require('./lib/main');
 require('./lib/main-node');
 require('./lib/utils');
 require('./lib/receivers');
+require('./lib/driver-xhr');
 require('./lib/senders');
 require('./lib/end-to-end');
 require('./lib/transports');
